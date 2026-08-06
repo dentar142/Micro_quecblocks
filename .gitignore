@@ -1,0 +1,19 @@
+# Host-generated Python caches and local diagnostics
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local board backups, logs, and generated downloads
+board_backups/
+diagnostics/*.log
+diagnostics/main.py
+*.zip
+
+# Browser/editor local state
+.pytest_cache/
+.mypy_cache/
+.vscode/
+node_modules/
+
+# Temporary staging copy (the committed test suite lives in host_tests/)
+tests/
