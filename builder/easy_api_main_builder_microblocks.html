@@ -1469,13 +1469,13 @@ if __name__ == "__main__":
     const API_CATEGORIES = [
       { name: "System / 系统", apis: ["init","status","delay","millis","preflight","ready","testall"] },
       { name: "LED / 指示灯", apis: ["led","setled","ledoff","ledrun","testled"] },
-      { name: "Key / 按键", apis: ["anjian","readanjian","keytext","readanjianadc","waitkey","iskey","testanjian"] },
+      { name: "Key / 按键", apis: ["anjian","readanjian","lastanjian","keytext","readanjianadc","readanjian_direction","waitkey","iskey","testanjian"] },
       { name: "Sensor / 传感器", apis: ["guangmin","readguangmin","readguangmin_percent","readguangmin_all","wenhumi","readwendu","readshidu","jiasudu","readx","readyaxis","readz"] },
-      { name: "IO-Bus / GPIO与总线", apis: ["i2c","scani2c","gpio","setgpio","readgpio","highpins","timer","after","every","pwm","startpwm","setpwmduty","readpwmduty","stoppwm","beep","spi","sendspi"] },
+      { name: "IO-Bus / GPIO与总线", apis: ["i2c","configurei2c","scani2c","gpio","configuregpio","readadc","setgpio","readgpio","highpins","timer","after","every","pwm","startpwm","setpwmduty","readpwmduty","stoppwm","beep","spi","configurespi","sendspi"] },
       { name: "LCD-Text / 屏幕与文本", apis: ["lcd","clearlcd","clearlcdline","showlcd","showlcdcolor","showlcdtemp","showlcdrowtemp","lcdtempactive","lcdrowtempactive","updatelcdtemp","lcdline","lcdvalue","showstatus"] },
       { name: "Algorithm / 算法与运算", apis: ["baoliuxiaoshu","shuzipaixu","zuidazhi","zuixiao","pingjunzhi","pin_jie","yunsuan","suijishu","shuxue","bijiao","luoji","wenbenchangdu","wenbenzifu","wenbenbaohan","zhuanshuzi","zhuanwenzi"] },
-      { name: "UART / 串口", apis: ["uart","setuart","senduart","readuart","readuarttext","waituart","rs232","sendrs232","readrs232text","rs485","sendrs485","readrs485text"] },
-      { name: "Storage-Audio / 存储与音频", apis: ["cunchu","writefile","readfile","removefile","yinpin","recordstart","recordstop","record","recordtimed","updateaudio","playfile","play","stopplay","playstop","tts","say","settts","setttsparams","setvolume","volume","readvolume"] },
+      { name: "UART / 串口", apis: ["uart","setuart","configureuart","senduart","readuart","readuarttext","waituart","rs232","sendrs232","readrs232text","rs485","sendrs485","readrs485text"] },
+      { name: "Storage-Audio / 存储与音频", apis: ["cunchu","sdcard","writefile","readfile","removefile","listfiles","storageinfo","makedir","removedir","yinpin","recordstart","recordstop","record","recordtimed","updateaudio","playfile","play","stopplay","playstop","tts","say","settts","setttsparams","setvolume","volume","readvolume"] },
       { name: "Wireless-Location / 无线与定位", apis: ["lte","readlte","networkstatus","lte_status","lte_field","lte_print","ble","setblemode","bleserver","bleclient","scanble","connectble","discoverble","readble","readbleclient","readbledata","sendble","readblehandle","writeblehandle","gnss","readgnss","readgnsslat","readgnsslon","lbs","readlbs","readlbslat","readlbslon","readlocation","readlocationlat","readlocationlon"] },
       { name: "Diagnostics / 模块自检", apis: ["testgpio","testtimer","testpwm","testbuzzer","testspi","testuart","testrs232","testrs485","testlte","testgnss","testlbs"] },
       { name: "HMI / 人机交互", apis: ["hmi","menu","runhmi","testhmi"] }
@@ -1484,20 +1484,20 @@ if __name__ == "__main__":
     const API_LABELS = {
       init: "初始化easy_api", status: "读取系统状态", delay: "延时等待", millis: "读取运行毫秒数", preflight: "模块预检查", ready: "就绪检查", testall: "全功能自检",
       led: "LED模块启用", setled: "设置LED状态", ledoff: "关闭全部LED", ledrun: "LED流水灯", testled: "LED测试",
-      anjian: "按键模块启用", readanjian: "读取按键事件", keytext: "格式化短按长按状态", readanjianadc: "读取五向键ADC", waitkey: "等待按键", iskey: "判断按键是否按住", testanjian: "按键测试",
+      anjian: "按键模块启用", readanjian: "读取按键事件", lastanjian: "读取最近按键事件", keytext: "格式化短按长按状态", readanjianadc: "读取五向键ADC", readanjian_direction: "读取五向键方向", waitkey: "等待按键", iskey: "判断按键是否按住", testanjian: "按键测试",
       guangmin: "光敏模块启用", readguangmin: "读取光敏值", readguangmin_percent: "读取光敏百分比", readguangmin_all: "读取光敏全部信息",
       wenhumi: "温湿度模块启用", readwendu: "读取温度", readshidu: "读取湿度",
       jiasudu: "加速度模块启用", readx: "读取X轴加速度", readyaxis: "读取Y轴加速度", readz: "读取Z轴加速度",
-      i2c: "I2C模块启用", scani2c: "扫描I2C地址", gpio: "GPIO模块启用", setgpio: "设置GPIO电平", readgpio: "读取GPIO电平", highpins: "汇总高电平引脚名",
+      i2c: "I2C模块启用", configurei2c: "I2C高级配置", scani2c: "扫描I2C地址", gpio: "GPIO模块启用", configuregpio: "GPIO高级配置", readadc: "读取指定ADC引脚", setgpio: "设置GPIO电平", readgpio: "读取GPIO电平", highpins: "汇总高电平引脚名",
       timer: "定时器模块启用", after: "延后执行", every: "周期执行", pwm: "PWM模块启用", startpwm: "启动PWM", setpwmduty: "动态设置PWM占空比", readpwmduty: "读取PWM占空比", stoppwm: "停止PWM", beep: "蜂鸣器响指定时长和频率",
-      spi: "SPI模块启用", sendspi: "SPI发送数据",
+      spi: "SPI模块启用", configurespi: "SPI高级配置", sendspi: "SPI发送数据",
       lcd: "LCD模块启用", clearlcd: "LCD清屏", clearlcdline: "LCD单行清除", showlcd: "LCD指定行列显示", showlcdcolor: "LCD彩色显示", showlcdtemp: "LCD全屏临时显示", showlcdrowtemp: "LCD单行临时显示", lcdtempactive: "全屏临时显示是否有效", lcdrowtempactive: "指定行临时显示是否有效", updatelcdtemp: "更新单行临时显示", lcdline: "LCD整行显示", lcdvalue: "LCD变量显示", showstatus: "LCD显示状态",
       baoliuxiaoshu: "保留指定小数位", shuzipaixu: "数字排序", zuidazhi: "求最大值", zuixiao: "求最小值", pingjunzhi: "求平均值", pin_jie: "文字拼接",
       yunsuan: "加减乘除等数字运算", suijishu: "生成范围随机数", shuxue: "Scratch数学函数", bijiao: "比较两个值", luoji: "与或非逻辑运算",
       wenbenchangdu: "读取文本长度", wenbenzifu: "读取第几个字符", wenbenbaohan: "判断文本是否包含", zhuanshuzi: "文字转数字", zhuanwenzi: "数值转文字",
-      uart: "UART2模块启用", setuart: "设置UART2参数", senduart: "UART2发送", readuart: "UART2读取原始数据", readuarttext: "UART2读取新文字", waituart: "UART2等待接收",
+      uart: "UART2模块启用", setuart: "设置UART2参数", configureuart: "UART高级配置", senduart: "UART2发送", readuart: "UART2读取原始数据", readuarttext: "UART2读取新文字", waituart: "UART2等待接收",
       rs232: "RS232模块启用", sendrs232: "RS232发送", readrs232text: "RS232接收文字到变量", rs485: "RS485模块启用", sendrs485: "RS485发送", readrs485text: "RS485接收文字到变量",
-      cunchu: "存储卡模块启用", writefile: "写入文件", readfile: "读取文件", removefile: "删除文件",
+      cunchu: "存储卡模块启用", sdcard: "SDCard模块启用", writefile: "写入文件", readfile: "读取文件", removefile: "删除文件", listfiles: "列出文件和目录", storageinfo: "读取存储空间", makedir: "创建目录", removedir: "删除目录",
       yinpin: "音频模块启用", recordstart: "开始录音", recordstop: "停止录音", record: "阻塞式定时录音", recordtimed: "非阻塞定时录音", updateaudio: "更新定时录音状态", playfile: "播放本地音频", play: "播放音频", stopplay: "停止播放", playstop: "停止播放别名",
       tts: "TTS播放文字", say: "TTS播放别名", settts: "设置TTS参数", setttsparams: "设置TTS参数别名", setvolume: "设置扬声器音量", volume: "读取或设置音量", readvolume: "读取音量",
       lte: "LTE模块启用", readlte: "读取LTE信息", networkstatus: "读取4G注册与信号状态",
@@ -1514,7 +1514,7 @@ if __name__ == "__main__":
       gpio: "startup", timer: "startup", pwm: "startup", spi: "startup", lcd: "startup", uart: "startup", setuart: "startup",
       rs232: "startup", rs485: "startup", cunchu: "startup", yinpin: "startup", settts: "startup", setttsparams: "startup", setvolume: "startup",
       lte: "startup", ble: "startup", setblemode: "startup", bleserver: "startup", bleclient: "startup", gnss: "startup", lbs: "startup", hmi: "startup",
-      readanjian: "fast", readanjianadc: "fast", readuarttext: "fast", readbledata: "fast", waitkey: "fast", waituart: "fast", updateaudio: "fast", lcdtempactive: "fast", lcdrowtempactive: "fast", updatelcdtemp: "fast", millis: "fast",
+      readanjian: "fast", lastanjian: "fast", readanjianadc: "fast", readanjian_direction: "fast", readuarttext: "fast", readbledata: "fast", waitkey: "fast", waituart: "fast", updateaudio: "fast", lcdtempactive: "fast", lcdrowtempactive: "fast", updatelcdtemp: "fast", millis: "fast",
       readguangmin: "slow", readguangmin_percent: "slow", readguangmin_all: "slow", readwendu: "slow", readshidu: "slow", readx: "slow", readyaxis: "slow", readz: "slow",
       lte_status: "slow", lte_field: "slow", lte_print: "slow",
       scani2c: "slow", readuart: "slow", readlte: "slow", networkstatus: "slow", readble: "slow", readbleclient: "slow", readgnss: "slow", readgnsslat: "slow", readgnsslon: "slow", readlbs: "slow", readlbslat: "slow", readlbslon: "slow", readlocation: "slow", readlocationlat: "slow", readlocationlon: "slow",
@@ -1526,21 +1526,21 @@ if __name__ == "__main__":
     // legacy/special API blocks still need the corresponding module enabled.
     const API_MODULE_REQUIREMENTS = {
       led: "led", setled: "led", ledoff: "led", ledrun: "led", testled: "led",
-      anjian: "anjian", readanjian: "anjian", readanjianadc: "anjian", waitanjian: "anjian", waitshort: "anjian", waitlong: "anjian", testanjian: "anjian",
+      anjian: "anjian", readanjian: "anjian", lastanjian: "anjian", readanjianadc: "anjian", readanjian_direction: "anjian", waitanjian: "anjian", waitshort: "anjian", waitlong: "anjian", waitkey: "anjian", testanjian: "anjian",
       guangmin: "guangmin", readguangmin: "guangmin", readguangmin_percent: "guangmin", readguangmin_all: "guangmin",
       showguangmin: "guangmin", testguangmin: "guangmin", i2c: "i2c", scani2c: "i2c", testi2c: "i2c", showi2c: "i2c",
       wenhumi: "wenhumi", readwenhumi: "wenhumi", readwendu: "wenhumi", readshidu: "wenhumi", testwenhumi: "wenhumi",
       showwenhumi: "wenhumi", jiasudu: "jiasudu", readjiasudu: "jiasudu", readx: "jiasudu", readyaxis: "jiasudu", readz: "jiasudu", testjiasudu: "jiasudu", showjiasudu: "jiasudu",
-      gpio: "gpio", readgpio: "gpio", setgpio: "gpio", highpins: "gpio", testgpio: "gpio",
+      gpio: "gpio", configuregpio: "gpio", readadc: "adc", readgpio: "gpio", setgpio: "gpio", highpins: "gpio", testgpio: "gpio",
       timer: "timer", after: "timer", every: "timer", testtimer: "timer",
       pwm: "pwm", startpwm: "pwm", setpwmduty: "pwm", readpwmduty: "pwm", stoppwm: "pwm", readpwm: "pwm", testpwm: "pwm",
       fengmingqi: "fengmingqi", beep: "fengmingqi", testbuzzer: "fengmingqi",
       lcd: "lcd", clearlcd: "lcd", clearlcdline: "lcd", showlcd: "lcd", showlcdcolor: "lcd", showlcdtemp: "lcd", showlcdrowtemp: "lcd", lcdtempactive: "lcd", lcdrowtempactive: "lcd", updatelcdtemp: "lcd", lcdline: "lcd", lcdvalue: "lcd", showstatus: "lcd", testlcd: "lcd",
-      spi: "spi", sendspi: "spi", testspi: "spi",
-      uart: "uart", setuart: "uart", senduart: "uart", readuart: "uart", readuarttext: "uart", waituart: "uart", testuart: "uart",
+      spi: "spi", configurespi: "spi", sendspi: "spi", testspi: "spi",
+      uart: "uart", setuart: "uart", configureuart: "uart", senduart: "uart", readuart: "uart", readuarttext: "uart", waituart: "uart", testuart: "uart",
       rs232: "rs232", sendrs232: "rs232", readrs232: "rs232", readrs232text: "rs232", testrs232: "rs232",
       rs485: "rs485", sendrs485: "rs485", readrs485: "rs485", readrs485text: "rs485", testrs485: "rs485",
-      cunchu: "cunchu", writefile: "cunchu", readfile: "cunchu", removefile: "cunchu", teststorage: "cunchu",
+      cunchu: "cunchu", sdcard: "cunchu", writefile: "cunchu", readfile: "cunchu", removefile: "cunchu", listfiles: "cunchu", storageinfo: "cunchu", makedir: "cunchu", removedir: "cunchu", teststorage: "cunchu",
       yinpin: "yinpin", recordstart: "yinpin", recordstop: "yinpin", record: "yinpin", recordtimed: "yinpin", updateaudio: "yinpin", playfile: "yinpin", play: "yinpin", stopplay: "yinpin", playstop: "yinpin", tts: "yinpin", say: "yinpin", settts: "yinpin", setttsparams: "yinpin", setvolume: "yinpin", volume: "yinpin", readvolume: "yinpin", testaudio: "yinpin",
       lte: "lte", readlte: "lte", networkstatus: "lte", testlte: "lte", lte_status: "lte", lte_field: "lte", lte_print: "lte",
       ble: "ble", setblemode: "ble", bleserver: "ble", bleclient: "ble", scanble: "ble", connectble: "ble", discoverble: "ble", readble: "ble", readbleclient: "ble", readbledata: "ble", readblehandle: "ble", sendble: "ble", writeblehandle: "ble", testble: "ble",
@@ -1551,19 +1551,54 @@ if __name__ == "__main__":
 
     const PARAM_API_PRESETS = [
       { key: "gpio_read", label: "GPIO \u8bfb\u53d6\u5230\u53d8\u91cf", outputVar: "gpio_value", a: "D3", b: "", c: "" },
+      { key: "gpio_config", label: "GPIO \u9ad8\u7ea7\u914d\u7f6e\u5f15\u811a", outputVar: "", a: "D3", b: "in", c: "down", d: "0" },
+      { key: "adc_read_pin", label: "ADC \u9ad8\u7ea7\u8bfb\u53d6\u5f15\u811a", outputVar: "adc_value", a: "C5", b: "", c: "" },
       { key: "gpio_write", label: "GPIO \u8f93\u51fa\u9ad8\u4f4e\u7535\u5e73", outputVar: "", a: "D3", b: "1", c: "" },
       { key: "gpio_high_list", label: "汇总高电平 GPIO 引脚名", outputVar: "high_pin_text", a: "PA3,PC0,PC3,PA5,PA6,PF13,PF14,PF15", b: "", c: "", placement: "slow" },
       { key: "pwm_start", label: "PWM \u542f\u52a8", outputVar: "", a: "D3", b: "1000", c: "50", placement: "startup" },
       { key: "pwm_set_duty", label: "PWM 使用变量设置占空比", outputVar: "", a: "pwm_duty", b: "", c: "", placement: "fast" },
       { key: "pwm_stop", label: "PWM \u505c\u6b62", outputVar: "", a: "", b: "", c: "" },
       { key: "i2c_scan", label: "I2C \u626b\u63cf\u5230\u53d8\u91cf", outputVar: "i2c_addrs", a: "", b: "", c: "" },
+      { key: "i2c_config", label: "I2C \u9ad8\u7ea7\u914d\u7f6e\u603b\u7ebf", outputVar: "", a: "1", b: "400000", c: "", d: "" },
       { key: "spi_send", label: "SPI \u53d1\u9001\u5230\u53d8\u91cf", outputVar: "spi_result", a: "test", b: "", c: "" },
+      { key: "spi_config", label: "SPI \u9ad8\u7ea7\u914d\u7f6e\u603b\u7ebf", outputVar: "", a: "1", b: "1000000", c: "0", d: "0", e: "", f: "", g: "" },
       { key: "uart_wait", label: "UART2 \u7b49\u5f85\u63a5\u6536\u5230\u53d8\u91cf", outputVar: "uart_read_text", a: "10000", b: "", c: "" },
+      { key: "math_func", label: "Scratch \u6570\u5b66\u51fd\u6570", outputVar: "math_result", a: "round", b: "value" },
+      { key: "uart_config", label: "UART \u9ad8\u7ea7\u914d\u7f6e\u53c2\u6570", outputVar: "", a: "2", b: "115200", c: "8", d: "none", e: "1", f: "1000", g: "", h: "" },
       { key: "file_write", label: "\u5b58\u50a8\u5361\u5199\u6587\u4ef6", outputVar: "", a: "SD:test.txt", b: "hello", c: "" },
+      { key: "file_list", label: "SDCard \u5217\u51fa\u6587\u4ef6", outputVar: "file_list", a: "*", b: "", c: "" },
+      { key: "storage_info", label: "SDCard \u8bfb\u53d6\u5bb9\u91cf", outputVar: "storage_info", a: "UFS", b: "", c: "" },
+      { key: "dir_make", label: "SDCard \u521b\u5efa\u76ee\u5f55", outputVar: "", a: "competition_test", b: "", c: "" },
+      { key: "dir_remove", label: "SDCard \u5220\u9664\u76ee\u5f55", outputVar: "", a: "competition_test", b: "0", c: "" },
       { key: "file_write_var", label: "存储卡写变量到文件", outputVar: "", a: "SD:test.txt", b: "show_text", c: "" },
       { key: "file_read", label: "\u5b58\u50a8\u5361\u8bfb\u6587\u4ef6\u5230\u53d8\u91cf", outputVar: "file_text", a: "SD:test.txt", b: "1024", c: "" },
       { key: "file_remove", label: "\u5b58\u50a8\u5361\u5220\u9664\u6587\u4ef6", outputVar: "", a: "SD:test.txt", b: "", c: "" },
       { key: "record_audio", label: "\u5f55\u97f3\u4e00\u6bb5\u65f6\u95f4", outputVar: "", a: "SD:competition_test.wav", b: "1500", c: "" },
+      { key: "led_set", label: "LED \u8bbe\u7f6e\u72b6\u6001", outputVar: "", a: "red", b: "1", c: "" },
+      { key: "key_text", label: "\u6309\u952e\u4e8b\u4ef6\u8f6c\u6587\u5b57", outputVar: "key_status", a: "key_event", b: "", c: "" },
+      { key: "key_is", label: "\u5224\u65ad\u6309\u952e\u6309\u4f4f", outputVar: "key_held", a: "center", b: "", c: "" },
+      { key: "lcd_text", label: "LCD \u6307\u5b9a\u884c\u5217\u663e\u793a", outputVar: "", a: "Hello", b: "0", c: "0" },
+      { key: "lcd_text_color", label: "LCD \u5f69\u8272\u663e\u793a", outputVar: "", a: "Hello", b: "0", c: "0", d: "white" },
+      { key: "lcd_row_active", label: "LCD \u6307\u5b9a\u884c\u4e34\u65f6\u72b6\u6001", outputVar: "lcd_active", a: "0" },
+      { key: "lcd_line_text", label: "LCD \u6574\u884c\u663e\u793a", outputVar: "", a: "0", b: "Hello", c: "0" },
+      { key: "lcd_value_text", label: "LCD \u53d8\u91cf\u663e\u793a", outputVar: "", a: "value", b: "0", c: "0" },
+      { key: "algo_round", label: "\u4fdd\u7559\u5c0f\u6570", outputVar: "rounded_value", a: "value", b: "2" },
+      { key: "algo_sort", label: "\u6570\u5b57\u6392\u5e8f", outputVar: "sorted_values", a: "values", b: "0" },
+      { key: "algo_max", label: "\u6c42\u6700\u5927\u503c", outputVar: "max_value", a: "values" },
+      { key: "algo_min", label: "\u6c42\u6700\u5c0f\u503c", outputVar: "min_value", a: "values" },
+      { key: "algo_avg", label: "\u6c42\u5e73\u5747\u503c", outputVar: "avg_value", a: "values" },
+      { key: "algo_join", label: "\u6587\u5b57\u62fc\u63a5", outputVar: "joined_text", a: "value_a", b: "value_b", c: "" },
+      { key: "algo_math", label: "\u6570\u5b57\u8fd0\u7b97", outputVar: "math_value", a: "value_a", b: "+", c: "value_b" },
+      { key: "algo_random", label: "范围随机数", outputVar: "random_value", a: "0", b: "100" },
+      { key: "algo_compare", label: "比较两个值", outputVar: "compare_result", a: "value_a", b: ">", c: "value_b" },
+      { key: "algo_logic", label: "与或非逻辑", outputVar: "logic_result", a: "value_a", b: "and", c: "value_b" },
+      { key: "text_length", label: "\u6587\u672c\u957f\u5ea6", outputVar: "text_length", a: "text_value" },
+      { key: "text_letter", label: "读取文本字符", outputVar: "text_char", a: "text_value", b: "0" },
+      { key: "text_contains", label: "判断文本包含", outputVar: "text_has", a: "text_value", b: "test" },
+      { key: "text_number", label: "文本转数字", outputVar: "number_value", a: "text_value" },
+      { key: "text_text", label: "数值转文字", outputVar: "text_value", a: "value" },
+      { key: "uart_send", label: "UART2 发送文字", outputVar: "", a: "OK\\r\\n" },
+      { key: "uart_text", label: "UART2 读取文字", outputVar: "uart_received_text", a: "" },
       { key: "record_timed", label: "非阻塞定时录音", outputVar: "", a: "SD:competition_test.wav", b: "10000", c: "" },
       { key: "play_audio", label: "\u64ad\u653e\u672c\u5730\u97f3\u9891", outputVar: "", a: "SD:competition_test.wav", b: "", c: "" },
       { key: "play_audio_nowait", label: "非阻塞播放本地音频", outputVar: "", a: "SD:competition_test.wav", b: "", c: "" },
@@ -1586,6 +1621,7 @@ if __name__ == "__main__":
       { key: "lte_status", label: "4G 读取完整状态到变量", outputVar: "lte_status", a: "", b: "", c: "", placement: "slow" },
       { key: "lte_field", label: "4G 读取单项状态到变量", outputVar: "lte_registered", a: "registered", b: "", c: "", placement: "slow" },
       { key: "lte_print", label: "4G 串口打印连接摘要", outputVar: "", a: "[4G]", b: "summary", c: "", placement: "slow" },
+      { key: "wait_key", label: "等待指定按键事件", outputVar: "key_event", a: "center", b: "10000", c: "short", placement: "fast" },
       { key: "delay", label: "延时等待", outputVar: "", a: "100", b: "", c: "", placement: "slow" },
       { key: "beep", label: "蜂鸣器响指定时长和频率", outputVar: "", a: "300", b: "2000", c: "", placement: "slow" },
       { key: "rs232_read", label: "RS232 接收文字到变量", outputVar: "rs232_received_text", a: "", b: "", c: "", placement: "fast" },
@@ -1594,18 +1630,52 @@ if __name__ == "__main__":
 
     const PARAM_API_META = {
       gpio_read: { output: "读取结果变量", a: "GPIO 引脚，例如 D3" },
+      gpio_config: { a: "GPIO 引脚", b: "模式: in / out", c: "上下拉: none / up / down", d: "输出初值 0/1" },
+      adc_read_pin: { output: "ADC 读取结果变量", a: "ADC 引脚" },
       gpio_write: { a: "GPIO 引脚，例如 D3", b: "输出电平：0 或 1" },
       gpio_high_list: { output: "高电平引脚名变量", a: "用逗号分隔的 GPIO 引脚列表" },
       pwm_start: { a: "PWM 引脚", b: "频率 Hz", c: "占空比 0-100" },
       pwm_set_duty: { a: "占空比变量名", variableFields: ["a"] },
       pwm_stop: {},
       i2c_scan: { output: "扫描结果变量" },
+      i2c_config: { a: "I2C 编号", b: "频率 Hz", c: "SDA 引脚，可留空", d: "SCL 引脚，可留空" },
       spi_send: { output: "SPI 返回结果变量", a: "发送文字" },
+      spi_config: { a: "SPI 编号", b: "速率 Hz", c: "CPOL 0/1", d: "CPHA 0/1", e: "SCK 引脚", f: "MOSI 引脚", g: "MISO 引脚" },
       uart_wait: { output: "接收结果变量", a: "等待超时 ms；0 表示立即返回" },
+      uart_config: { a: "UART 编号", b: "波特率", c: "数据位", d: "校验 none/even/odd", e: "停止位", f: "超时 ms", g: "TX 引脚", h: "RX 引脚" },
       file_write: { a: "文件路径", b: "写入文字" },
       file_write_var: { a: "文件路径", b: "要写入的变量名", variableFields: ["b"] },
       file_read: { output: "文件内容变量", a: "文件路径", b: "最多读取字节数" },
       file_remove: { a: "要删除的文件路径" },
+      file_list: { output: "文件列表变量", a: "目录或通配符，例如 *" },
+      storage_info: { output: "空间信息变量", a: "卷名，默认 UFS" },
+      dir_make: { a: "目录路径" },
+      dir_remove: { a: "目录路径", b: "强制删除 0/1" },
+      led_set: { a: "LED 名称", b: "状态 0/1", bOptions: [["0", "关"], ["1", "开"]] },
+      key_text: { output: "文字变量", a: "按键事件变量", variableFields: ["a"] },
+      key_is: { output: "布尔变量", a: "方向", aOptions: [["up", "上"], ["down", "下"], ["left", "左"], ["right", "右"], ["center", "中心"], ["user", "USER"]] },
+      lcd_text: { a: "显示文字", b: "行 0-6", c: "列 0-19" },
+      lcd_text_color: { a: "显示文字", b: "行 0-6", c: "列 0-19", d: "颜色", dOptions: [["white", "白"], ["red", "红"], ["green", "绿"], ["blue", "蓝"], ["yellow", "黄"]] },
+      lcd_row_active: { output: "布尔变量", a: "行 0-6" },
+      lcd_line_text: { a: "行 0-6", b: "显示文字", c: "列 0-19" },
+      lcd_value_text: { a: "显示变量", b: "行 0-6", c: "列 0-19", variableFields: ["a"] },
+      algo_round: { output: "结果变量", a: "数值变量", b: "小数位数", variableFields: ["a"] },
+      algo_sort: { output: "结果变量", a: "列表变量", b: "倒序 0/1", variableFields: ["a"] },
+      algo_max: { output: "结果变量", a: "列表变量", variableFields: ["a"] },
+      algo_min: { output: "结果变量", a: "列表变量", variableFields: ["a"] },
+      algo_avg: { output: "结果变量", a: "列表变量", variableFields: ["a"] },
+      algo_join: { output: "结果变量", a: "值 1", b: "值 2", c: "值 3", variableFields: ["a", "b", "c"] },
+      algo_math: { output: "结果变量", a: "左值", b: "运算符", c: "右值", variableFields: ["a", "c"] },
+      algo_random: { output: "结果变量", a: "最小值", b: "最大值" },
+      algo_compare: { output: "布尔变量", a: "左值", b: "比较符", c: "右值", variableFields: ["a", "c"] },
+      algo_logic: { output: "布尔变量", a: "左值", b: "and/or/not", c: "右值", variableFields: ["a", "c"] },
+      text_length: { output: "结果变量", a: "文本变量", variableFields: ["a"] },
+      text_letter: { output: "字符变量", a: "文本变量", b: "下标", variableFields: ["a"] },
+      text_contains: { output: "布尔变量", a: "文本变量", b: "查找文字", variableFields: ["a"] },
+      text_number: { output: "数字变量", a: "文本变量", variableFields: ["a"] },
+      text_text: { output: "文本变量", a: "数值变量", variableFields: ["a"] },
+      uart_send: { a: "发送文字" },
+      uart_text: { output: "接收文字变量" },
       record_audio: { a: "录音文件路径", b: "录音时长 ms" },
       record_timed: { a: "录音文件路径", b: "录音时长 ms" },
       play_audio: { a: "音频文件路径" },
@@ -1629,6 +1699,8 @@ if __name__ == "__main__":
       lte_status: { output: "状态字典变量" },
       lte_field: { output: "状态值变量", a: "状态字段", aOptions: [["sim", "SIM 卡"], ["registered", "注册状态"], ["attached", "数据附着"], ["signal", "信号强度"], ["status", "原始注册状态"]] },
       lte_print: { a: "串口前缀", b: "打印模式：summary 或 raw" },
+      wait_key: { output: "事件结果变量", a: "按键", aOptions: [["up", "上"], ["down", "下"], ["left", "左"], ["right", "右"], ["center", "中间/确认"], ["user", "USER"]], b: "超时 ms", c: "事件", cOptions: [["press", "按下"], ["release", "松开"], ["short", "短按"], ["long", "长按"], ["repeat", "重复"]] },
+      math_func: { output: "结果变量", a: "函数", b: "数值", aOptions: [["round", "四舍五入"], ["floor", "向下取整"], ["ceil", "向上取整"], ["abs", "绝对值"]], variableFields: ["b"] },
       delay: { a: "等待毫秒数" },
       beep: { a: "持续时间 ms", b: "频率 Hz" },
       rs232_read: { output: "接收结果变量" },
@@ -1637,13 +1709,19 @@ if __name__ == "__main__":
 
     const API_TO_PARAM_PRESET = {
       readgpio: "gpio_read", setgpio: "gpio_write", highpins: "gpio_high_list", startpwm: "pwm_start", setpwmduty: "pwm_set_duty", stoppwm: "pwm_stop",
+      configuregpio: "gpio_config", readadc: "adc_read_pin", configurei2c: "i2c_config", configurespi: "spi_config", configureuart: "uart_config",
       scani2c: "i2c_scan", sendspi: "spi_send", waituart: "uart_wait", writefile: "file_write",
-      readfile: "file_read", removefile: "file_remove", recordtimed: "record_timed", playfile: "play_audio",
+      readfile: "file_read", removefile: "file_remove", listfiles: "file_list", storageinfo: "storage_info", makedir: "dir_make", removedir: "dir_remove", recordtimed: "record_timed", playfile: "play_audio",
       tts: "tts_say", say: "tts_say", setvolume: "set_volume", sendrs232: "rs232_send",
       sendrs485: "rs485_send", delay: "delay", beep: "beep", readrs232text: "rs232_read", readrs485text: "rs485_read", setblemode: "ble_mode", scanble: "ble_scan", connectble: "ble_connect",
       discoverble: "ble_discover", readblehandle: "ble_read_handle", writeblehandle: "ble_write_handle",
       sendble: "ble_send", showlcdtemp: "lcd_temp_var", showlcdrowtemp: "lcd_row_temp_var", clearlcdline: "lcd_clear_line",
-      lte_status: "lte_status", lte_field: "lte_field", lte_print: "lte_print"
+      lte_status: "lte_status", lte_field: "lte_field", lte_print: "lte_print", waitkey: "wait_key", setuart: "uart_config", shuxue: "math_func",
+      setled: "led_set", keytext: "key_text", iskey: "key_is",
+      showlcd: "lcd_text", showlcdcolor: "lcd_text_color", lcdrowtempactive: "lcd_row_active", lcdline: "lcd_line_text", lcdvalue: "lcd_value_text",
+      baoliuxiaoshu: "algo_round", shuzipaixu: "algo_sort", zuidazhi: "algo_max", zuixiao: "algo_min", pingjunzhi: "algo_avg", pin_jie: "algo_join",
+      yunsuan: "algo_math", suijishu: "algo_random", bijiao: "algo_compare", luoji: "algo_logic", wenbenchangdu: "text_length", wenbenzifu: "text_letter",
+      wenbenbaohan: "text_contains", zhuanshuzi: "text_number", zhuanwenzi: "text_text", senduart: "uart_send", readuarttext: "uart_text"
     };
 
     const READ_PRESETS = [
@@ -1655,8 +1733,9 @@ if __name__ == "__main__":
       { key: "axis_y", label: "加速度 Y", varName: "y", expr: "api.readyaxis()", raw: false },
       { key: "axis_z", label: "加速度 Z", varName: "z", expr: "api.readz()", raw: false },
       { key: "button", label: "按键事件", varName: "key_value", expr: "api.readanjian()", raw: true },
-      { key: "key_status", label: "短按/长按状态文字", varName: "key_status", expr: "api.keytext(key_event)", raw: true },
+      { key: "key_status", label: "最近短按/长按状态文字", varName: "key_status", expr: "api.keytext(api.lastanjian())", raw: true },
       { key: "button_adc", label: "五向键 ADC", varName: "key_adc", expr: "api.readanjianadc()", raw: false },
+      { key: "button_direction", label: "五向键方向", varName: "key_direction", expr: "api.readanjian_direction()", raw: true },
       { key: "millis", label: "定时器当前毫秒", varName: "now_ms", expr: "api.millis()", raw: false },
       { key: "uart", label: "串口接收", varName: "uart_read_text", expr: "api.readuart()", raw: false },
       { key: "uart_text", label: "UART2 新接收文字", varName: "uart_received_text", expr: "api.readuarttext()", raw: true },
@@ -1689,6 +1768,11 @@ if __name__ == "__main__":
       ["按住左键", "api.iskey(\"left\")"],
       ["按住右键", "api.iskey(\"right\")"],
       ["按住中间键", "api.iskey(\"center\")"],
+      ["五向方向为上", "api.readanjian_direction() == \"up\""],
+      ["五向方向为下", "api.readanjian_direction() == \"down\""],
+      ["五向方向为左", "api.readanjian_direction() == \"left\""],
+      ["五向方向为右", "api.readanjian_direction() == \"right\""],
+      ["五向方向为中心", "api.readanjian_direction() == \"center\""],
       ["光敏值大于 100", "api.readguangmin() > 100"]
     ];
 
@@ -1716,6 +1800,7 @@ if __name__ == "__main__":
       { key: "z_text", label: "变量：z_text", value: "z_text", isVar: true },
       { key: "key_value_text", label: "变量：key_value_text", value: "key_value_text", isVar: true },
       { key: "key_adc_text", label: "变量：key_adc_text", value: "key_adc_text", isVar: true },
+      { key: "key_direction_text", label: "变量：key_direction_text", value: "key_direction_text", isVar: true },
       { key: "location_source_text", label: "变量：location_source_text", value: "location_source_text", isVar: true },
       { key: "lat_value_text", label: "变量：lat_value_text", value: "lat_value_text", isVar: true },
       { key: "lon_value_text", label: "变量：lon_value_text", value: "lon_value_text", isVar: true },
@@ -1745,7 +1830,7 @@ if __name__ == "__main__":
 
     const ZERO_ARG_APIS = [
       "init","status","ready","preflight","testall","millis","led","ledoff","ledrun","testled",
-      "anjian","readanjian","readanjianadc","waitanjian","waitshort","waitlong","testanjian",
+      "anjian","readanjian","readanjianadc","readanjian_direction","waitanjian","waitshort","waitlong","testanjian",
       "guangmin","readguangmin","readguangmin_percent","readguangmin_all","i2c","wenhumi","readwenhumi","readwendu","readshidu",
       "jiasudu","readjiasudu","readx","readyaxis","readz","gpio","testgpio","timer","testtimer",
       "pwm","readpwmduty","readpwm","testpwm","fengmingqi","testbuzzer","lcd","clearlcd","lcdclear","lcdtempactive","updatelcdtemp",
@@ -1754,7 +1839,7 @@ if __name__ == "__main__":
       "cunchu","teststorage","yinpin","recordstart","recordstop","record","updateaudio","play","stopplay","playstop",
       "settts","setttsparams","volume","readvolume","testaudio","lte","readlte","networkstatus","testlte","gnss","readgnss",
       "readgnsslat","readgnsslon","testgnss","lbs","readlbs","readlbslat","readlbslon","readlocation",
-      "readlocationlat","readlocationlon","testlbs","ble","bleserver","bleclient","readble","readbleclient","testble","hmi","menu","runhmi","testhmi"
+      "readlocationlat","readlocationlon","testlbs","ble","bleserver","bleclient","readble","readbleclient","readbledata","testble","hmi","menu","runhmi","testhmi","sdcard"
     ];
 
     function apiDisplayLabel(api) {
@@ -1773,7 +1858,7 @@ if __name__ == "__main__":
     }
 
     const API_RETURN_APIS = new Set([
-      "status", "millis", "readanjian", "readanjianadc", "readuart", "readuarttext", "readlte", "networkstatus",
+      "status", "millis", "readanjian", "readanjianadc", "readanjian_direction", "readuart", "readuarttext", "readlte", "networkstatus",
       "readble", "readbleclient", "readbledata", "readgnss", "readgnsslat", "readgnsslon", "readlbs", "readlbslat",
       "readlbslon", "readlocation", "readlocationlat", "readlocationlon", "readvolume", "readpwmduty"
     ]);
@@ -1781,6 +1866,16 @@ if __name__ == "__main__":
       .flatMap(cat => cat.apis)
       .filter(api => ZERO_ARG_APIS.includes(api))
       .map(api => ({ key: api, name: api, label: apiDisplayLabel(api) + "()", expr: "api." + api + "()", placement: apiDefaultPlacement(api), returns: API_RETURN_APIS.has(api) }));
+
+    const API_ALTERNATIVE_HINTS = {
+      lastanjian: "请使用读取变量里的“最近短按/长按状态文字”",
+      after: "请使用延时等待积木后接要执行的积木",
+      every: "请使用快速轮询框、慢速刷新框或重复循环",
+      shuxue: "请使用数学函数积木",
+      setuart: "请使用 UART 高级配置参数积木",
+      sdcard: "请在启动区打开“存储卡”，SDCard 文件积木会自动使用该模块",
+      readbledata: "请使用读取变量里的“BLE 新接收文字”"
+    };
 
     // Keep the editor's validation and palette coverage aligned with the actual
     // builder vocabulary.  The MicroBlocks skin must not silently hide a valid
@@ -1818,6 +1913,7 @@ if __name__ == "__main__":
     let saveTimer = null;
     let restoringHistory = false;
     let latestDiagnostics = { errors: [], warnings: [] };
+    let lastGeneratedCode = "";
     let lcdDesign = JSON.parse(JSON.stringify(LCD_DESIGN_DEFAULT));
     const zoneLayout = {
       startup: { x: 16, y: 16, width: 720 },
@@ -2380,6 +2476,12 @@ if __name__ == "__main__":
       if (!raw || typeof raw !== "object") return defaultBlock("api");
       const normalized = defaultBlock(raw.type || "api", raw);
       normalized.id = raw.id || normalized.id;
+      // Keep legacy key-status projects independent from a separately named
+      // key_event variable. The read preset is non-consuming and safe in any
+      // loop phase.
+      if (normalized.type === "read" && normalized.readKey === "key_status") {
+        normalized.readExpr = "api.keytext(api.lastanjian())";
+      }
       // Structural blocks inherit their execution phase from the enclosing
       // loop. Older saved states copied the ordinary block default
       // (placement="slow") onto if/loop/event containers, which made valid
@@ -2623,7 +2725,8 @@ if __name__ == "__main__":
             return '<span class="chip ' + apiKind(cat.name) + '" draggable="true" data-action="add-param-api" data-param-key="' + esc(paramKey) + '" title="点击添加已经配置好参数名称的专用积木">' + label + '<span class="zone">参数积木</span></span>';
           }
           if (!ZERO_ARG_APIS.includes(api)) {
-            return '<span class="chip ' + apiKind(cat.name) + ' disabled" title="该接口需要参数，请使用读取、显示、串口、参数接口或执行动作专用积木">' + label + '<span class="zone">需参数</span></span>';
+            const hint = API_ALTERNATIVE_HINTS[api] || "该接口已有专用积木，请从上方常用积木中选择";
+            return '<span class="chip ' + apiKind(cat.name) + ' disabled" title="' + esc(hint) + '">' + label + '<span class="zone">' + esc(hint) + '</span></span>';
           }
           return '<span class="chip ' + apiKind(cat.name) + '" draggable="true" data-action="add-api" data-api="' + api + '" title="推荐放置：' + zone + '">' + label + '<span class="zone">' + zone + '</span></span>';
         }).join("");
@@ -2980,10 +3083,10 @@ if __name__ == "__main__":
         const fields = [];
         if (meta.output) fields.push(paramApiInput(meta.output, "paramOutputVar", block.paramOutputVar, true));
         if (meta.a) fields.push(meta.aOptions ? paramApiChoice(meta.a, "paramA", block.paramA, meta.aOptions) : paramApiInput(meta.a, "paramA", block.paramA, (meta.variableFields || []).includes("a")));
-        if (meta.b) fields.push(paramApiInput(meta.b, "paramB", block.paramB, (meta.variableFields || []).includes("b")));
-        if (meta.c) fields.push(paramApiInput(meta.c, "paramC", block.paramC, (meta.variableFields || []).includes("c")));
-        if (meta.d) fields.push(paramApiInput(meta.d, "paramD", block.paramD, (meta.variableFields || []).includes("d")));
-        if (meta.e) fields.push(paramApiInput(meta.e, "paramE", block.paramE, (meta.variableFields || []).includes("e")));
+        if (meta.b) fields.push(meta.bOptions ? paramApiChoice(meta.b, "paramB", block.paramB, meta.bOptions) : paramApiInput(meta.b, "paramB", block.paramB, (meta.variableFields || []).includes("b")));
+        if (meta.c) fields.push(meta.cOptions ? paramApiChoice(meta.c, "paramC", block.paramC, meta.cOptions) : paramApiInput(meta.c, "paramC", block.paramC, (meta.variableFields || []).includes("c")));
+        if (meta.d) fields.push(meta.dOptions ? paramApiChoice(meta.d, "paramD", block.paramD, meta.dOptions) : paramApiInput(meta.d, "paramD", block.paramD, (meta.variableFields || []).includes("d")));
+        if (meta.e) fields.push(meta.eOptions ? paramApiChoice(meta.e, "paramE", block.paramE, meta.eOptions) : paramApiInput(meta.e, "paramE", block.paramE, (meta.variableFields || []).includes("e")));
         return '<div class="row"><div><label>接口类型</label><select data-action="param-api-preset">' + paramApiOptions(block.paramApiKey) + '</select></div>' +
           '<div><label>建议放置位置</label><select data-field="placement">' + options(["startup","fast","slow"], block.placement || "slow") + '</select></div></div>' +
           (fields.length ? '<div class="row">' + fields.join("") + '</div>' : '<p class="hint">此接口没有必填参数。</p>') +
@@ -3119,7 +3222,7 @@ if __name__ == "__main__":
       // inherit the phase from the enclosing fast/slow loop instead.
       if (["if", "while", "until", "repeat", "select", "fastloop", "slowloop", "forever", "button"].includes(block.type)) return null;
       if (block.type === "read") {
-        return ["button", "key_status", "button_adc", "millis", "uart", "uart_text", "ble_data", "audio_recording", "lcd_row_active"].includes(block.readKey) ? "fast" : "slow";
+        return ["button", "key_status", "button_adc", "button_direction", "millis", "uart", "uart_text", "ble_data", "audio_recording", "lcd_row_active"].includes(block.readKey) ? "fast" : "slow";
       }
       if (block.type === "event") return ["fast", "slow"].includes(block.eventPlacement) ? block.eventPlacement : (block.eventType === "data" ? "slow" : "fast");
       if (block.type === "reporter") {
@@ -3162,8 +3265,9 @@ if __name__ == "__main__":
         if (block.type === "api") return API_MODULE_REQUIREMENTS[block.apiKey || block.apiName] === module;
         if (block.type === "paramapi") {
           const key = block.paramApiKey || "";
-          return (key.startsWith("ble_") ? "ble" : key.startsWith("file_") ? "cunchu" :
+          return (key.startsWith("ble_") ? "ble" : (key.startsWith("file_") || ["file_list","storage_info","dir_make","dir_remove"].includes(key)) ? "cunchu" :
             ["lte_status", "lte_field", "lte_print"].includes(key) ? "lte" :
+            key === "wait_key" ? "anjian" :
             ["lcd_temp_var", "lcd_row_temp_var", "lcd_clear_line"].includes(key) ? "lcd" :
             ["rs232_read", "rs232_send"].includes(key) ? "rs232" :
             ["rs485_read", "rs485_send"].includes(key) ? "rs485" : null) === module;
@@ -3194,18 +3298,53 @@ if __name__ == "__main__":
       const d = block.paramD || "";
       const e = block.paramE || "";
       if (key === "gpio_read") return out + " = api.readgpio(" + quote(a || "D3") + ")";
+      if (key === "gpio_config") return "api.configuregpio(" + quote(a || "D3") + ", " + quote(b || "in") + ", " + quote(c || "none") + ", " + intLiteral(d, 0, 0, 1) + ")";
+      if (key === "adc_read_pin") return out + " = api.readadc(" + quote(a || "C5") + ")";
       if (key === "gpio_write") return "api.setgpio(" + quote(a || "D3") + ", " + intLiteral(b, 1, 0, 1) + ")";
       if (key === "gpio_high_list") return out + " = api.highpins(" + stringTupleLiteral(a) + ")";
       if (key === "pwm_start") return "api.startpwm(" + quote(a || "D3") + ", " + intLiteral(b, 1000, 1, 1000000) + ", " + intLiteral(c, 50, 0, 100) + ")";
       if (key === "pwm_set_duty") return "api.setpwmduty(" + safeVarName(a, "pwm_duty") + ")";
       if (key === "pwm_stop") return "api.stoppwm()";
       if (key === "i2c_scan") return out + " = api.scani2c()";
+      if (key === "i2c_config") return "api.configurei2c(" + intLiteral(a, 1, 0, 9) + ", " + (c ? quote(c) : "None") + ", " + (d ? quote(d) : "None") + ", " + intLiteral(b, 400000, 1000, 5000000) + ")";
       if (key === "spi_send") return out + " = api.sendspi(" + quote(a || "test") + ")";
+      if (key === "spi_config") return "api.configurespi(" + intLiteral(a, 1, 0, 9) + ", " + intLiteral(b, 1000000, 1000, 50000000) + ", " + intLiteral(c, 0, 0, 1) + ", " + intLiteral(d, 0, 0, 1) + ", " + (e ? quote(e) : "None") + ", " + (f ? quote(f) : "None") + ", " + (g ? quote(g) : "None") + ")";
       if (key === "uart_wait") return out + " = api.waituart(" + intLiteral(a, 10000, 0, 600000) + ")";
+      if (key === "uart_config") return "api.configureuart(" + intLiteral(a, 2, 0, 9) + ", " + intLiteral(b, 115200, 300, 4000000) + ", " + intLiteral(c, 8, 5, 9) + ", " + ((d || "none").toLowerCase() === "none" ? "None" : quote(d)) + ", " + intLiteral(e, 1, 1, 2) + ", " + intLiteral(f, 1000, 0, 600000) + ", " + (g ? quote(g) : "None") + ", " + (h ? quote(h) : "None") + ")";
       if (key === "file_write") return "api.writefile(" + quote(a || "SD:test.txt") + ", " + quote(b || "hello") + ")";
       if (key === "file_write_var") return "api.writefile(" + quote(a || "SD:test.txt") + ", " + safeVarName(b, "show_text") + ")";
       if (key === "file_read") return out + " = api.readfile(" + quote(a || "SD:test.txt") + ", " + intLiteral(b, 1024, 1, 65535) + ")";
       if (key === "file_remove") return "api.removefile(" + quote(a || "SD:test.txt") + ")";
+      if (key === "file_list") return out + " = api.listfiles(" + quote(a || "*") + ")";
+      if (key === "storage_info") return out + " = api.storageinfo(" + quote(a || "UFS") + ")";
+      if (key === "dir_make") return "api.makedir(" + quote(a || "competition_test") + ")";
+      if (key === "dir_remove") return "api.removedir(" + quote(a || "competition_test") + ", " + intLiteral(b, 0, 0, 1) + ")";
+      if (key === "led_set") return "api.setled(" + quote(a || "red") + ", " + intLiteral(b, 1, 0, 1) + ")";
+      if (key === "key_text") return out + " = api.keytext(" + safeVarName(a, "key_event") + ")";
+      if (key === "key_is") return out + " = api.iskey(" + quote(a || "center") + ")";
+      if (key === "lcd_text") return "api.showlcd(" + quote(a || "Hello") + ", " + intLiteral(b, 0, 0, 6) + ", " + intLiteral(c, 0, 0, 19) + ")";
+      if (key === "lcd_text_color") return "api.showlcdcolor(" + quote(a || "Hello") + ", " + intLiteral(b, 0, 0, 6) + ", " + intLiteral(c, 0, 0, 19) + ", " + quote(d || "white") + ")";
+      if (key === "lcd_row_active") return out + " = api.lcdrowtempactive(" + intLiteral(a, 0, 0, 6) + ")";
+      if (key === "lcd_line_text") return "api.lcdline(" + intLiteral(a, 0, 0, 6) + ", " + quote(b || "Hello") + ", " + intLiteral(c, 0, 0, 19) + ")";
+      if (key === "lcd_value_text") return "api.showlcd(" + "str(" + safeVarName(a, "value") + ")" + ", " + intLiteral(b, 0, 0, 6) + ", " + intLiteral(c, 0, 0, 19) + ")";
+      if (key === "algo_round") return out + " = api.baoliuxiaoshu(" + safeVarName(a, "value") + ", " + intLiteral(b, 2, 0, 12) + ")";
+      if (key === "algo_sort") return out + " = api.shuzipaixu(" + safeVarName(a, "values") + ", " + (intLiteral(b, 0, 0, 1) === "1" ? "True" : "False") + ")";
+      if (key === "algo_max") return out + " = api.zuidazhi(" + safeVarName(a, "values") + ")";
+      if (key === "algo_min") return out + " = api.zuixiao(" + safeVarName(a, "values") + ")";
+      if (key === "algo_avg") return out + " = api.pingjunzhi(" + safeVarName(a, "values") + ")";
+      if (key === "algo_join") return out + " = api.pin_jie(" + [a, b, c].filter(Boolean).map(value => safeVarName(value, "value")).join(", ") + ")";
+      if (key === "algo_math") return out + " = api.yunsuan(" + safeVarName(a, "value_a") + ", " + quote(b || "+") + ", " + safeVarName(c, "value_b") + ")";
+      if (key === "algo_random") return out + " = api.suijishu(" + intLiteral(a, 0, -1000000, 1000000) + ", " + intLiteral(b, 100, -1000000, 1000000) + ")";
+      if (key === "algo_compare") return out + " = api.bijiao(" + safeVarName(a, "value_a") + ", " + quote(b || ">") + ", " + safeVarName(c, "value_b") + ")";
+      if (key === "algo_logic") return out + " = api.luoji(" + safeVarName(a, "value_a") + ", " + quote(b || "and") + ", " + safeVarName(c, "value_b") + ")";
+      if (key === "math_func") return out + " = api.shuxue(" + quote(a || "round") + ", " + safeVarName(b, "value") + ")";
+      if (key === "text_length") return out + " = api.wenbenchangdu(" + safeVarName(a, "text_value") + ")";
+      if (key === "text_letter") return out + " = api.wenbenzifu(" + safeVarName(a, "text_value") + ", " + intLiteral(b, 0, 0, 65535) + ")";
+      if (key === "text_contains") return out + " = api.wenbenbaohan(" + safeVarName(a, "text_value") + ", " + quote(b || "test") + ")";
+      if (key === "text_number") return out + " = api.zhuanshuzi(" + safeVarName(a, "text_value") + ")";
+      if (key === "text_text") return out + " = api.zhuanwenzi(" + safeVarName(a, "value") + ")";
+      if (key === "uart_send") return "api.senduart(" + quote(a || "OK\\r\\n") + ")";
+      if (key === "uart_text") return out + " = api.readuarttext()";
       if (key === "record_audio") return "api.record(" + quote(a || "SD:competition_test.wav") + ", " + intLiteral(b, 1500, 1, 600000) + ")";
       if (key === "record_timed") return "api.recordtimed(" + quote(a || "SD:competition_test.wav") + ", " + intLiteral(b, 10000, 1, 600000) + ")";
       if (key === "play_audio") return "api.playfile(" + quote(a || "SD:competition_test.wav") + ")";
@@ -3236,6 +3375,7 @@ if __name__ == "__main__":
         if (String(b || "summary").toLowerCase() === "raw") return "print(" + prefix + ", _lte_status_snapshot())";
         return "_lte_status = _lte_status_snapshot(); print(" + prefix + ", \"sim={} registered={} attached={} signal={}\".format(_lte_status.get(\"sim\"), _lte_status.get(\"registered\"), _lte_status.get(\"attached\"), _lte_status.get(\"signal\")))";
       }
+      if (key === "wait_key") return out + " = api.waitkey(" + quote(a || "center") + ", " + intLiteral(b, 10000, 0, 600000) + ", " + quote(c || "short") + ")";
       if (key === "delay") return "api.delay(" + intLiteral(a, 100, 0, 600000) + ")";
       if (key === "beep") return "api.beep(" + intLiteral(a, 300, 1, 600000) + ", " + intLiteral(b, 2000, 1, 20000) + ")";
       if (key === "rs232_read") return out + " = api.readrs232text()";
@@ -3496,6 +3636,9 @@ if __name__ == "__main__":
         const name = safeVarName(item.text, "value");
         if (!initializers.some(line => line.indexOf(name + " =") === 0)) initializers.push(name + " = \"\"");
       });
+      referencedVariableNames().forEach(name => {
+        if (!variableDefinitions().has(name) && !initializers.some(line => line.indexOf(name + " =") === 0)) initializers.push(name + " = None");
+      });
       blocks.forEach(block => {
         if (block.type === "paramapi" && block.placement === "startup") startup.push(paramApiLine(block));
       });
@@ -3550,10 +3693,20 @@ if __name__ == "__main__":
         if (!foreverLines.length) foreverLines.push("pass");
       }
 
+      const generatedSourceForGuard = startup.concat(initializers, fast, slow, foreverLines, canvasSourceLines).join("\n");
+      const requiredRuntimeApis = Array.from(new Set(Array.from(generatedSourceForGuard.matchAll(/api\.([A-Za-z_]\w*)\s*\(/g)).map(match => match[1]))).sort();
+      const runtimeGuardLines = requiredRuntimeApis.length ? [
+        "",
+        "_REQUIRED_EASY_API = " + JSON.stringify(requiredRuntimeApis),
+        "_MISSING_EASY_API = [name for name in _REQUIRED_EASY_API if not hasattr(api, name)]",
+        "if _MISSING_EASY_API:",
+        "    raise RuntimeError(\"easy_api runtime is outdated; upload the complete runtime/starter before main.py. Missing: \" + \", \".join(_MISSING_EASY_API))"
+      ] : [];
       const lines = [
         "# -*- coding: utf-8 -*-",
         "import easy_api as api",
         "print(\"[BOOT] main.py loaded\")",
+        ...runtimeGuardLines,
         "",
         "def _lte_status_snapshot():",
         "    try:",
@@ -3677,6 +3830,49 @@ if __name__ == "__main__":
       });
       if (Array.isArray(node.items)) node.items.forEach(item => reporterReferencedVariables(item, output));
       return output;
+    }
+
+    function referencedVariableNames() {
+      const names = new Set();
+      const add = value => { if (isValidVarName(value)) names.add(String(value).trim()); };
+      const addMode = (block, modeField, valueField) => { if (block[modeField] === "var") add(block[valueField]); };
+      walkBlocks(blocks, block => {
+        if (block.type === "lcd" && boolField(block.lcdIsVar)) add(block.lcdText);
+        if (block.type === "serial" && boolField(block.serialIsVar)) add(block.serialText);
+        if (block.type === "format") add(block.sourceName);
+        if (block.type === "changevar") add(block.changeTarget);
+        if (block.type === "listappend") { add(block.appendTarget); addMode(block, "appendValueMode", "appendValue"); }
+        if (block.type === "sort") addMode(block, "sortSourceMode", "sortSource");
+        if (block.type === "stat") addMode(block, "statSourceMode", "statSource");
+        if (block.type === "join") for (let n = 1; n <= 6; n += 1) addMode(block, "joinMode" + n, "joinValue" + n);
+        if (block.type === "setvar") addMode(block, "setValueMode", "setValue");
+        if (block.type === "numberop") { addMode(block, "numberLeftMode", "numberLeft"); addMode(block, "numberRightMode", "numberRight"); }
+        if (block.type === "mathop") addMode(block, "mathValueMode", "mathValue");
+        if (block.type === "logicop") { addMode(block, "logicLeftMode", "logicLeft"); addMode(block, "logicRightMode", "logicRight"); }
+        if (block.type === "textop") { addMode(block, "textLeftMode", "textLeft"); addMode(block, "textRightMode", "textRight"); }
+        if (["if", "while", "until"].includes(block.type)) {
+          if (block.conditionMode === "compare") { add(block.conditionVar); addMode(block, "conditionValueMode", "conditionValue"); }
+          if (["keyevent", "keyeither"].includes(block.conditionMode)) add(block.conditionEventVar);
+          if (block.conditionMode === "hasdata") add(block.conditionDataVar);
+          if (!block.conditionMode || block.conditionMode === "preset") {
+            const source = String(block.condition || "");
+            const re = /[A-Za-z_][A-Za-z0-9_]*/g; let match;
+            while ((match = re.exec(source))) {
+              if (source.charAt(match.index - 1) === ".") continue;
+              if (!["True", "False", "None", "and", "or", "not", "if", "else", "api"].includes(match[0])) add(match[0]);
+            }
+          }
+        }
+        if (block.type === "event" && block.eventType !== "always") add(block.eventVar);
+        if (block.type === "reporter") reporterReferencedVariables(reporterNodeFromBlock(block), []).forEach(add);
+        if (block.type === "predicate") reporterReferencedVariables(predicateNodeFromBlock(block), []).forEach(add);
+        if (block.type === "paramapi") {
+          const meta = PARAM_API_META[block.paramApiKey] || {};
+          (meta.variableFields || []).forEach(key => add(block["param" + key.toUpperCase()]));
+        }
+      });
+      lcdDesign.forEach(item => { if (item.type === "text" && item.variable) add(item.text); });
+      return names;
     }
 
     function refreshVariableSuggestions() {
@@ -3975,19 +4171,21 @@ if __name__ == "__main__":
           if (["light","light_percent"].includes(block.readKey)) requireModule(block, "guangmin", "光敏读取");
           if (["temperature","humidity"].includes(block.readKey)) requireModule(block, "wenhumi", "温湿度读取");
           if (["axis_x","axis_y","axis_z"].includes(block.readKey)) requireModule(block, "jiasudu", "加速度读取");
-          if (["button","button_adc"].includes(block.readKey)) requireModule(block, "anjian", "按键读取");
+          if (["button","button_adc","button_direction"].includes(block.readKey)) requireModule(block, "anjian", "按键读取");
           if (["uart","uart_text"].includes(block.readKey)) requireModule(block, "uart", "UART2 读取");
           if (["ble","ble_data"].includes(block.readKey)) requireModule(block, "ble", "BLE 读取");
           if (block.readKey === "audio_recording") requireModule(block, "yinpin", "录音状态更新");
           if (["location_data","location_source","lat_value","lon_value"].includes(block.readKey) && !enabled.has("gnss") && !enabled.has("lbs")) issue(errors, block, "", "定位读取至少需要启用 GNSS 或 LBS 模块。" );
         }
         if (block.type === "paramapi") {
-          if (["gpio_read","gpio_write","gpio_high_list"].includes(block.paramApiKey)) requireModule(block, "gpio", "GPIO 参数接口");
+          if (["gpio_read","gpio_write","gpio_high_list","gpio_config"].includes(block.paramApiKey)) requireModule(block, "gpio", "GPIO 参数接口");
+          if (block.paramApiKey === "adc_read_pin") requireModule(block, "guangmin", "ADC 参数接口");
           if (["pwm_start","pwm_set_duty","pwm_stop"].includes(block.paramApiKey)) requireModule(block, "pwm", "PWM 参数接口");
-          if (block.paramApiKey === "i2c_scan") requireModule(block, "i2c", "I2C 扫描");
-          if (block.paramApiKey === "spi_send") requireModule(block, "spi", "SPI 发送");
+          if (["i2c_scan","i2c_config"].includes(block.paramApiKey)) requireModule(block, "i2c", "I2C 参数接口");
+          if (["spi_send","spi_config"].includes(block.paramApiKey)) requireModule(block, "spi", "SPI 参数接口");
+          if (block.paramApiKey === "uart_config") requireModule(block, "uart", "UART 参数接口");
           if (block.paramApiKey === "uart_wait") requireModule(block, "uart", "UART2 接收");
-          if (block.paramApiKey.startsWith("file_")) requireModule(block, "cunchu", "存储卡操作");
+          if (block.paramApiKey.startsWith("file_") || ["storage_info","dir_make","dir_remove"].includes(block.paramApiKey)) requireModule(block, "cunchu", "存储卡操作");
           if (["record_audio","record_timed","play_audio","play_audio_nowait","tts_say","tts_say_nowait","set_volume"].includes(block.paramApiKey)) requireModule(block, "yinpin", "音频操作");
           if (block.paramApiKey === "beep") requireModule(block, "fengmingqi", "蜂鸣器操作");
           if (block.paramApiKey === "rs232_read") requireModule(block, "rs232", "RS232 接收");
@@ -3995,6 +4193,7 @@ if __name__ == "__main__":
           if (block.paramApiKey.startsWith("ble_")) requireModule(block, "ble", "BLE 操作");
           if (["lcd_temp_var","lcd_row_temp_var","lcd_clear_line"].includes(block.paramApiKey)) requireModule(block, "lcd", "LCD 临时显示");
           if (["lte_status","lte_field","lte_print"].includes(block.paramApiKey)) requireModule(block, "lte", "4G 状态操作");
+          if (block.paramApiKey === "wait_key") requireModule(block, "anjian", "等待按键事件");
           if (block.paramApiKey === "lte_field" && !["sim","registered","attached","signal","status"].includes(String(block.paramA || "registered").trim())) issue(warnings, block, "paramA", "4G 状态字段未知，将按 registered 读取。可用：sim、registered、attached、signal、status。");
         }
           if (block.type === "api" || block.type === "reporter" || (block.type === "predicate" && (block.predicateMode || "condition") === "api")) {
@@ -4077,8 +4276,22 @@ if __name__ == "__main__":
     }
 
     function generateAndRender(options) {
-      byId("codePreview").textContent = generateMainCode();
-      latestDiagnostics = validateBuilder();
+      try {
+        lastGeneratedCode = generateMainCode();
+      } catch (err) {
+        lastGeneratedCode = "# main.py generation failed\n# " + String(err && err.stack ? err.stack : err) + "\n";
+        latestDiagnostics = { errors: [{ blockId: "", field: "", message: "生成代码时发生异常：" + String(err && err.message ? err.message : err) }], warnings: [] };
+        byId("codePreview").textContent = lastGeneratedCode;
+        renderDiagnostics();
+        applyDiagnosticHighlights();
+        return;
+      }
+      byId("codePreview").textContent = lastGeneratedCode;
+      try {
+        latestDiagnostics = validateBuilder();
+      } catch (err) {
+        latestDiagnostics = { errors: [{ blockId: "", field: "", message: "语法/配置检查异常：" + String(err && err.message ? err.message : err) }], warnings: [] };
+      }
       refreshVariableSuggestions();
       renderDiagnostics();
       applyDiagnosticHighlights();
@@ -4314,18 +4527,19 @@ if __name__ == "__main__":
     }
 
     async function copyCode() {
-      latestDiagnostics = validateBuilder();
-      renderDiagnostics();
-      applyDiagnosticHighlights();
-      if (latestDiagnostics.errors.length) {
-        byId("status").textContent = "存在 " + latestDiagnostics.errors.length + " 个错误，已阻止复制。请先修正红色积木或配置。";
-        return;
-      }
       try {
-        const code = generateMainCode();
+        const code = lastGeneratedCode || generateMainCode();
+        let copied = false;
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(code);
-        } else {
+          try {
+            await Promise.race([
+              navigator.clipboard.writeText(code),
+              new Promise((_, reject) => window.setTimeout(() => reject(new Error("clipboard timeout")), 1200))
+            ]);
+            copied = true;
+          } catch (clipboardError) { /* Fall back to the synchronous textarea path. */ }
+        }
+        if (!copied) {
           const area = document.createElement("textarea");
           area.value = code;
           area.setAttribute("readonly", "");
@@ -4336,30 +4550,30 @@ if __name__ == "__main__":
           if (!document.execCommand("copy")) throw new Error("copy command failed");
           area.remove();
         }
-        byId("status").textContent = "已复制 main.py。";
+        const errorCount = latestDiagnostics.errors.length;
+        byId("status").textContent = errorCount ? "已复制 main.py；同时发现 " + errorCount + " 个问题，请查看诊断面板。" : "已复制 main.py。";
       } catch (err) {
-        byId("status").textContent = "复制失败，请手动复制右侧代码。";
+        byId("status").textContent = "复制失败，请手动复制右侧代码：" + String(err && err.message ? err.message : err);
       }
     }
 
     function downloadCode() {
-      latestDiagnostics = validateBuilder();
-      renderDiagnostics();
-      applyDiagnosticHighlights();
-      if (latestDiagnostics.errors.length) {
-        byId("status").textContent = "存在 " + latestDiagnostics.errors.length + " 个错误，已阻止下载。请先修正红色积木或配置。";
-        return;
+      try {
+        const code = lastGeneratedCode || generateMainCode();
+        const blob = new Blob([code], { type: "text/x-python;charset=utf-8" });
+        const a = document.createElement("a");
+        const downloadUrl = URL.createObjectURL(blob);
+        a.href = downloadUrl;
+        a.download = "main.py";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 1000);
+        const errorCount = latestDiagnostics.errors.length;
+        byId("status").textContent = errorCount ? "已下载 main.py；同时发现 " + errorCount + " 个问题，请查看诊断面板。" : "已下载 main.py。";
+      } catch (err) {
+        byId("status").textContent = "下载失败：" + String(err && err.message ? err.message : err);
       }
-      const blob = new Blob([generateMainCode()], { type: "text/x-python;charset=utf-8" });
-      const a = document.createElement("a");
-      const downloadUrl = URL.createObjectURL(blob);
-      a.href = downloadUrl;
-      a.download = "main.py";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 1000);
-      byId("status").textContent = "已下载 main.py。";
     }
 
     function builderInputState() {
@@ -5153,7 +5367,7 @@ if __name__ == "__main__":
           const isSupported = (!chip.dataset.module) &&
             (!chip.dataset.type || UNIKNECT_TYPES.has(chip.dataset.type)) &&
             (!chip.dataset.api || UNIKNECT_APIS.has(chip.dataset.api)) &&
-            (!chip.dataset.paramKey || chip.dataset.paramKey === "i2c_scan");
+            (!chip.dataset.paramKey || PARAM_API_PRESETS.some(preset => preset.key === chip.dataset.paramKey));
           chip.style.display = isSupported && groups[category].some(name => chip.classList.contains(name)) ? "block" : "none";
         });
         qsa(".mb-drawer-tabs button").forEach(button => button.classList.toggle("is-active", button.dataset.mbCategory === category));
@@ -5163,7 +5377,7 @@ if __name__ == "__main__":
         qsa(".mb-palette [data-module]").forEach(item => { item.style.display = "none"; });
         qsa(".mb-palette [data-type]").forEach(item => { item.style.display = UNIKNECT_TYPES.has(item.dataset.type) ? "block" : "none"; });
         qsa(".mb-palette [data-api]").forEach(item => { item.style.display = UNIKNECT_APIS.has(item.dataset.api) ? "block" : "none"; });
-        qsa(".mb-palette [data-param-key]").forEach(item => { item.style.display = item.dataset.paramKey === "i2c_scan" ? "block" : "none"; });
+        qsa(".mb-palette [data-param-key]").forEach(item => { item.style.display = PARAM_API_PRESETS.some(preset => preset.key === item.dataset.paramKey) ? "block" : "none"; });
         qsa(".mb-palette .category-title").forEach(title => {
           const group = title.nextElementSibling;
           if (!group || !group.classList.contains("chips")) return;
@@ -5382,6 +5596,14 @@ if __name__ == "__main__":
             '<button data-mb-category="connection">通信</button>' +
           '</div>';
         palette.insertBefore(drawer, palette.firstChild);
+        const storageChip = palette.querySelector('[data-param-key="file_remove"]');
+        const storageEnable = palette.querySelector('[data-api="cunchu"]');
+        if (storageEnable && !palette.querySelector('[data-api="sdcard"]')) {
+          storageEnable.insertAdjacentHTML("afterend", '<span class="chip kind-comm" draggable="true" data-action="add-api" data-api="sdcard" title="推荐放置：启动区" role="button" tabindex="0" aria-label="api.sdcard|SDCard模块启用启动区">api.sdcard|SDCard模块启用<span class="zone">启动区</span></span>');
+        }
+        if (storageChip && !palette.querySelector('[data-param-key="file_list"]')) {
+          storageChip.insertAdjacentHTML("afterend", '<span class="chip kind-comm" draggable="true" data-action="add-param-api" data-param-key="file_list" title="列出文件和目录" role="button" tabindex="0" aria-label="api.listfiles|列出文件和目录参数积木">api.listfiles|列出文件和目录<span class="zone">参数积木</span></span><span class="chip kind-comm" draggable="true" data-action="add-param-api" data-param-key="storage_info" title="读取存储空间" role="button" tabindex="0" aria-label="api.storageinfo|读取存储空间参数积木">api.storageinfo|读取存储空间<span class="zone">参数积木</span></span><span class="chip kind-comm" draggable="true" data-action="add-param-api" data-param-key="dir_make" title="创建目录" role="button" tabindex="0" aria-label="api.makedir|创建目录参数积木">api.makedir|创建目录<span class="zone">参数积木</span></span><span class="chip kind-comm" draggable="true" data-action="add-param-api" data-param-key="dir_remove" title="删除目录" role="button" tabindex="0" aria-label="api.removedir|删除目录参数积木">api.removedir|删除目录<span class="zone">参数积木</span></span>');
+        }
 
         const workspace = byId("workspaceViewport");
         const modulePanel = document.createElement("section");

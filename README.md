@@ -60,11 +60,15 @@ print(hasattr(api, "lcdrect"))
 print(hasattr(api, "lcdcircle"))
 print(hasattr(api, "readlte"))
 print(hasattr(api, "networkstatus"))
+print(api.api_version())
+print("readadc" in api.api_capabilities())
 ```
 
-以上结果都应为 `True`。如果 `import easy_api` 失败，先检查运行库目录是否上传完整，不要先重刷固件。
+以上能力检查都应为 `True`，并且 `api.api_version()` 应为当前仓库版本。如果 `readadc` 为 `False`，说明板上仍是旧运行库；必须重新上传整个 `runtime/starter/`，不能只上传生成的 `main.py`。新生成的 `main.py` 也会在启动前自动检查所需 API，避免运行到中途才出现 `AttributeError`。
 
 ### 5. 打开积木工作台
+
+项目只有一个编辑入口：`builder/easy_api_main_builder_microblocks.html`。所有积木、LCD 设计器、SDCard、4G/GNSS、代码生成、复制和下载功能都集成在这个单文件 HTML 中；旧的 `easy_api_main_builder_configured.html` 已移除，避免打开错误版本。
 
 直接双击 `builder/easy_api_main_builder_microblocks.html` 即可离线打开，也可以在仓库目录启动静态服务器：
 

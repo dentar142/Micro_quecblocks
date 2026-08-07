@@ -56,6 +56,20 @@ class EasyApiContractTests(unittest.TestCase):
             re.MULTILINE,
         ))
 
+    def test_button_event_helpers_share_last_event_contract(self):
+        source = (ROOT / "runtime" / "starter" / "easy_api_parts" / "10_led_buttons.py").read_text(encoding="utf-8")
+        self.assertIn("def lastanjian():", source)
+        self.assertIn("def readanjian_direction():", source)
+        self.assertIn("return _nav.read_key()", source)
+        self.assertIn("global _last_button_event", source)
+        self.assertIn("_last_button_event = (name, event)", source)
+
+    def test_runtime_exposes_version_and_capability_probe(self):
+        source = (ROOT / "runtime" / "starter" / "easy_api_parts" / "00_core.py").read_text(encoding="utf-8")
+        self.assertIn("EASY_API_VERSION", source)
+        self.assertIn("def api_version()", source)
+        self.assertIn("def api_capabilities()", source)
+
 
 if __name__ == "__main__":
     unittest.main()

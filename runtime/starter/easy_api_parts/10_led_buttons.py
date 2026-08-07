@@ -111,13 +111,14 @@ def _ensure_buttons(report=True):
 
 
 def anjian(enabled=1):
-    global _buttons, _nav, _button_events
+    global _buttons, _nav, _button_events, _last_button_event
     _set_feature("buttons", enabled)
     if enabled:
         return _ensure_buttons() is not None
     _buttons = None
     _nav = None
     _button_events = []
+    _last_button_event = None
     return True
 
 
@@ -125,20 +126,30 @@ button = anjian
 
 
 def readanjian():
-    global _button_events
+    global _button_events, _last_button_event
     buttons = _ensure_buttons()
     if not buttons:
         return None
     if _button_events:
-        return _button_events.pop(0)
+        _last_button_event = _button_events.pop(0)
+        return _last_button_event
     events = buttons.poll(ticks_ms())
     if not events:
         return None
     _button_events.extend(events)
-    return _button_events.pop(0)
+    _last_button_event = _button_events.pop(0)
+    return _last_button_event
 
 
 readbutton = readanjian
+
+
+def lastanjian():
+    """Return the most recently returned event without consuming another one."""
+    return _last_button_event
+
+
+lastbutton = lastanjian
 
 
 def keytext(event):
@@ -164,6 +175,27 @@ readbuttonadc = readanjianadc
 readkeyadc = readanjianadc
 
 
+def readanjian_direction():
+    """Return the current five-way direction name from the configured ADC pin.
+
+    The mapping is defined by config.NAV_THRESHOLDS and therefore follows the
+    UniKnect LCD Shield calibration rather than assuming ADC value order.
+    Returns ``None`` while released or outside calibrated ranges.
+    """
+    buttons = _ensure_buttons()
+    if not buttons or _nav is None:
+        return None
+    try:
+        return _nav.read_key()
+    except Exception as exc:
+        _remember_error("buttons", exc)
+        return None
+
+
+readkeydirection = readanjian_direction
+buttondirection = readanjian_direction
+
+
 def waitanjian(timeout=10000):
     return _wait_button(None, None, timeout)
 
@@ -184,6 +216,7 @@ def waitlong(timeout=10000):
 
 
 def _wait_button(match_name=None, match_event=None, timeout=10000):
+    global _last_button_event
     buttons = _ensure_buttons()
     if not buttons:
         return None
@@ -194,7 +227,8 @@ def _wait_button(match_name=None, match_event=None, timeout=10000):
                 continue
             if match_event is not None and event != match_event:
                 continue
-            return (name, event)
+            _last_button_event = (name, event)
+            return _last_button_event
         sleep_ms(20)
     return None
 

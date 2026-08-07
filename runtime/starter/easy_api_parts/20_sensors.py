@@ -46,6 +46,7 @@ def guangmin(enabled=1):
 
 guangming = guangmin
 light = guangmin
+adc = guangmin
 
 
 def readguangmin():
@@ -125,6 +126,24 @@ def i2c(enabled=1):
 
 def scani2c():
     return _scan_i2c()
+
+
+def configurei2c(bus_id=1, sda=None, scl=None, freq=400000):
+    """Configure an I2C bus with optional SDA/SCL pin overrides."""
+    import machine
+    bus_id = int(bus_id)
+    freq = int(freq)
+    kwargs = {"freq": freq}
+    if sda:
+        kwargs["sda"] = machine.Pin(str(sda))
+    if scl:
+        kwargs["scl"] = machine.Pin(str(scl))
+    try:
+        bus = machine.I2C(bus_id, **kwargs)
+    except Exception:
+        bus = machine.I2C(bus_id, freq=freq)
+    _i2c_custom_buses[bus_id] = bus
+    return True
 
 
 def testi2c():

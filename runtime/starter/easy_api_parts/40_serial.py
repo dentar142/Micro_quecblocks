@@ -50,6 +50,35 @@ def setuart(uart_id, baudrate=115200, timeout=1000):
     return uart(1, uart_id, baudrate, timeout)
 
 
+def configureuart(uart_id=2, baudrate=115200, bits=8, parity=None, stop=1, timeout=1000, tx=None, rx=None):
+    """Configure UART framing and optional TX/RX pin overrides."""
+    global _uart, _uart_id, _uart_baudrate, _uart_timeout
+    import machine
+    _close_uart_port(_uart)
+    _uart = None
+    _uart_id = int(uart_id)
+    _uart_baudrate = int(baudrate)
+    _uart_timeout = int(timeout)
+    config.UART_ID = _uart_id
+    config.UART_BAUDRATE = _uart_baudrate
+    config.UART_TIMEOUT_MS = _uart_timeout
+    kwargs = {"bits": int(bits), "parity": parity, "stop": int(stop), "timeout": _uart_timeout}
+    if tx:
+        kwargs["tx"] = machine.Pin(str(tx))
+    if rx:
+        kwargs["rx"] = machine.Pin(str(rx))
+    try:
+        obj = machine.UART(_uart_id, _uart_baudrate, **kwargs)
+    except Exception:
+        obj = machine.UART(_uart_id, _uart_baudrate, timeout=_uart_timeout)
+    from lib.kit.serial_tests import UartPort
+    port = UartPort.__new__(UartPort)
+    port.uart = obj
+    _uart = port
+    _set_feature("uart", 1)
+    return True
+
+
 def senduart(data):
     port = _ensure_uart()
     if not port:

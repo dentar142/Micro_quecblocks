@@ -19,6 +19,39 @@ def readgpio(pin):
     return p.value()
 
 
+def configuregpio(pin, mode="in", pull="none", initial=0):
+    """Configure one GPIO pin using stable beginner-facing names."""
+    import machine
+    name = str(pin).strip()
+    mode_name = str(mode or "in").lower()
+    pull_name = str(pull or "none").lower()
+    pin_mode = machine.Pin.OUT if mode_name in ("out", "output", "输出") else machine.Pin.IN
+    pin_pull = None
+    if pull_name in ("up", "pull_up", "上拉"):
+        pin_pull = machine.Pin.PULL_UP
+    elif pull_name in ("down", "pull_down", "下拉"):
+        pin_pull = machine.Pin.PULL_DOWN
+    try:
+        obj = machine.Pin(name, pin_mode, pin_pull) if pin_pull is not None else machine.Pin(name, pin_mode)
+    except TypeError:
+        obj = machine.Pin(name, pin_mode)
+    if pin_mode == machine.Pin.OUT:
+        obj.value(1 if int(initial) else 0)
+    _gpio_objects[name] = obj
+    return True
+
+
+def readadc(pin):
+    """Read any ADC-capable pin as a 16-bit value."""
+    import machine
+    name = str(pin).strip()
+    adc = _adc_channels.get(name)
+    if adc is None:
+        adc = machine.ADC(machine.Pin(name))
+        _adc_channels[name] = adc
+    return adc.read_u16()
+
+
 def highpins(pins, *extra_pins):
     """Return the requested pin names that currently read high."""
     import machine
@@ -625,6 +658,25 @@ def sendspi(data=b"test"):
             deinit()
         if _feature("lcd"):
             _drop_report_display()
+
+
+def configurespi(bus_id=1, baudrate=1000000, polarity=0, phase=0, sck=None, mosi=None, miso=None):
+    """Configure an SPI bus, optionally overriding its pins."""
+    import machine
+    bus_id = int(bus_id)
+    kwargs = {"baudrate": int(baudrate), "polarity": int(polarity), "phase": int(phase)}
+    if sck:
+        kwargs["sck"] = machine.Pin(str(sck))
+    if mosi:
+        kwargs["mosi"] = machine.Pin(str(mosi))
+    if miso:
+        kwargs["miso"] = machine.Pin(str(miso))
+    try:
+        bus = machine.SPI(bus_id, **kwargs)
+    except Exception:
+        bus = machine.SPI(bus_id, baudrate=int(baudrate), polarity=int(polarity), phase=int(phase))
+    _spi_custom_buses[bus_id] = bus
+    return True
 
 
 def testspi(data=b"QUECTEL-SPI"):

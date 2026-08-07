@@ -14,6 +14,26 @@ import config
 from lib.kit.compat import sleep_ms, ticks_diff, ticks_ms
 
 
+# Bump this whenever the public easy_api surface changes.  Generated programs
+# use this value to detect the common failure mode where only main.py was
+# uploaded and the board still has an older easy_api runtime.
+EASY_API_VERSION = "2026.08.08.1"
+
+
+def api_version():
+    return EASY_API_VERSION
+
+
+def api_capabilities():
+    """Return the public callable names available in this runtime."""
+    names = []
+    for name, value in globals().items():
+        if callable(value) and not name.startswith("_"):
+            names.append(name)
+    names.sort()
+    return names
+
+
 _reporter = None
 _errors = {}
 
@@ -25,6 +45,7 @@ _leds = None
 _buttons = None
 _nav = None
 _button_events = []
+_last_button_event = None
 _light = None
 _i2c_bus = None
 _climate = None
@@ -66,6 +87,10 @@ _ble_client_mtu = 0
 _ble_client_services = []
 _ble_client_chars = []
 _ble_client_current_desc_char = None
+_adc_channels = {}
+_gpio_objects = {}
+_i2c_custom_buses = {}
+_spi_custom_buses = {}
 
 
 def _bool(value):

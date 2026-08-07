@@ -103,8 +103,10 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 |---|---|
 | `api.anjian(enabled=1)` | 启用或关闭 USER 键和五向键。 |
 | `api.readanjian()` | 非阻塞取出一个 `(按键名, 事件)`；无事件返回 `None`。 |
+| `api.lastanjian()` | 返回最近一次已取出的按键事件，不再读取硬件。 |
 | `api.keytext(event)` | 只把 `short` / `long` 格式化为紧凑英文状态。 |
 | `api.readanjianadc()` | 读取五向键 ADC 原始值；不可用时返回 `None`。 |
+| `api.readanjian_direction()` | 按当前 ADC 值直接返回 `up`、`down`、`left`、`right` 或 `center`；松手/超出阈值返回 `None`。别名：`readkeydirection()`、`buttondirection()`。 |
 | `api.waitkey(name, timeout=10000, event="short")` | 阻塞等待指定按键事件，超时返回 `None`。 |
 | `api.iskey(name)` | 返回指定键当前是否按住。 |
 | `api.testanjian(timeout=15000)` | 在限定时间内交互测试全部按键。 |
@@ -112,6 +114,12 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 按键名为 `user`、`up`、`down`、`left`、`right`、`center`；常用事件为
 `press`、`release`、`short`、`long`。普通轮询优先使用 `readanjian()`，避免
 `waitkey()` 阻塞其他任务。
+
+五向键使用 UniKnect LCD Shield 的模拟电阻梯形输入。当前套件默认引脚为
+`config.NAV_ADC_PIN = "C1"`（Arduino Shield A3），方向对应关系由
+`config.NAV_THRESHOLDS` 决定：`left`、`down`、`center`、`right`、`up`。
+不同批次电阻有偏差时，先运行 `examples/00_nav_calibration.py`，再修改
+`NAV_THRESHOLDS`；网页生成器和运行库都会使用同一份配置。
 
 ### Sensor / 传感器
 
@@ -146,6 +154,15 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 | `api.spi(enabled=1)` | 启用或关闭 SPI 回环功能。 |
 | `api.sendspi(data=b"test")` | SPI 发送并返回同时读到的数据。 |
 | `api.beep(ms=300, freq=2000)` | 蜂鸣器动作积木使用的接口；响指定时长和频率。 |
+
+高级引脚配置积木：
+
+| 接口 | 用途 |
+|---|---|
+| `api.configuregpio(pin, mode="in", pull="none", initial=0)` | 为指定 GPIO 选择输入/输出、上拉/下拉，并设置输出初值。 |
+| `api.readadc(pin)` | 读取指定 ADC 引脚的 16 位原始值；板载光敏默认仍使用 `C5`，五向键使用 `C1`。 |
+| `api.configurei2c(bus_id=1, sda=None, scl=None, freq=400000)` | 配置 I2C 编号、频率和可选 SDA/SCL；留空时使用固件默认引脚。 |
+| `api.configurespi(bus_id=1, baudrate=1000000, polarity=0, phase=0, sck=None, mosi=None, miso=None)` | 配置 SPI 速率、模式和可选信号引脚。 |
 
 ### LCD-Text / 屏幕与文本
 
@@ -207,14 +224,27 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 比赛数据串口只使用 UART2（`usart_b`，连接电脑 `COM43`）；`COM17` 仅用于
 REPL 烧录和调试，不能把 `usart_a` 当作题目数据串口。
 
+高级 UART 配置：
+
+```python
+api.configureuart(2, 115200, 8, None, 1, 1000, None, None)
+```
+
+参数依次为 UART 编号、波特率、数据位、校验（`None`/`"even"`/`"odd"`）、停止位、超时、TX 引脚和 RX 引脚。留空引脚使用固件默认映射。
+
 ### Storage-Audio / 存储与音频
 
 | 生成器接口 | 功能与返回值 |
 |---|---|
 | `api.cunchu(enabled=1)` | 启用或关闭存储功能。 |
+| `api.sdcard(enabled=1)` | `cunchu()` 的 SDCard 语义别名；启用后才能调用下列存储接口。 |
 | `api.writefile(path, data)` | 覆盖写入文字、字节或变量，成功返回 `True`。 |
 | `api.readfile(path, size=1024, default="")` | 读取指定字节数；失败返回 `default`。 |
 | `api.removefile(path)` | 删除文件，返回是否成功。 |
+| `api.listfiles(path="*")` | 列出文件/目录，返回 `[{"name": ..., "size": ..., "directory": ...}]`。 |
+| `api.storageinfo(volume="UFS")` | 返回卷空间字典 `volume/total/free/used`；UniKnect 官方示例使用 `UFS`。 |
+| `api.makedir(path)` | 创建目录，成功返回 `True`。 |
+| `api.removedir(path, force=False)` | 删除目录；`force=True` 时按固件能力尝试递归/强制删除。 |
 | `api.yinpin(enabled=1)` | 初始化或释放录音、播放和 TTS。 |
 | `api.recordstart(path=None)` | 开始录音；默认使用配置文件路径。 |
 | `api.recordstop()` | 停止当前录音。 |
@@ -235,6 +265,13 @@ REPL 烧录和调试，不能把 `usart_a` 当作题目数据串口。
 生成器“写文件”积木写固定文字，“写变量到文件”积木直接写变量；两者不要
 混用。要保持按键和通信响应，优先使用 `recordtimed()`、`playfile(..., False)`
 和 `tts(..., False)`，并在快速轮询调用 `updateaudio()`。
+
+存储路径由 QuecPython 官方 `quectel.File` 接口解释。音频和文件示例中的
+`SD:` 是设备文件路径前缀；它不是标准 MicroPython 的通用挂载点。空间统计
+使用 `File.statvfs("UFS")`，这是当前 UniKnect/EC200U 参考示例中的卷名。
+网页积木和运行库已经生成这些调用，但是否插入实体 SD 卡、卡是否被固件挂载，
+必须在目标板上运行 `api.teststorage()` 或 `api.storageinfo()` 实测确认，不能
+仅凭代码生成结果宣称硬件已验证。
 
 ### Wireless-Location / 无线与定位
 

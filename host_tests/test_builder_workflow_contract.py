@@ -86,6 +86,12 @@ class BuilderWorkflowContractTests(unittest.TestCase):
     def setUpClass(cls):
         cls.source = BUILDER_HTML.read_text(encoding="utf-8")
 
+    def test_single_builder_keeps_five_way_direction_contract(self):
+        self.assertIn('readanjian_direction: "anjian"', self.source)
+        self.assertIn('{ key: "button_direction",', self.source)
+        for key in ("button", "button_adc", "button_direction", "key_status"):
+            self.assertIn('"' + key + '"', self.source)
+
     def test_parameterized_apis_cannot_be_zero_argument_blocks(self):
         parameterized = _const_object_pairs(self.source, "API_TO_PARAM_PRESET")
         zero_argument = set(_const_array(self.source, "ZERO_ARG_APIS"))
@@ -100,6 +106,61 @@ class BuilderWorkflowContractTests(unittest.TestCase):
         self.assertIn("API_TO_PARAM_PRESET[api]", palette)
         self.assertIn('data-action="add-param-api"', palette)
         self.assertIn('defaultBlock("paramapi"', self.source)
+
+    def test_sdcard_and_common_parameter_apis_are_draggable(self):
+        parameterized = _const_object_pairs(self.source, "API_TO_PARAM_PRESET")
+        expected = {
+            "listfiles": "file_list",
+            "storageinfo": "storage_info",
+            "makedir": "dir_make",
+            "removedir": "dir_remove",
+            "setled": "led_set",
+            "showlcd": "lcd_text",
+            "senduart": "uart_send",
+            "keytext": "key_text",
+            "iskey": "key_is",
+        }
+        for api_name, preset_name in expected.items():
+            self.assertEqual(parameterized.get(api_name), preset_name)
+
+        restrict = _balanced_body(self.source, "function restrictToUniknect()")
+        self.assertIn("PARAM_API_PRESETS.some", restrict)
+        self.assertNotIn('item.dataset.paramKey === "i2c_scan"', restrict)
+
+        for key in ("file_list", "storage_info", "dir_make", "dir_remove"):
+            self.assertIn('{ key: "' + key + '"', self.source)
+            self.assertIn('if (key === "' + key + '")', self.source)
+
+    def test_generated_program_checks_runtime_api_surface_before_hardware_calls(self):
+        generator = _balanced_body(self.source, "function generateMainCode()")
+        self.assertIn("_REQUIRED_EASY_API", generator)
+        self.assertIn("_MISSING_EASY_API", generator)
+        self.assertIn("upload the complete runtime/starter", generator)
+
+    def test_builder_api_calls_exist_in_runtime_parts(self):
+        runtime = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in (ROOT / "runtime" / "starter" / "easy_api_parts").glob("*.py")
+        )
+        runtime_names = set(re.findall(r"^def\s+([A-Za-z_]\w*)\s*\(", runtime, re.MULTILINE))
+        builder_calls = set(re.findall(r"api\.([A-Za-z_]\w*)\s*\(", self.source))
+        self.assertEqual(sorted(builder_calls - runtime_names), [])
+
+    def test_five_way_key_contract_is_exposed_and_parameterized(self):
+        self.assertIn('lastanjian: "读取最近按键事件"', self.source)
+        self.assertIn('api.keytext(api.lastanjian())', self.source)
+        parameterized = _const_object_pairs(self.source, "API_TO_PARAM_PRESET")
+        self.assertEqual(parameterized.get("waitkey"), "wait_key")
+        meta = _from_marker(self.source, "const PARAM_API_META =")
+        self.assertIn("wait_key:", meta)
+        self.assertIn('aOptions:', meta)
+        self.assertIn('cOptions:', meta)
+        self.assertIn('key === "wait_key"', self.source)
+
+    def test_legacy_key_status_state_is_migrated(self):
+        normalizer = _balanced_body(self.source, "function normalizeSavedBlock(")
+        self.assertIn('normalized.readKey === "key_status"', normalizer)
+        self.assertIn('normalized.readExpr = "api.keytext(api.lastanjian())"', normalizer)
 
     def test_all_read_presets_remain_selectable(self):
         preset_body = _balanced_body(self.source, "const READ_PRESETS =", "[", "]")
@@ -177,13 +238,21 @@ class BuilderWorkflowContractTests(unittest.TestCase):
             "LCD canvas commands must either use one phase or a replacement path",
         )
 
-    def test_copy_and_download_share_validation_gate(self):
+    def test_copy_and_download_export_even_when_diagnostics_have_errors(self):
         copy_body = _balanced_body(self.source, "async function copyCode()")
         download_body = _balanced_body(self.source, "function downloadCode()")
-        self.assertIn("validateBuilder()", copy_body)
-        self.assertIn("latestDiagnostics.errors.length", copy_body)
-        self.assertIn("validateBuilder()", download_body)
-        self.assertIn("latestDiagnostics.errors.length", download_body)
+        self.assertIn("lastGeneratedCode", copy_body)
+        self.assertIn("lastGeneratedCode", download_body)
+        self.assertIn("已复制 main.py；同时发现", copy_body)
+        self.assertIn("已下载 main.py；同时发现", download_body)
+        self.assertNotIn("已阻止复制", copy_body)
+        self.assertNotIn("已阻止下载", download_body)
+
+    def test_generation_failure_is_visible_and_keeps_debug_code(self):
+        generator = _balanced_body(self.source, "function generateAndRender(options)")
+        self.assertIn("main.py generation failed", generator)
+        self.assertIn("生成代码时发生异常", generator)
+        self.assertIn("codePreview", generator)
 
     def test_location_and_return_value_contracts(self):
         requirements = _const_object_pairs(self.source, "API_MODULE_REQUIREMENTS")

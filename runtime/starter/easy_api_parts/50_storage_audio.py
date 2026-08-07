@@ -7,6 +7,13 @@ def cunchu(enabled=1):
 
 
 storage = cunchu
+sdcard = cunchu
+
+
+def _file_target(path):
+    """Return a safe File API target without inventing a mount point."""
+    value = str(path or "").strip()
+    return value or "test.txt"
 
 
 def writefile(path, data):
@@ -16,7 +23,7 @@ def writefile(path, data):
         # Let pending BLE/audio AT callbacks leave the shared modem channel.
         sleep_ms(250)
         from quectel import File
-        with File.open(path, "w") as fp:
+        with File.open(_file_target(path), "w") as fp:
             fp.write(_payload(data))
         _clear_error("storage")
         return True
@@ -33,7 +40,7 @@ def readfile(path, size=1024, default=""):
     try:
         sleep_ms(250)
         from quectel import File
-        with File.open(path, "r") as fp:
+        with File.open(_file_target(path), "r") as fp:
             data = fp.read(size)
         _clear_error("storage")
         return data
@@ -48,7 +55,69 @@ def removefile(path):
     try:
         sleep_ms(250)
         from quectel import File
-        File.remove(path)
+        File.remove(_file_target(path))
+        _clear_error("storage")
+        return True
+    except Exception as exc:
+        _remember_error("storage", exc)
+        return False
+
+
+def listfiles(path="*"):
+    """List File API entries as JSON-friendly name/size records."""
+    if not _feature("storage"):
+        return _skip("STORAGE", "disabled")
+    try:
+        from quectel import File
+        entries = []
+        for info in File.listdir(_file_target(path)):
+            name_fn = getattr(info, "name", None)
+            size_fn = getattr(info, "size", None)
+            name = name_fn() if name_fn else str(info)
+            size = size_fn() if size_fn else None
+            entries.append({"name": name, "size": size, "directory": size == -1})
+        _clear_error("storage")
+        return entries
+    except Exception as exc:
+        _remember_error("storage", exc)
+        return []
+
+
+def storageinfo(volume="UFS"):
+    """Return File.statvfs information; EC200U reference uses the UFS volume."""
+    if not _feature("storage"):
+        return _skip("STORAGE", "disabled")
+    try:
+        from quectel import File
+        total, free = File.statvfs(str(volume or "UFS"))
+        total = int(total)
+        free = int(free)
+        _clear_error("storage")
+        return {"volume": str(volume or "UFS"), "total": total, "free": free, "used": total - free}
+    except Exception as exc:
+        _remember_error("storage", exc)
+        return None
+
+
+def makedir(path):
+    if not _feature("storage"):
+        return _skip("STORAGE", "disabled")
+    try:
+        from quectel import File
+        File.mkdir(_file_target(path))
+        _clear_error("storage")
+        return True
+    except Exception as exc:
+        _remember_error("storage", exc)
+        return False
+
+
+def removedir(path, force=False):
+    if not _feature("storage"):
+        return _skip("STORAGE", "disabled")
+    try:
+        from quectel import File
+        File.rmdir(_file_target(path), bool(force))
         _clear_error("storage")
         return True
     except Exception as exc:
@@ -89,6 +158,8 @@ def yinpin(enabled=1):
 
 
 audio = yinpin
+mic = yinpin
+speaker = yinpin
 
 
 def _audio_obj():
