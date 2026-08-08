@@ -1126,6 +1126,51 @@
     body.mb-mode .mb-module-switch { min-height: 30px; border-radius: var(--md-corner-md); }
     body.mb-mode .mb-monitor { border-radius: var(--md-corner-md); }
     body.mb-mode .workspace-viewport { height: calc(100vh - 210px); }
+    body.mb-mode .block.is-preview-active {
+      outline: 3px solid #f6c453;
+      outline-offset: 2px;
+      filter: brightness(1.08) saturate(1.12);
+      box-shadow: 0 0 0 5px rgba(246,196,83,.22), 0 7px 18px rgba(34,48,42,.22);
+    }
+    body.mb-mode .block.is-selected {
+      outline: 2px solid #77b7e8;
+      outline-offset: 2px;
+    }
+    body.mb-mode .mb-variable-watchers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 10px;
+    }
+    body.mb-mode .mb-variable-watcher {
+      min-width: 0;
+      padding: 8px 9px;
+      border: 1px solid var(--mb-line);
+      border-radius: var(--md-corner-md);
+      background: var(--mb-surface-soft);
+      color: var(--mb-muted);
+      font-size: 10px;
+    }
+    body.mb-mode .mb-variable-watcher strong {
+      display: block;
+      overflow: hidden;
+      color: var(--mb-ink);
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    body.mb-mode .mb-variable-watcher output {
+      display: block;
+      margin-top: 3px;
+      overflow: hidden;
+      color: #216eaa;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    body.mb-theme-night .mb-variable-watcher output { color: #9bd4ff; }
 
     /* Night overrides come last so no day surface can leak into the dark UI. */
     body.mb-mode.mb-theme-night {
@@ -5135,6 +5180,8 @@ if __name__ == "__main__":
       let stageRunning = false;
       let activeCategory = "all";
       let tick = 0;
+      let previewCursor = -1;
+      const previewValues = {};
 
       function qs(selector, root) { return (root || document).querySelector(selector); }
       function qsa(selector, root) { return Array.from((root || document).querySelectorAll(selector)); }
@@ -5189,6 +5236,52 @@ if __name__ == "__main__":
         renderWorkspace();
         generateAndRender();
         byId("saveState").textContent = "已载入已验证硬件模板：LED、ADC、I2C、温湿度、加速度、定时器、LCD";
+      }
+
+      function previewScriptBlocks() {
+        return allBlocks().filter(function (block) { return block.type !== "enable"; });
+      }
+
+      function simulatePreviewValues(phase) {
+        previewValues.wendu = (25.2 + phase * .1).toFixed(1);
+        previewValues.wendu_text = previewValues.wendu;
+        previewValues.shidu = String(46 + phase);
+        previewValues.shidu_text = previewValues.shidu;
+        previewValues.light_value = String(420 + phase * 18);
+        previewValues.light_value_text = previewValues.light_value;
+        previewValues.light_percent = String(52 + phase);
+        previewValues.light_percent_text = previewValues.light_percent;
+        previewValues.x = (-.2 + phase / 100).toFixed(1);
+        previewValues.x_text = previewValues.x;
+        previewValues.y = "-0.3";
+        previewValues.y_text = previewValues.y;
+        previewValues.z = "9.3";
+        previewValues.z_text = previewValues.z;
+        previewValues.key_event = phase % 5 === 0 ? "center press" : "None";
+        previewValues.key_direction = phase % 5 === 0 ? "center" : "None";
+        previewValues.lte_read_text = "LTE: ready";
+        previewValues.location_source = "GNSS";
+        previewValues.lat_value = "22.30";
+        previewValues.lon_value = "114.17";
+      }
+
+      function renderVariableWatchers() {
+        const host = qs("#mbVariableWatchers");
+        if (!host) return;
+        const names = Array.from(variableDefinitions()).sort().filter(function (name) { return name !== "loop"; }).slice(0, 18);
+        host.innerHTML = names.length ? names.map(function (name) {
+          const value = Object.prototype.hasOwnProperty.call(previewValues, name) ? previewValues[name] : "未运行";
+          return '<div class="mb-variable-watcher"><span>' + esc(name) + '</span><strong><output>' + esc(value) + '</output></strong></div>';
+        }).join("") : '<div class="mb-variable-watcher"><span>暂无变量</span><strong><output>从左侧添加初始化或读取积木</output></strong></div>';
+      }
+
+      function markPreviewBlock() {
+        qsa(".block.is-preview-active").forEach(function (node) { node.classList.remove("is-preview-active"); });
+        const sequence = previewScriptBlocks();
+        if (previewCursor < 0 || !sequence.length) return;
+        const block = sequence[previewCursor % sequence.length];
+        const node = document.querySelector('.block[data-id="' + block.id + '"]');
+        if (node) node.classList.add("is-preview-active");
       }
 
       function lcdPreviewColor(color) {
@@ -5317,7 +5410,10 @@ if __name__ == "__main__":
       }
 
       function updateStage() {
-      const startup = allBlocks().filter(block => block.type === "enable" && String(block.enabled) !== "0").length;
+        simulatePreviewValues(tick % 10);
+        markPreviewBlock();
+        renderVariableWatchers();
+        const startup = allBlocks().filter(block => block.type === "enable" && String(block.enabled) !== "0").length;
         const fast = allBlocks().filter(block => block.type === "fastloop").length;
         const slow = allBlocks().filter(block => block.type === "slowloop").length;
         const counts = qs("#mbScriptCounts");
@@ -5343,14 +5439,28 @@ if __name__ == "__main__":
 
       function setPreview(running) {
         stageRunning = !!running;
+        if (stageRunning && previewCursor < 0) previewCursor = 0;
         if (stageTimer) window.clearInterval(stageTimer);
         stageTimer = null;
-        if (stageRunning) stageTimer = window.setInterval(function () { tick += 1; updateStage(); }, 700);
+        if (stageRunning) stageTimer = window.setInterval(function () { tick += 1; previewCursor += 1; updateStage(); }, 700);
         const run = qs('[data-mb-action="run"]');
         const stop = qs('[data-mb-action="stop"]');
         if (run) run.textContent = stageRunning ? "预览运行中" : "运行预览";
         if (stop) stop.classList.toggle("is-live", stageRunning);
         updateStage();
+      }
+
+      function stepPreview() {
+        const sequence = previewScriptBlocks();
+        if (!sequence.length) return;
+        stageRunning = false;
+        if (stageTimer) window.clearInterval(stageTimer);
+        stageTimer = null;
+        previewCursor = (previewCursor + 1) % sequence.length;
+        tick += 1;
+        updateStage();
+        const state = qs("#mbStageState");
+        if (state) state.textContent = "单步预览 · " + (previewCursor + 1) + "/" + sequence.length;
       }
 
       function filterPalette(category) {
@@ -5427,7 +5537,7 @@ if __name__ == "__main__":
         panel.innerHTML = '<div class="mb-startup-head"><strong>模块设置</strong><span>启动时自动写入 main.py，不需要摆放积木</span></div><div class="mb-module-groups">' +
           groups.map(group => '<div class="mb-module-group"><span>' + group[0] + '</span><div class="mb-module-switches">' +
             group[1].map(item => '<label class="mb-module-switch' + (["uart", "cunchu", "yinpin", "ble"].includes(item[0]) ? ' is-deferred' : '') + '" title="' + (["uart", "cunchu", "yinpin", "ble"].includes(item[0]) ? '当前硬件链路尚未完成实测，请按赛题需要再开启' : 'UniKnect EC200U 套件模块') + '"><input type="checkbox" data-mb-module="' + item[0] + '"' + (enabledModule(item[0]) ? ' checked' : '') + '><span>' + item[1] + '</span></label>').join("") +
-          '</div></div>').join("") + '</div>';
+          '</div></div>').join("") + '</div><div class="mb-variable-watchers" id="mbVariableWatchers" aria-label="变量观察器"></div>';
       }
 
       function normalizeLcdItem(item) {
@@ -5613,7 +5723,10 @@ if __name__ == "__main__":
         const scripts = document.createElement("div");
         scripts.className = "mb-script-tabs";
         scripts.innerHTML =
-          '<button class="mb-tab is-active" data-mb-focus="main">脚本画布 <small>循环与事件</small></button>' +
+          '<button class="mb-tab is-active" data-mb-focus="main">主脚本 <small>循环与事件</small></button>' +
+          '<button class="mb-tab" data-mb-focus="startup">启动脚本 <small>初始化</small></button>' +
+          '<button class="mb-tab" data-mb-focus="variables">变量 <small>观察器</small></button>' +
+          '<button class="mb-step" data-mb-action="step" title="执行一个预览步骤">单步</button>' +
           '<span class="mb-script-note" id="mbScriptCounts"></span>';
         main.insertBefore(scripts, workspace);
 
@@ -5642,13 +5755,19 @@ if __name__ == "__main__":
           const focus = event.target.closest("[data-mb-focus]");
           if (focus) {
             qsa(".mb-tab").forEach(tab => tab.classList.toggle("is-active", tab === focus));
-            focusWorkspaceZone(focus.dataset.mbFocus);
+            if (focus.dataset.mbFocus === "variables") {
+              const panel = qs("#mbVariableWatchers");
+              if (panel) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            } else {
+              focusWorkspaceZone(focus.dataset.mbFocus);
+            }
             return;
           }
           const action = event.target.closest("[data-mb-action]");
           if (!action) return;
           if (action.dataset.mbAction === "run") setPreview(true);
           else if (action.dataset.mbAction === "stop") setPreview(false);
+          else if (action.dataset.mbAction === "step") stepPreview();
           else if (action.dataset.mbAction === "verified") {
             if (!blocks.length || window.confirm("将替换当前积木为已验证硬件模板。已保存项目不会丢失，仍要继续吗？")) verifiedTemplate();
           } else if (action.dataset.mbAction === "code") {
@@ -5712,7 +5831,7 @@ if __name__ == "__main__":
         });
         new MutationObserver(function () { restrictBlockInputs(); renderModulePanel(); renderLcdDesigner(); updateStage(); }).observe(byId("workspace"), { childList: true, subtree: true });
 
-        if (!BUILDER_SAVED_STATE.microblocksMode) verifiedTemplate();
+        if (!BUILDER_SAVED_STATE.microblocksMode && !blocks.length) verifiedTemplate();
         restrictToUniknect();
         filterPalette("all");
         restrictBlockInputs();

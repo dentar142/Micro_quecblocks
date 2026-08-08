@@ -270,6 +270,17 @@ def _lcd_xy(row=0, col=0):
     return int(col) * 8, int(row) * 18
 
 
+def _lcd_clamp(value, lower, upper):
+    """Convert a coordinate to an inclusive LCD bound."""
+    value = int(value)
+    return max(lower, min(value, upper))
+
+
+def _lcd_is_number(value):
+    """Recognize numeric pixel-line arguments without CPython helpers."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
 def _lcd_color_value(display, color):
     if isinstance(color, str):
         return getattr(display.lcd, color.strip().upper(), display.lcd.WHITE)
@@ -283,6 +294,8 @@ def _lcd_write(text, row=0, col=0, flush=True, color="white"):
     display = _ensure_display()
     if not display:
         return None
+    row = _lcd_clamp(row, 0, max(0, (display.lcd.HEIGHT - 16) // 18))
+    col = _lcd_clamp(col, 0, max(0, (display.lcd.WIDTH - 1) // 8))
     x, y = _lcd_xy(row, col)
     value = str(text)
     # The frozen ST7735 driver rejects an empty string with ValueError.
@@ -335,12 +348,19 @@ def _lcd_draw(operation, stage="draw"):
 
 
 def lcdfill(color="black"):
-    """Fill the 160x128 ST7735 canvas with a named color."""
+    """Fill the ST7735 canvas in short strips to bound transfer allocation."""
     display = _ensure_display()
     if not display:
         return None
     value = _lcd_color_value(display, color)
-    return _lcd_draw(lambda: (display.lcd.fill_screen(value), display.lcd.flush(), True)[-1], "fill")
+    def operation():
+        strip_height = 8
+        for top in range(0, display.lcd.HEIGHT, strip_height):
+            height = min(strip_height, display.lcd.HEIGHT - top)
+            display.lcd.fill_rectangle(0, top, display.lcd.WIDTH, height, value)
+        display.lcd.flush()
+        return True
+    return _lcd_draw(operation, "fill")
 
 
 def lcdrect(x, y, width, height, color="white", filled=True, thickness=1):
@@ -348,8 +368,8 @@ def lcdrect(x, y, width, height, color="white", filled=True, thickness=1):
     display = _ensure_display()
     if not display:
         return None
-    x = max(0, min(int(x), display.lcd.WIDTH - 1))
-    y = max(0, min(int(y), display.lcd.HEIGHT - 1))
+    x = _lcd_clamp(x, 0, display.lcd.WIDTH - 1)
+    y = _lcd_clamp(y, 0, display.lcd.HEIGHT - 1)
     width = max(1, min(int(width), display.lcd.WIDTH - x))
     height = max(1, min(int(height), display.lcd.HEIGHT - y))
     thickness = max(1, min(int(thickness), min(width, height)))
@@ -373,7 +393,10 @@ def _lcd_pixel_line(x1, y1, x2, y2, color="white", thickness=1):
     if not display:
         return None
     value = _lcd_color_value(display, color)
-    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+    x1 = _lcd_clamp(x1, 0, display.lcd.WIDTH - 1)
+    y1 = _lcd_clamp(y1, 0, display.lcd.HEIGHT - 1)
+    x2 = _lcd_clamp(x2, 0, display.lcd.WIDTH - 1)
+    y2 = _lcd_clamp(y2, 0, display.lcd.HEIGHT - 1)
     thickness = max(1, min(int(thickness), 8))
     def operation():
         line_x, line_y = x1, y1
@@ -408,17 +431,28 @@ def lcdcircle(cx, cy, radius, color="white", filled=False):
     if not display:
         return None
     value = _lcd_color_value(display, color)
-    cx, cy, radius = int(cx), int(cy), max(1, int(radius))
+    cx = _lcd_clamp(cx, 0, display.lcd.WIDTH - 1)
+    cy = _lcd_clamp(cy, 0, display.lcd.HEIGHT - 1)
+    radius = max(1, min(int(radius), max(display.lcd.WIDTH, display.lcd.HEIGHT)))
     def operation():
         x, y, err = radius, 0, 1 - radius
         while x >= y:
             points = ((cx + x, cy + y), (cx + y, cy + x), (cx - y, cy + x), (cx - x, cy + y),
                       (cx - x, cy - y), (cx - y, cy - x), (cx + y, cy - x), (cx + x, cy - y))
-            for px, py in points:
-                if 0 <= px < display.lcd.WIDTH and 0 <= py < display.lcd.HEIGHT:
-                    if filled:
-                        display.lcd.fill_rectangle(min(px, cx), py, abs(px - cx) * 2 + 1, 1, value)
-                    else:
+            if filled:
+                for py in (cy + y, cy - y):
+                    left = max(0, cx - x)
+                    right = min(display.lcd.WIDTH - 1, cx + x)
+                    if 0 <= py < display.lcd.HEIGHT and left <= right:
+                        display.lcd.fill_rectangle(left, py, right - left + 1, 1, value)
+                for py in (cy + x, cy - x):
+                    left = max(0, cx - y)
+                    right = min(display.lcd.WIDTH - 1, cx + y)
+                    if 0 <= py < display.lcd.HEIGHT and left <= right:
+                        display.lcd.fill_rectangle(left, py, right - left + 1, 1, value)
+            else:
+                for px, py in points:
+                    if 0 <= px < display.lcd.WIDTH and 0 <= py < display.lcd.HEIGHT:
                         display.lcd.fill_rectangle(px, py, 1, 1, value)
             y += 1
             if err <= 0:
@@ -436,7 +470,7 @@ def clearlcdline(row):
     display = _ensure_display()
     if not display:
         return None
-    row = int(row)
+    row = _lcd_clamp(row, 0, max(0, (display.lcd.HEIGHT - 18) // 18))
     y = row * 18
 
     def operation():
@@ -539,18 +573,19 @@ def readpwmduty():
     return getattr(_pwm, "duty_percent", None)
 
 
-def lcdtext(text, row=0, col=0):
-    return showlcd(text, row, col)
+def lcdtext(text, row=0, col=0, color="white"):
+    return showlcdcolor(text, row, col, color)
 
 
 def lcdline(*args):
     """Legacy row text call or pixel line call from the LCD designer."""
-    if len(args) >= 4:
+    if len(args) >= 4 and all(_lcd_is_number(value) for value in args[:4]):
         return _lcd_pixel_line(args[0], args[1], args[2], args[3], args[4] if len(args) > 4 else "white", args[5] if len(args) > 5 else 1)
     row = args[0] if args else 0
     text = args[1] if len(args) > 1 else ""
     col = args[2] if len(args) > 2 else 0
-    return showlcd(text, row, col)
+    color = args[3] if len(args) > 3 else "white"
+    return showlcdcolor(text, row, col, color)
 
 
 def lcdclear():
