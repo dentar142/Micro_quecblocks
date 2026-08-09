@@ -92,6 +92,14 @@ class BuilderWorkflowContractTests(unittest.TestCase):
         for key in ("button", "button_adc", "button_direction", "key_status"):
             self.assertIn('"' + key + '"', self.source)
 
+    def test_module_switch_catalog_matches_startup_panel(self):
+        module_catalog = set(re.findall(r'\["([a-z0-9_]+)","[^"\n]+"\]', self.source[self.source.find("const MODULE_CATEGORIES ="):self.source.find("const API_CATEGORIES =")]))
+        panel = _balanced_body(self.source, "function renderModulePanel()")
+        panel_modules = set(re.findall(r'\["([a-z0-9_]+)",\s*"[^"\n]+"\]', panel))
+        expected = {"led", "anjian", "timer", "hmi", "guangmin", "i2c", "wenhumi", "jiasudu", "gpio", "pwm", "fengmingqi", "lcd", "spi", "uart", "rs232", "rs485", "cunchu", "yinpin", "lte", "ble", "gnss", "lbs"}
+        self.assertEqual(module_catalog, expected)
+        self.assertEqual(panel_modules, expected)
+
     def test_parameterized_apis_cannot_be_zero_argument_blocks(self):
         parameterized = _const_object_pairs(self.source, "API_TO_PARAM_PRESET")
         zero_argument = set(_const_array(self.source, "ZERO_ARG_APIS"))
@@ -190,6 +198,11 @@ class BuilderWorkflowContractTests(unittest.TestCase):
             {name: dependency_map.get(name) for name in expected},
             expected,
             "ordinary APIs need a central module dependency table",
+        )
+        self.assertEqual(
+            dependency_map.get("readadc"),
+            "guangmin",
+            "ADC pin reads use the shared 光敏 ADC / guangmin startup switch",
         )
 
         validator = _from_marker(self.source, "function validateBuilder()")
