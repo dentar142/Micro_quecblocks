@@ -60,7 +60,7 @@ print(hasattr(api, "lcdrect"))
 print(hasattr(api, "lcdcircle"))
 print(hasattr(api, "readlte"))
 print(hasattr(api, "networkstatus"))
-print(api.api_version())
+print(api.api_version())  # 当前仓库应为 2026.08.09.2 或更高
 print("readadc" in api.api_capabilities())
 ```
 
@@ -83,6 +83,7 @@ python -m http.server 8878
 - MicroBlocks 风格的积木选择器、脚本舞台、运行/停止和明暗主题；
 - EC200U 启动模块独立开关；
 - LCD 160×128 可视化画布，可编辑文字、矩形、线条、圆形的坐标、尺寸、粗细、颜色和填充；
+- LCD 可从 SD/UFS 读取 RGB565 原始图片显示，主机端转换工具位于 `tools/rgb565_image.py`；
 - 4G/LTE、GNSS、串口、传感器和 LCD 相关积木；
 - 生成代码预览与 `main.py` 下载。
 

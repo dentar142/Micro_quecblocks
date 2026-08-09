@@ -5,7 +5,7 @@ import easy_api as api
 DISPLAY_CYCLES = None
 BUTTON_POLL_MS = 20
 SENSOR_REFRESH_MS = 500
-UART_ID = 2                 # fixed UART2 / USART_B, PC COM43
+UART_ID = 2                 # UART2 / USART_B; use the currently enumerated data-UART COM port
 UART_BAUDRATE = 115200
 UART_TIMEOUT_MS = 1000
 

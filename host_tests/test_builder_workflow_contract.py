@@ -123,6 +123,9 @@ class BuilderWorkflowContractTests(unittest.TestCase):
             "makedir": "dir_make",
             "removedir": "dir_remove",
             "setled": "led_set",
+            "led1": "led1_set",
+            "led2": "led2_set",
+            "led3": "led3_set",
             "showlcd": "lcd_text",
             "senduart": "uart_send",
             "keytext": "key_text",
@@ -136,6 +139,9 @@ class BuilderWorkflowContractTests(unittest.TestCase):
         self.assertNotIn('item.dataset.paramKey === "i2c_scan"', restrict)
 
         for key in ("file_list", "storage_info", "dir_make", "dir_remove"):
+            self.assertIn('{ key: "' + key + '"', self.source)
+            self.assertIn('if (key === "' + key + '")', self.source)
+        for key in ("led1_set", "led2_set", "led3_set", "led_brightness", "led_breathe"):
             self.assertIn('{ key: "' + key + '"', self.source)
             self.assertIn('if (key === "' + key + '")', self.source)
 
@@ -193,6 +199,7 @@ class BuilderWorkflowContractTests(unittest.TestCase):
             "readgnss": "gnss",
             "readlbs": "lbs",
             "readble": "ble",
+            "lcdimage": "lcd",
         }
         self.assertEqual(
             {name: dependency_map.get(name) for name in expected},
@@ -211,6 +218,32 @@ class BuilderWorkflowContractTests(unittest.TestCase):
         api_branch = validator[api_branch_start:]
         self.assertIn("API_MODULE_REQUIREMENTS", api_branch)
         self.assertRegex(api_branch, r"requireModule\s*\(")
+
+    def test_sd_rgb565_image_and_uart_reply_contracts(self):
+        self.assertIn('key: "lcd_image"', self.source)
+        self.assertIn('api.lcdimage(', self.source)
+        self.assertIn('block.paramApiKey === "lcd_image"', self.source)
+        self.assertIn('if " + safeVarName(block.serialText, "value") + " is not None:', self.source)
+        self.assertIn('const escapedCr = String.fromCharCode(92) + "r";', self.source)
+        self.assertIn('if (["ON", "OFF", "OK"].includes(command)) payload = command + String.fromCharCode(13, 10);', self.source)
+
+    def test_official_lcd_api_parameter_blocks_and_examples(self):
+        for key in (
+            "lcd_rotation", "lcd_fill_screen", "lcd_flush", "lcd_draw_point",
+            "lcd_draw_line", "lcd_draw_rectangle", "lcd_fill_rectangle",
+            "lcd_circle", "lcd_show_string", "lcd_color565", "lcd_official_test",
+        ):
+            self.assertIn('key: "' + key + '"', self.source)
+        for call in (
+            "api.lcdrotation(", "api.lcdfillscreen(", "api.lcdflush()",
+            "api.lcddrawpoint(", "api.lcddrawline(", "api.lcddrawrect(",
+            "api.lcdfillrect(", "api.lcdcircle(", "api.lcdshowstring(",
+            "api.lcdcolor565(", "api.testlcdofficial()",
+        ):
+            self.assertIn(call, self.source)
+        self.assertIn("lcd_official_basic_demo", self.source)
+        self.assertIn("lcd_official_sensor_demo", self.source)
+        self.assertIn("lcd_official_image_demo", self.source)
 
     def test_nested_api_blocks_share_a_phase_and_placement_guard(self):
         emitter = _balanced_body(self.source, "function emitBlock(")

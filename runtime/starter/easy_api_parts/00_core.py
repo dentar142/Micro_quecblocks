@@ -17,7 +17,7 @@ from lib.kit.compat import sleep_ms, ticks_diff, ticks_ms
 # Bump this whenever the public easy_api surface changes.  Generated programs
 # use this value to detect the common failure mode where only main.py was
 # uploaded and the board still has an older easy_api runtime.
-EASY_API_VERSION = "2026.08.08.1"
+EASY_API_VERSION = "2026.08.10.1"
 
 
 def api_version():
@@ -42,6 +42,8 @@ _lcd_temp_active = False
 _lcd_temp_until = 0
 _lcd_row_temp_until = {}
 _leds = None
+_led_pwm = {}
+_led_breathe_state = {}
 _buttons = None
 _nav = None
 _button_events = []
@@ -55,6 +57,7 @@ _uart = None
 _uart_id = config.UART_ID
 _uart_baudrate = config.UART_BAUDRATE
 _uart_timeout = config.UART_TIMEOUT_MS
+_uart_text_buffer = ""
 _rs232 = None
 _rs485 = None
 _audio = None
@@ -193,6 +196,9 @@ def _mirror_uart_to_pc(data):
         else:
             text = str(data)
         sys.stdout.write(text)
+        flush = getattr(sys.stdout, "flush", None)
+        if flush:
+            flush()
     except Exception:
         pass
 

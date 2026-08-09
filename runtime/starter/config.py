@@ -32,10 +32,22 @@ FEATURES = {
 LIGHT_ADC_PIN = "C5"
 USER_BUTTON_PIN = "SW"
 LED_PINS = {
+    # UniKnect EC200U kit LED mapping supplied for this board:
+    # LED1=PB0 (green), LED2=PB7 (blue), LED3=PB14 (red).
     "green": "B0",
-    "blue": "LED_BLUE",
+    "blue": "B7",
     "red": "B14",
 }
+
+# Verified on the NUCLEO-F413ZH QuecPython firmware with
+# pyb.Timer(...).channel(..., Timer.PWM, pin=Pin(...)).
+LED_PWM_CHANNELS = {
+    "green": ("B0", 3, 3),
+    "blue": ("B7", 4, 2),
+    "red": ("B14", 12, 1),
+}
+LED_PWM_FREQ = 1000
+LED_BREATHE_DEFAULT_PERIOD_MS = 2000
 
 I2C_ID = 1
 I2C_FREQ = 400000
@@ -50,14 +62,14 @@ LCD_CS_PIN = "D14"
 NAV_ADC_PIN = "C1"
 NAV_RELEASE_MIN = 60000
 NAV_THRESHOLDS = {
-    # Arduino 1.8'' TFT Shield schematic:
-    # LEFT=R4 22R, DOWN=R2 220R, CENTER=R3 470R,
-    # RIGHT=R6 1K, UP=R5 4.7K, release=R7 1K pull-up to 3V3.
-    "left": (0, 5000),
-    "down": (7000, 16000),
+    # 实板校准结果：当前接线的 ADC 区间与 Shield 原理图标签相反。
+    # 典型实测值：1000=right, 10000=up, 20000=center,
+    # 30000=left, 50000=down；松手约 65535。
+    "left": (28000, 40000),
+    "down": (47000, 59000),
     "center": (17000, 26000),
-    "right": (28000, 40000),
-    "up": (47000, 59000),
+    "right": (0, 5000),
+    "up": (7000, 16000),
 }
 
 # 五向模拟键使用电阻分压，实板松手/按下瞬间会有少量抖动；比赛主程序按稳定事件输出。
@@ -84,6 +96,9 @@ UART_BAUDRATE = 115200
 UART_TIMEOUT_MS = 1000
 # True 时，api.senduart(...) 会同时输出到电脑 USB/REPL 串口。
 UART_MIRROR_TO_PC = True
+# Compatibility for older generated UART command projects. Exact ON/OFF/OK
+# acknowledgements are line framed; arbitrary text and variables are unchanged.
+UART_AUTO_LINE_COMMANDS = True
 RS485_DIRECTION_PIN = None
 RS232_TRANSCEIVER_CONFIRMED = False
 

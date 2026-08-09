@@ -7,9 +7,9 @@
 | 光敏电阻 | `C5` / Arduino A5 | ADC 读取环境亮度 |
 | AHT20 / LIS2DH12 | `I2C(1)` | S502 必须拨到 MCU 侧 |
 | LCD | `SPI(1)`, DC=`F12`, CS=`D14` | ST7735 屏幕 |
-| LCD 五向键 | Arduino A3 / 当前固件映射 `C1` | TFT Shield `NAV` 模拟电阻梯形输入；必须在实际板上校准。旧版 `C0/A1` 记录不作为当前映射依据 |
+| LCD 五向键 | Arduino A3 / 当前固件映射 `C1` | TFT Shield `NAV` 模拟电阻梯形输入；本套实板已按实际方向校准：约 1000=右、10000=上、20000=中、30000=左、50000=下，松手约 65535。不同批次仍应运行校准示例；旧版 `C0/A1` 记录不作为当前映射依据 |
 | NUCLEO 用户键 | `SW` | 数字输入，默认下拉 |
-| NUCLEO LED | `B0`, `LED_BLUE`, `B14` | 绿/蓝/红；不同固件可能只有 `LED_BLUE` 别名 |
+| NUCLEO LED | `PB0` / `PB7` / `PB14` | 本套件映射：LED1 绿=`PB0`（TIM3_CH3）、LED2 蓝=`PB7`（TIM4_CH2）、LED3 红=`PB14`（TIM12_CH1），三路均为高有效并已验证硬件 PWM。 |
 | UART | `UART(2)` | 用于 TTL、RS232、RS485 示例 |
 
 ## 现场需配置资源

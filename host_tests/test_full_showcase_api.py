@@ -22,15 +22,23 @@ class FakeLcd:
     BLUE = 0x001F
 
     def __init__(self):
+        self.rotations = []
         self.strings = []
         self.rectangles = []
+        self.images = []
         self.flushes = 0
+
+    def set_rotation(self, rotation):
+        self.rotations.append(rotation)
 
     def show_string(self, x, y, text, color, background, size):
         self.strings.append((x, y, text, color, background, size))
 
     def fill_rectangle(self, x, y, width, height, color):
         self.rectangles.append((x, y, width, height, color))
+
+    def show_image(self, x, y, width, height, data):
+        self.images.append((x, y, width, height, data))
 
     def flush(self):
         self.flushes += 1
@@ -55,6 +63,7 @@ class EasyApiFullShowcaseLcdTests(unittest.TestCase):
         self.original_ticks_diff = easy_api.ticks_diff
         self.original_row_temp_until = dict(getattr(easy_api, "_lcd_row_temp_until", {}))
         easy_api.config.FEATURES["lcd"] = True
+        easy_api.config.FEATURES["storage"] = True
         easy_api._display = FakeDisplay()
         easy_api._lcd_temp_active = False
         easy_api._lcd_temp_until = 0
@@ -137,6 +146,34 @@ class EasyApiFullShowcaseLcdTests(unittest.TestCase):
         self.assertTrue(lcdline(5, 5, 6, 5, "green"))
         self.assertTrue(all(rect[2:4] == (1, 1) for rect in self.api._display.lcd.rectangles))
 
+    def test_lcdimage_uses_bounded_rgb565_frame(self):
+        class FakeFile:
+            def __enter__(self):
+                return self
+            def __exit__(self, *args):
+                return False
+            def read(self, size):
+                return bytes(range(size))
+
+        class FakeFileApi:
+            @staticmethod
+            def open(path, mode):
+                return FakeFile()
+
+        old_file = sys.modules.get("quectel")
+        sys.modules["quectel"] = types.SimpleNamespace(File=FakeFileApi)
+        try:
+            self.assertTrue(self.api.lcdimage("SD:logo.rgb565", 2, 3, 4, 5))
+        finally:
+            if old_file is None:
+                sys.modules.pop("quectel", None)
+            else:
+                sys.modules["quectel"] = old_file
+        self.assertEqual(len(self.api._display.lcd.images), 1)
+        x, y, width, height, data = self.api._display.lcd.images[0]
+        self.assertEqual((x, y, width, height), (2, 3, 4, 5))
+        self.assertEqual(len(data), 40)
+
     def test_updatelcdtemp_clears_expired_temporary_row(self):
         showlcdrowtemp = self._require_api("showlcdrowtemp")
         updatelcdtemp = self._require_api("updatelcdtemp")
@@ -169,6 +206,18 @@ class EasyApiFullShowcaseLcdTests(unittest.TestCase):
         self.assertTrue(lcdrowtempactive(5))
         now["value"] = 1050
         self.assertFalse(lcdrowtempactive(5))
+
+    def test_official_lcd_wrappers_use_pixel_coordinates_and_rgb565(self):
+        self.assertEqual(self.api.lcdcolor565(255, 0, 0), FakeLcd.RED)
+        self.assertTrue(self.api.lcdrotation(1))
+        self.assertTrue(self.api.lcddrawpoint(2, 3, "red"))
+        self.assertTrue(self.api.lcdshowstring(4, 5, "Hello", "green", "black", 12))
+        self.assertTrue(self.api.lcddrawrect(10, 20, 20, 30, "blue"))
+        self.assertTrue(self.api.lcdfillrect(30, 40, 12, 8, "yellow"))
+        self.assertTrue(self.api.lcddrawline(0, 0, 5, 5, "white"))
+        self.assertTrue(self.api.lcdcircle(80, 64, 12, "red", False))
+        self.assertTrue(self.api.lcdflush())
+        self.assertGreaterEqual(self.api._display.lcd.flushes, 7)
 
 
 class FakeMachinePwm:

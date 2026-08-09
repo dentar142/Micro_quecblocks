@@ -52,6 +52,24 @@ def readadc(pin):
     return adc.read_u16()
 
 
+def readadcvoltage(pin, reference_voltage=3.3):
+    """Read an ADC pin and convert the raw 16-bit result to volts."""
+    raw = readadc(pin)
+    return raw * float(reference_voltage) / 65535.0
+
+
+def readadcpercent(pin):
+    """Read an ADC pin and convert the raw 16-bit result to 0-100 percent."""
+    return readadc(pin) * 100.0 / 65535.0
+
+
+def readadc_all(pin, reference_voltage=3.3):
+    """Return raw ADC, voltage, and percentage in one small dictionary."""
+    raw = readadc(pin)
+    voltage = raw * float(reference_voltage) / 65535.0
+    return {"raw_u16": raw, "voltage": voltage, "percent": raw * 100.0 / 65535.0}
+
+
 def highpins(pins, *extra_pins):
     """Return the requested pin names that currently read high."""
     import machine
@@ -249,6 +267,19 @@ def lcd(enabled=1):
     return True
 
 
+def lcdrotation(rotation=1):
+    """Official ST7735 set_rotation wrapper."""
+    display = _ensure_display()
+    if not display:
+        return None
+    value = max(0, min(3, int(rotation)))
+    def operation():
+        display.lcd.set_rotation(value)
+        display.lcd.flush()
+        return True
+    return _lcd_draw(operation, "rotation")
+
+
 def clearlcd():
     global _display, _lcd_row_temp_until
     display = _ensure_display()
@@ -264,6 +295,22 @@ def clearlcd():
         # Keeping it lets a later refresh recover after garbage collection.
         _lcd_operation_failed("clear", exc)
         return False
+
+
+def lcdfillscreen(color="black"):
+    """Official fill_screen wrapper using bounded strips."""
+    return lcdfill(color)
+
+
+def lcdflush():
+    """Flush the current ST7735 framebuffer."""
+    display = _ensure_display()
+    if not display:
+        return None
+    def operation():
+        display.lcd.flush()
+        return True
+    return _lcd_draw(operation, "flush")
 
 
 def _lcd_xy(row=0, col=0):
@@ -463,6 +510,128 @@ def lcdcircle(cx, cy, radius, color="white", filled=False):
         display.lcd.flush()
         return True
     return _lcd_draw(operation, "circle")
+
+
+def lcddrawpoint(x=0, y=0, color="white"):
+    """Official draw_point wrapper."""
+    display = _ensure_display()
+    if not display:
+        return None
+    x = _lcd_clamp(x, 0, display.lcd.WIDTH - 1)
+    y = _lcd_clamp(y, 0, display.lcd.HEIGHT - 1)
+    value = _lcd_color_value(display, color)
+    def operation():
+        display.lcd.fill_rectangle(x, y, 1, 1, value)
+        display.lcd.flush()
+        return True
+    return _lcd_draw(operation, "draw-point")
+
+
+def lcddrawline(x0=0, y0=0, x1=0, y1=0, color="white"):
+    """Official draw_line wrapper with endpoint coordinates."""
+    return _lcd_pixel_line(x0, y0, x1, y1, color, 1)
+
+
+def lcddrawrect(x0=0, y0=0, x1=10, y1=10, color="white"):
+    """Official draw_rectangle wrapper using two corner points."""
+    left = min(int(x0), int(x1))
+    top = min(int(y0), int(y1))
+    width = abs(int(x1) - int(x0)) + 1
+    height = abs(int(y1) - int(y0)) + 1
+    return lcdrect(left, top, width, height, color, False, 1)
+
+
+def lcdfillrect(x=0, y=0, width=10, height=10, color="white"):
+    """Official fill_rectangle wrapper."""
+    return lcdrect(x, y, width, height, color, True, 1)
+
+
+def lcdshowstring(x=0, y=0, text="Hello", color="white", background="black", size=16):
+    """Official pixel-coordinate show_string wrapper."""
+    display = _ensure_display()
+    if not display:
+        return None
+    x = _lcd_clamp(x, 0, display.lcd.WIDTH - 1)
+    y = _lcd_clamp(y, 0, display.lcd.HEIGHT - 1)
+    size = max(8, min(24, int(size)))
+    value = str(text) or " "
+    fg = _lcd_color_value(display, color)
+    bg = _lcd_color_value(display, background)
+    def operation():
+        display.lcd.show_string(x, y, value, fg, bg, size)
+        display.lcd.flush()
+        return True
+    return _lcd_draw(operation, "show-string")
+
+
+def lcdcolor565(red=0, green=0, blue=0):
+    """Convert RGB888 components to the official RGB565 integer."""
+    red = max(0, min(255, int(red)))
+    green = max(0, min(255, int(green)))
+    blue = max(0, min(255, int(blue)))
+    return ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3)
+
+
+def testlcdofficial():
+    """Run a bounded official-API showcase and leave the result on LCD."""
+    display = _ensure_display()
+    if not display:
+        return False
+    try:
+        lcdfillscreen("black")
+        lcdrotation(3)
+        lcdshowstring(4, 4, "LCD API", "cyan", "black", 16)
+        lcddrawpoint(2, 28, "white")
+        lcddrawline(4, 32, 40, 52, "green")
+        lcddrawrect(48, 28, 96, 58, "yellow")
+        lcdfillrect(104, 32, 40, 24, "blue")
+        lcdcircle(80, 92, 20, "red", False)
+        lcdflush()
+        return _pass("LCD_API", "official primitives")
+    except Exception as exc:
+        return _fail("LCD_API", exc)
+
+
+def lcdimage(path, x=0, y=0, width=40, height=40):
+    """Draw an RGB565 raw image stored through the Quectel File API."""
+    if not _feature("lcd"):
+        return _skip("LCD_IMAGE", "LCD disabled")
+    if not _feature("storage"):
+        return _skip("LCD_IMAGE", "storage disabled")
+    display = _ensure_display()
+    if not display:
+        return None
+    try:
+        x = _lcd_clamp(x, 0, display.lcd.WIDTH - 1)
+        y = _lcd_clamp(y, 0, display.lcd.HEIGHT - 1)
+        width = max(1, min(int(width), display.lcd.WIDTH - x))
+        height = max(1, min(int(height), display.lcd.HEIGHT - y))
+        expected = width * height * 2
+        if expected > 40960:
+            raise ValueError("image frame exceeds 40 KiB")
+        from quectel import File
+        sleep_ms(250)
+        with File.open(_file_target(path), "r") as fp:
+            data = fp.read(expected)
+        if isinstance(data, str):
+            data = data.encode()
+        elif not isinstance(data, (bytes, bytearray)):
+            data = bytes(data)
+        if len(data) < expected:
+            raise ValueError("RGB565 file too short: {} < {} bytes".format(len(data), expected))
+        payload = bytearray(data[:expected])
+        def operation():
+            display.lcd.show_image(x, y, width, height, payload)
+            display.lcd.flush()
+            return True
+        result = _lcd_draw(operation, "image")
+        if result:
+            print("[LCD][IMAGE] {} {}x{} at {},{}".format(_file_target(path), width, height, x, y))
+        return result
+    except Exception as exc:
+        _remember_error("lcd", exc)
+        print("[LCD][IMAGE][FAIL] {}".format(repr(exc)))
+        return False
 
 
 def clearlcdline(row):

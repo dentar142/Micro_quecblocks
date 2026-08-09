@@ -1,0 +1,41 @@
+backup_dir=C:\2026soc\Micro_quecblocks\backups\board_files_20260809_231116
+dirs=4
+files=33
+errors=0
+
+[FILES]
+73	boot.py
+3611	main.py
+10983	easy_api_parts/00_core.py
+8011	easy_api_parts/10_led_buttons.py
+6819	easy_api_parts/20_sensors.py
+20741	easy_api_parts/30_io_display.py
+6947	easy_api_parts/40_serial.py
+11046	easy_api_parts/50_storage_audio.py
+12722	easy_api_parts/60_radio.py
+1150	easy_api_parts/70_hmi.py
+67	lib/alg/__init__.py
+961	lib/alg/number_algorithms.py
+5431	lib/alg/operators.py
+627	lib/alg/text_format.py
+113	lib/alg/text_join.py
+143	lib/kit/__init__.py
+3593	lib/kit/audio_storage.py
+17025	lib/kit/ble_modes.py
+4683	lib/kit/buttons.py
+822	lib/kit/compat.py
+3075	lib/kit/display.py
+10538	lib/kit/io_tests.py
+1116	lib/kit/leds.py
+1445	lib/kit/menu.py
+410	lib/kit/preflight.py
+1533	lib/kit/report.py
+3578	lib/kit/runtime.py
+2812	lib/kit/sensors.py
+1707	lib/kit/serial_tests.py
+724	lib/kit/text_format.py
+3797	config.py
+1326	easy_api.py
+12904	universal_main.py
+
+[ERRORS]

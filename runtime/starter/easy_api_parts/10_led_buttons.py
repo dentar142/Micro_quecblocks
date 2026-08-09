@@ -24,7 +24,7 @@ def _ensure_leds(report=True):
 
 
 def led(enabled=1):
-    global _leds
+    global _leds, _led_pwm, _led_breathe_state
     _set_feature("leds", enabled)
     if enabled:
         return _ensure_leds() is not None
@@ -33,16 +33,25 @@ def led(enabled=1):
             _leds.all_off()
         except Exception:
             pass
+    _stop_led_pwm()
+    _led_pwm = {}
+    _led_breathe_state = {}
     _leds = None
     return True
 
 
 def setled(name, value):
+    global _led_breathe_state
     leds = _ensure_leds()
     if not leds:
         return None
     try:
-        leds.set(name, bool(value))
+        channel = str(name).lower()
+        _stop_led_pwm(channel)
+        if not isinstance(_led_breathe_state, dict):
+            _led_breathe_state = {}
+        _led_breathe_state.pop(channel, None)
+        leds.set(channel, bool(value))
         return True
     except Exception as exc:
         _remember_error("leds", exc)
@@ -50,6 +59,9 @@ def setled(name, value):
 
 
 def ledoff():
+    global _led_breathe_state
+    _stop_led_pwm()
+    _led_breathe_state = {}
     if _leds:
         _leds.all_off()
     return True
@@ -71,6 +83,130 @@ def testled():
         return _fail("LED", _errors.get("leds", "not initialized"))
     leds.cycle(200)
     return _pass("LED", ",".join(leds.names()))
+
+
+def _stop_led_pwm(name=None):
+    global _led_pwm
+    if not isinstance(_led_pwm, dict):
+        try:
+            _led_pwm.stop()
+        except Exception:
+            pass
+        _led_pwm = {}
+        return
+    names = tuple(_led_pwm.keys()) if name is None else (str(name).lower(),)
+    for channel in names:
+        output = _led_pwm.pop(channel, None)
+        if output:
+            try:
+                output.stop()
+            except Exception:
+                pass
+
+
+def _stop_led_pwm_if_needed(name):
+    _stop_led_pwm(str(name).lower())
+
+
+def ledbrightness(name="green", duty=100, freq=None):
+    """Set independent hardware-PWM brightness for any of the three LEDs."""
+    global _led_pwm, _led_breathe_state
+    leds = _ensure_leds()
+    if not leds:
+        return None
+    channel = str(name or "green").lower()
+    pwm_spec = config.LED_PWM_CHANNELS.get(channel)
+    if pwm_spec is None:
+        return _fail("LED_PWM", "unknown LED channel: " + channel)
+    duty = max(0, min(100, float(duty)))
+    try:
+        if not isinstance(_led_pwm, dict):
+            _stop_led_pwm()
+        if not isinstance(_led_breathe_state, dict):
+            _led_breathe_state = {}
+        _led_breathe_state.pop(channel, None)
+        output = _led_pwm.get(channel)
+        if output is None:
+            from lib.kit.io_tests import PwmOutput
+            output = PwmOutput(
+                pwm_spec[0], freq or config.LED_PWM_FREQ, duty,
+                timer_id=pwm_spec[1], timer_channel=pwm_spec[2],
+                prefer_pyb=True,
+            )
+            output.start()
+            _led_pwm[channel] = output
+        else:
+            output.set_duty(duty)
+        return True
+    except Exception as exc:
+        _stop_led_pwm(channel)
+        _remember_error("leds", exc)
+        return _fail("LED_PWM", exc)
+
+
+def ledbreathe(name="green", period_ms=None, min_duty=0, max_duty=100, steps=32):
+    """Start one LED's non-blocking breathe cycle; call updateled() often."""
+    global _led_breathe_state
+    channel = str(name or "green").lower()
+    if channel not in config.LED_PWM_CHANNELS:
+        return _fail("LED_BREATHE", "unknown LED channel: " + channel)
+    period = max(200, int(period_ms or config.LED_BREATHE_DEFAULT_PERIOD_MS))
+    low = max(0, min(100, int(min_duty)))
+    high = max(low, min(100, int(max_duty)))
+    count = max(4, min(128, int(steps)))
+    if not isinstance(_led_breathe_state, dict):
+        _led_breathe_state = {}
+    current = _led_breathe_state.get(channel)
+    if current and current.get("period") == period and current.get("low") == low and current.get("high") == high and current.get("steps") == count:
+        # Repeated calls from a user loop must not restart the animation.
+        return updateled()
+    result = ledbrightness(channel, low)
+    if result:
+        _led_breathe_state[channel] = {
+            "name": channel, "period": period, "low": low, "high": high,
+            "steps": count, "index": 0, "last": ticks_ms(),
+        }
+    return result
+
+
+def updateled():
+    """Advance all active non-blocking LED breathe animations."""
+    global _led_breathe_state
+    if not isinstance(_led_breathe_state, dict) or not _led_breathe_state:
+        return False
+    now = ticks_ms()
+    for channel in tuple(_led_breathe_state.keys()):
+        state = _led_breathe_state.get(channel)
+        if not state:
+            continue
+        interval = max(10, int(state["period"] / (state["steps"] * 2)))
+        if ticks_diff(now, state["last"]) < interval:
+            continue
+        state["last"] = now
+        state["index"] = (state["index"] + 1) % (state["steps"] * 2)
+        phase = state["index"]
+        if phase > state["steps"]:
+            phase = state["steps"] * 2 - phase
+        span = state["high"] - state["low"]
+        output = _led_pwm.get(channel) if isinstance(_led_pwm, dict) else None
+        if output:
+            output.set_duty(state["low"] + span * phase / state["steps"])
+    return True
+
+
+def led1(value=1):
+    """LED1 green PB0 digital on/off."""
+    return setled("green", value)
+
+
+def led2(value=1):
+    """LED2 blue PB7 digital on/off."""
+    return setled("blue", value)
+
+
+def led3(value=1):
+    """LED3 red PB14 digital on/off."""
+    return setled("red", value)
 
 
 # Buttons

@@ -60,8 +60,19 @@ class ButtonStateTests(unittest.TestCase):
 
 class NavigationTests(unittest.TestCase):
     def test_thresholds(self):
-        nav = AnalogNavigation(FakeAdc(100), {"right": (0, 1000)}, 60000)
+        thresholds = {
+            "left": (28000, 40000),
+            "down": (47000, 59000),
+            "center": (17000, 26000),
+            "right": (0, 5000),
+            "up": (7000, 16000),
+        }
+        nav = AnalogNavigation(FakeAdc(1000), thresholds, 60000)
         self.assertEqual(nav.read_key(), "right")
+        for value, expected in ((10000, "up"), (20000, "center"),
+                                (30000, "left"), (50000, "down")):
+            nav.adc.value = value
+            self.assertEqual(nav.read_key(), expected)
         nav.adc.value = 65000
         self.assertIsNone(nav.read_key())
 
@@ -81,6 +92,81 @@ class NavigationTests(unittest.TestCase):
 
         self.assertEqual(adc.reads, 1)
         self.assertEqual(events, [("down", PRESS)])
+
+
+class LedPwmMappingTests(unittest.TestCase):
+    def test_board_pwm_mapping_matches_verified_timer_channels(self):
+        import config
+
+        self.assertEqual(config.LED_PWM_CHANNELS, {
+            "green": ("B0", 3, 3),
+            "blue": ("B7", 4, 2),
+            "red": ("B14", 12, 1),
+        })
+
+    def test_all_led_channels_create_independent_verified_pyb_outputs(self):
+        import easy_api
+        import lib.kit.io_tests as io_tests
+
+        class FakeLeds:
+            def set(self, _name, _value):
+                pass
+
+        class FakeOutput:
+            instances = []
+
+            def __init__(self, pin, frequency, duty, **options):
+                self.pin = pin
+                self.frequency = frequency
+                self.duty = duty
+                self.options = options
+                self.stopped = False
+                type(self).instances.append(self)
+
+            def start(self):
+                return "pyb.Timer.PWM"
+
+            def set_duty(self, duty):
+                self.duty = duty
+                return True
+
+            def stop(self):
+                self.stopped = True
+
+        original_output = io_tests.PwmOutput
+        original_leds = easy_api._leds
+        original_pwm = easy_api._led_pwm
+        original_breathe = easy_api._led_breathe_state
+        original_enabled = easy_api.config.FEATURES["leds"]
+        try:
+            io_tests.PwmOutput = FakeOutput
+            easy_api.config.FEATURES["leds"] = True
+            easy_api._leds = FakeLeds()
+            easy_api._led_pwm = {}
+            easy_api._led_breathe_state = {}
+
+            for channel in ("green", "blue", "red"):
+                self.assertTrue(easy_api.ledbrightness(channel, 40, 1000))
+
+            self.assertEqual(set(easy_api._led_pwm), {"green", "blue", "red"})
+            self.assertEqual(
+                [(item.pin, item.options["timer_id"], item.options["timer_channel"])
+                 for item in FakeOutput.instances],
+                [("B0", 3, 3), ("B7", 4, 2), ("B14", 12, 1)],
+            )
+            self.assertTrue(all(item.options["prefer_pyb"] for item in FakeOutput.instances))
+
+            easy_api.led2(0)
+            self.assertEqual(set(easy_api._led_pwm), {"green", "red"})
+            self.assertTrue(FakeOutput.instances[1].stopped)
+            self.assertFalse(FakeOutput.instances[0].stopped)
+            self.assertFalse(FakeOutput.instances[2].stopped)
+        finally:
+            io_tests.PwmOutput = original_output
+            easy_api._leds = original_leds
+            easy_api._led_pwm = original_pwm
+            easy_api._led_breathe_state = original_breathe
+            easy_api.config.FEATURES["leds"] = original_enabled
 
 
 class ReporterTests(unittest.TestCase):
@@ -195,11 +281,13 @@ class EasyApiTextReceiveTests(unittest.TestCase):
 
         self.api = easy_api
         self.original_uart = easy_api._uart
+        self.original_uart_text_buffer = easy_api._uart_text_buffer
         self.original_ble = easy_api._ble
         self.original_features = dict(easy_api.config.FEATURES)
 
     def tearDown(self):
         self.api._uart = self.original_uart
+        self.api._uart_text_buffer = self.original_uart_text_buffer
         self.api._ble = self.original_ble
         self.api.config.FEATURES.clear()
         self.api.config.FEATURES.update(self.original_features)
@@ -216,6 +304,55 @@ class EasyApiTextReceiveTests(unittest.TestCase):
 
         self.assertEqual(self.api.readuarttext(), "hello")
         self.assertIsNone(self.api.readuarttext())
+
+    def test_readuarttext_removes_only_line_terminators_for_commands(self):
+        class FakePort:
+            def read_available(self):
+                return b"LED_ON\r\n"
+
+        self.api.config.FEATURES["uart"] = True
+        self.api._uart = FakePort()
+        self.assertEqual(self.api.readuarttext(), "LED_ON")
+
+    def test_readuarttext_reassembles_split_command_line(self):
+        class FakePort:
+            values = [b"LED_", b"ON\r\n"]
+            def read_available(self):
+                return self.values.pop(0)
+
+        self.api.config.FEATURES["uart"] = True
+        self.api._uart = FakePort()
+        self.assertIsNone(self.api.readuarttext())
+        self.assertEqual(self.api.readuarttext(), "LED_ON")
+
+    def test_senduart_ignores_none_sentinel(self):
+        class FakePort:
+            def __init__(self):
+                self.writes = []
+            def write(self, value):
+                self.writes.append(value)
+
+        port = FakePort()
+        self.api.config.FEATURES["uart"] = True
+        self.api._uart = port
+        self.assertFalse(self.api.senduart(None))
+        self.assertEqual(port.writes, [])
+
+    def test_senduart_line_frames_legacy_command_ack(self):
+        class FakePort:
+            def __init__(self):
+                self.writes = []
+            def write(self, value):
+                self.writes.append(value)
+
+        port = FakePort()
+        self.api.config.FEATURES["uart"] = True
+        self.api.config.UART_AUTO_LINE_COMMANDS = True
+        self.api._uart = port
+        self.assertTrue(self.api.senduart("ON"))
+        self.assertEqual(port.writes, [b"ON\r\n"])
+        self.assertTrue(self.api.senduart("payload"))
+        self.assertEqual(port.writes[-1], b"payload")
 
     def test_readbledata_consumes_backend_value(self):
         class FakeBackend:

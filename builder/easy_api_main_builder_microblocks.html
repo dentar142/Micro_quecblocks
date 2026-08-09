@@ -1252,6 +1252,8 @@
         <button class="ghost small" data-action="template" data-template="full">全功能展示</button>
         <button class="ghost small" data-action="template" data-template="basic">基础传感器</button>
         <button class="ghost small" data-action="template" data-template="location">LTE/BLE/GNSS/LBS 定位</button>
+        <button class="ghost small" data-action="template" data-template="sensor_sd">传感器 → SD/串口/LCD</button>
+        <button class="ghost small" data-action="template" data-template="audio_ble">录音 → SD → 播放/TTS/BLE</button>
         <button class="danger small" data-action="clear">清空</button>
       </div>
 
@@ -1274,7 +1276,26 @@
           <span class="chip kind-display" draggable="true" data-action="add" data-type="lcd" role="button" tabindex="0" aria-label="LCD 显示慢速区">LCD 显示<span class="zone">慢速区</span></span>
           <span class="chip kind-comm" draggable="true" data-action="add" data-type="serial" role="button" tabindex="0" aria-label="串口发送慢速区 / 通信展示">串口发送<span class="zone">慢速区 / 通信展示</span></span>
           <span class="chip kind-custom" draggable="true" data-action="add-param-api" data-param-key="delay" role="button" tabindex="0" aria-label="延时等待快速/慢速">延时等待<span class="zone">快速/慢速</span></span>
+          <span class="chip kind-display" draggable="true" data-action="add-param-api" data-param-key="lcd_image" role="button" tabindex="0" aria-label="SD RGB565 图片显示到 LCD 慢速区">SD RGB565 图片到 LCD<span class="zone">慢速区</span></span>
+          <span class="chip kind-control" draggable="true" data-action="add-param-api" data-param-key="led1_set" role="button" tabindex="0" aria-label="LED1 绿灯 PB0 开关快速区">LED1 绿 PB0<span class="zone">快速区</span></span>
+          <span class="chip kind-control" draggable="true" data-action="add-param-api" data-param-key="led2_set" role="button" tabindex="0" aria-label="LED2 蓝灯 PB7 开关快速区">LED2 蓝 PB7<span class="zone">快速区</span></span>
+          <span class="chip kind-control" draggable="true" data-action="add-param-api" data-param-key="led3_set" role="button" tabindex="0" aria-label="LED3 红灯 PB14 开关快速区">LED3 红 PB14<span class="zone">快速区</span></span>
           <span class="chip kind-custom" draggable="true" data-action="add" data-type="paramapi" role="button" tabindex="0" aria-label="参数接口按用途">参数接口<span class="zone">按用途</span></span>
+          <span class="chip kind-custom" draggable="true" data-action="add-function" data-function="climate_log" role="button" tabindex="0" aria-label="温湿度记录展示功能组">温湿度记录展示<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-custom" draggable="true" data-action="add-function" data-function="light_log" role="button" tabindex="0" aria-label="光敏记录展示功能组">光敏记录展示<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-custom" draggable="true" data-action="add-function" data-function="motion_log" role="button" tabindex="0" aria-label="加速度记录展示功能组">加速度记录展示<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-comm" draggable="true" data-action="add-function" data-function="audio_cycle" role="button" tabindex="0" aria-label="录音回放语音功能组">录音回放语音<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-comm" draggable="true" data-action="add-function" data-function="uart_command_control" role="button" tabindex="0" aria-label="UART指令控制功能组">UART 指令控制<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-comm" draggable="true" data-action="add-function" data-function="ble_command_control" role="button" tabindex="0" aria-label="BLE指令控制功能组">BLE 指令控制<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-display" draggable="true" data-action="add-function" data-function="lcd_sensor_dashboard" role="button" tabindex="0" aria-label="LCD传感器看板功能组">LCD 传感器看板<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-comm" draggable="true" data-action="add-function" data-function="gnss_log" role="button" tabindex="0" aria-label="GNSS日志功能组">GNSS 日志<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-control" draggable="true" data-action="add-function" data-function="led_key_control" role="button" tabindex="0" aria-label="五向键控制LED功能组">五向键控制 LED<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-comm" draggable="true" data-action="add-function" data-function="sd_text_to_tts" role="button" tabindex="0" aria-label="SD文本TTS功能组">SD 文本播报<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-comm" draggable="true" data-action="add-function" data-function="mic_record_only" role="button" tabindex="0" aria-label="麦克风录音到SD功能组">麦克风录音到 SD<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-comm" draggable="true" data-action="add-function" data-function="mic_record_playback" role="button" tabindex="0" aria-label="麦克风录音并播放功能组">录音并播放<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-display" draggable="true" data-action="add-function" data-function="lcd_official_basic_demo" role="button" tabindex="0" aria-label="LCD官方基础例程功能组">LCD 官方基础例程<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-display" draggable="true" data-action="add-function" data-function="lcd_official_sensor_demo" role="button" tabindex="0" aria-label="LCD官方传感器例程功能组">LCD 官方传感器例程<span class="zone">可展开编辑</span></span>
+          <span class="chip kind-display" draggable="true" data-action="add-function" data-function="lcd_official_image_demo" role="button" tabindex="0" aria-label="LCD官方图片例程功能组">LCD 官方图片例程<span class="zone">可展开编辑</span></span>
           <span class="chip kind-sensor" draggable="true" data-action="add" data-type="sort" role="button" tabindex="0" aria-label="数字排序慢速区">数字排序<span class="zone">慢速区</span></span>
           <span class="chip kind-sensor" draggable="true" data-action="add" data-type="stat" role="button" tabindex="0" aria-label="最大最小平均慢速区">最大最小平均<span class="zone">慢速区</span></span>
           <span class="chip kind-sensor" draggable="true" data-action="add" data-type="join" role="button" tabindex="0" aria-label="文字拼接慢速区 / 通信展示">文字拼接<span class="zone">慢速区 / 通信展示</span></span>
@@ -1513,22 +1534,22 @@ if __name__ == "__main__":
 
     const API_CATEGORIES = [
       { name: "System / 系统", apis: ["init","status","delay","millis","preflight","ready","testall"] },
-      { name: "LED / 指示灯", apis: ["led","setled","ledoff","ledrun","testled"] },
+      { name: "LED / 指示灯", apis: ["led","setled","led1","led2","led3","ledbrightness","ledbreathe","updateled","ledoff","ledrun","testled"] },
       { name: "Key / 按键", apis: ["anjian","readanjian","lastanjian","keytext","readanjianadc","readanjian_direction","waitkey","iskey","testanjian"] },
       { name: "Sensor / 传感器", apis: ["guangmin","readguangmin","readguangmin_percent","readguangmin_all","wenhumi","readwendu","readshidu","jiasudu","readx","readyaxis","readz"] },
       { name: "IO-Bus / GPIO与总线", apis: ["i2c","configurei2c","scani2c","gpio","configuregpio","readadc","setgpio","readgpio","highpins","timer","after","every","pwm","startpwm","setpwmduty","readpwmduty","stoppwm","beep","spi","configurespi","sendspi"] },
-      { name: "LCD-Text / 屏幕与文本", apis: ["lcd","clearlcd","clearlcdline","showlcd","showlcdcolor","showlcdtemp","showlcdrowtemp","lcdtempactive","lcdrowtempactive","updatelcdtemp","lcdline","lcdvalue","showstatus"] },
+      { name: "LCD-Text / 屏幕与文本", apis: ["lcd","lcdrotation","clearlcd","lcdfillscreen","lcdflush","clearlcdline","showlcd","showlcdcolor","lcdshowstring","lcdimage","lcddrawpoint","lcddrawline","lcddrawrect","lcdfillrect","lcdcircle","lcdcolor565","showlcdtemp","showlcdrowtemp","lcdtempactive","lcdrowtempactive","updatelcdtemp","lcdline","lcdvalue","showstatus","testlcdofficial"] },
       { name: "Algorithm / 算法与运算", apis: ["baoliuxiaoshu","shuzipaixu","zuidazhi","zuixiao","pingjunzhi","pin_jie","yunsuan","suijishu","shuxue","bijiao","luoji","wenbenchangdu","wenbenzifu","wenbenbaohan","zhuanshuzi","zhuanwenzi"] },
       { name: "UART / 串口", apis: ["uart","setuart","configureuart","senduart","readuart","readuarttext","waituart","rs232","sendrs232","readrs232text","rs485","sendrs485","readrs485text"] },
       { name: "Storage-Audio / 存储与音频", apis: ["cunchu","sdcard","writefile","readfile","removefile","listfiles","storageinfo","makedir","removedir","yinpin","recordstart","recordstop","record","recordtimed","updateaudio","playfile","play","stopplay","playstop","tts","say","settts","setttsparams","setvolume","volume","readvolume"] },
-      { name: "Wireless-Location / 无线与定位", apis: ["lte","readlte","networkstatus","lte_status","lte_field","lte_print","ble","setblemode","bleserver","bleclient","scanble","connectble","discoverble","readble","readbleclient","readbledata","sendble","readblehandle","writeblehandle","gnss","readgnss","readgnsslat","readgnsslon","lbs","readlbs","readlbslat","readlbslon","readlocation","readlocationlat","readlocationlon"] },
+      { name: "Wireless-Location / 无线与定位", apis: ["lte","readlte","networkstatus","lte_status","lte_field","lte_print","ble","setblemode","bleserver","bleclient","scanble","connectble","discoverble","readble","readbletext","readblesent","readbleclient","readbledata","sendble","readblehandle","writeblehandle","gnss","readgnss","readgnsslat","readgnsslon","lbs","readlbs","readlbslat","readlbslon","readlocation","readlocationlat","readlocationlon"] },
       { name: "Diagnostics / 模块自检", apis: ["testgpio","testtimer","testpwm","testbuzzer","testspi","testuart","testrs232","testrs485","testlte","testgnss","testlbs"] },
       { name: "HMI / 人机交互", apis: ["hmi","menu","runhmi","testhmi"] }
     ];
 
     const API_LABELS = {
       init: "初始化easy_api", status: "读取系统状态", delay: "延时等待", millis: "读取运行毫秒数", preflight: "模块预检查", ready: "就绪检查", testall: "全功能自检",
-      led: "LED模块启用", setled: "设置LED状态", ledoff: "关闭全部LED", ledrun: "LED流水灯", testled: "LED测试",
+      led: "LED模块启用", setled: "设置LED状态", led1: "LED1绿 PB0", led2: "LED2蓝 PB7", led3: "LED3红 PB14", ledbrightness: "三色LED独立PWM调光", ledbreathe: "三色LED独立呼吸灯", updateled: "更新LED呼吸灯", ledoff: "关闭全部LED", ledrun: "LED流水灯", testled: "LED测试",
       anjian: "按键模块启用", readanjian: "读取按键事件", lastanjian: "读取最近按键事件", keytext: "格式化短按长按状态", readanjianadc: "读取五向键ADC", readanjian_direction: "读取五向键方向", waitkey: "等待按键", iskey: "判断按键是否按住", testanjian: "按键测试",
       guangmin: "光敏模块启用", readguangmin: "读取光敏值", readguangmin_percent: "读取光敏百分比", readguangmin_all: "读取光敏全部信息",
       wenhumi: "温湿度模块启用", readwendu: "读取温度", readshidu: "读取湿度",
@@ -1536,7 +1557,7 @@ if __name__ == "__main__":
       i2c: "I2C模块启用", configurei2c: "I2C高级配置", scani2c: "扫描I2C地址", gpio: "GPIO模块启用", configuregpio: "GPIO高级配置", readadc: "读取指定ADC引脚", setgpio: "设置GPIO电平", readgpio: "读取GPIO电平", highpins: "汇总高电平引脚名",
       timer: "定时器模块启用", after: "延后执行", every: "周期执行", pwm: "PWM模块启用", startpwm: "启动PWM", setpwmduty: "动态设置PWM占空比", readpwmduty: "读取PWM占空比", stoppwm: "停止PWM", beep: "蜂鸣器响指定时长和频率",
       spi: "SPI模块启用", configurespi: "SPI高级配置", sendspi: "SPI发送数据",
-      lcd: "LCD模块启用", clearlcd: "LCD清屏", clearlcdline: "LCD单行清除", showlcd: "LCD指定行列显示", showlcdcolor: "LCD彩色显示", showlcdtemp: "LCD全屏临时显示", showlcdrowtemp: "LCD单行临时显示", lcdtempactive: "全屏临时显示是否有效", lcdrowtempactive: "指定行临时显示是否有效", updatelcdtemp: "更新单行临时显示", lcdline: "LCD整行显示", lcdvalue: "LCD变量显示", showstatus: "LCD显示状态",
+      lcd: "LCD模块启用", lcdrotation: "LCD旋转方向", clearlcd: "LCD清屏", lcdfillscreen: "LCD填充整屏", lcdflush: "LCD刷新帧缓冲", clearlcdline: "LCD单行清除", showlcd: "LCD指定行列显示", showlcdcolor: "LCD彩色显示", lcdshowstring: "官方像素文字", lcdimage: "SD RGB565图片显示", lcddrawpoint: "官方绘制像素点", lcddrawline: "官方绘制线段", lcddrawrect: "官方绘制空心矩形", lcdfillrect: "官方填充矩形", lcdcircle: "绘制圆形", lcdcolor565: "RGB转RGB565颜色", showlcdtemp: "LCD全屏临时显示", showlcdrowtemp: "LCD单行临时显示", lcdtempactive: "全屏临时显示是否有效", lcdrowtempactive: "指定行临时显示是否有效", updatelcdtemp: "更新单行临时显示", lcdline: "LCD整行显示", lcdvalue: "LCD变量显示", showstatus: "LCD显示状态", testlcdofficial: "LCD官方例程调试",
       baoliuxiaoshu: "保留指定小数位", shuzipaixu: "数字排序", zuidazhi: "求最大值", zuixiao: "求最小值", pingjunzhi: "求平均值", pin_jie: "文字拼接",
       yunsuan: "加减乘除等数字运算", suijishu: "生成范围随机数", shuxue: "Scratch数学函数", bijiao: "比较两个值", luoji: "与或非逻辑运算",
       wenbenchangdu: "读取文本长度", wenbenzifu: "读取第几个字符", wenbenbaohan: "判断文本是否包含", zhuanshuzi: "文字转数字", zhuanwenzi: "数值转文字",
@@ -1547,7 +1568,7 @@ if __name__ == "__main__":
       tts: "TTS播放文字", say: "TTS播放别名", settts: "设置TTS参数", setttsparams: "设置TTS参数别名", setvolume: "设置扬声器音量", volume: "读取或设置音量", readvolume: "读取音量",
       lte: "LTE模块启用", readlte: "读取LTE信息", networkstatus: "读取4G注册与信号状态",
       lte_status: "4G读取完整状态", lte_field: "4G读取单项状态", lte_print: "4G串口打印状态",
-      ble: "蓝牙模式及名称设置", setblemode: "BLE模式及目标设置", bleserver: "BLE服务端启用", bleclient: "BLE客户端启用", scanble: "BLE扫描", connectble: "BLE连接", discoverble: "BLE发现服务", readble: "读取BLE状态", readbleclient: "读取BLE状态别名", readbledata: "读取一条BLE新消息", sendble: "BLE发送数据", readblehandle: "BLE读取句柄", writeblehandle: "BLE写入句柄",
+      ble: "蓝牙模式及名称设置", setblemode: "BLE模式及目标设置", bleserver: "BLE服务端启用", bleclient: "BLE客户端启用", scanble: "BLE扫描", connectble: "BLE连接", discoverble: "BLE发现服务", readble: "读取BLE状态字典", readbletext: "读取BLE状态摘要", readblesent: "读取BLE最近发送", readbleclient: "读取BLE状态别名", readbledata: "读取一条BLE新消息", sendble: "BLE发送数据", readblehandle: "BLE读取句柄", writeblehandle: "BLE写入句柄",
       gnss: "GNSS模块启用", readgnss: "读取GNSS信息", readgnsslat: "读取GNSS纬度", readgnsslon: "读取GNSS经度",
       lbs: "LBS模块启用", readlbs: "读取LBS定位", readlbslat: "读取LBS纬度", readlbslon: "读取LBS经度", readlocation: "GNSS优先LBS兜底定位", readlocationlat: "读取兜底定位纬度", readlocationlon: "读取兜底定位经度",
       hmi: "HMI模块启用", menu: "HMI菜单", runhmi: "运行HMI", testhmi: "HMI测试",
@@ -1562,7 +1583,7 @@ if __name__ == "__main__":
       readanjian: "fast", lastanjian: "fast", readanjianadc: "fast", readanjian_direction: "fast", readuarttext: "fast", readbledata: "fast", waitkey: "fast", waituart: "fast", updateaudio: "fast", lcdtempactive: "fast", lcdrowtempactive: "fast", updatelcdtemp: "fast", millis: "fast",
       readguangmin: "slow", readguangmin_percent: "slow", readguangmin_all: "slow", readwendu: "slow", readshidu: "slow", readx: "slow", readyaxis: "slow", readz: "slow",
       lte_status: "slow", lte_field: "slow", lte_print: "slow",
-      scani2c: "slow", readuart: "slow", readlte: "slow", networkstatus: "slow", readble: "slow", readbleclient: "slow", readgnss: "slow", readgnsslat: "slow", readgnsslon: "slow", readlbs: "slow", readlbslat: "slow", readlbslon: "slow", readlocation: "slow", readlocationlat: "slow", readlocationlon: "slow",
+      scani2c: "slow", readuart: "slow", readlte: "slow", networkstatus: "slow", readble: "slow", readbletext: "slow", readblesent: "slow", readbleclient: "slow", readgnss: "slow", readgnsslat: "slow", readgnsslon: "slow", readlbs: "slow", readlbslat: "slow", readlbslon: "slow", readlocation: "slow", readlocationlat: "slow", readlocationlon: "slow",
       readrs232text: "fast", readrs485text: "fast"
     };
 
@@ -1570,25 +1591,25 @@ if __name__ == "__main__":
     // the runtime.  Parameterized calls use PARAM_API_PRESETS below, but
     // legacy/special API blocks still need the corresponding module enabled.
     const API_MODULE_REQUIREMENTS = {
-      led: "led", setled: "led", ledoff: "led", ledrun: "led", testled: "led",
+      led: "led", setled: "led", led1: "led", led2: "led", led3: "led", ledbrightness: "led", ledbreathe: "led", updateled: "led", ledoff: "led", ledrun: "led", testled: "led",
       anjian: "anjian", readanjian: "anjian", lastanjian: "anjian", readanjianadc: "anjian", readanjian_direction: "anjian", waitanjian: "anjian", waitshort: "anjian", waitlong: "anjian", waitkey: "anjian", testanjian: "anjian",
       guangmin: "guangmin", readguangmin: "guangmin", readguangmin_percent: "guangmin", readguangmin_all: "guangmin",
       showguangmin: "guangmin", testguangmin: "guangmin", i2c: "i2c", scani2c: "i2c", testi2c: "i2c", showi2c: "i2c",
       wenhumi: "wenhumi", readwenhumi: "wenhumi", readwendu: "wenhumi", readshidu: "wenhumi", testwenhumi: "wenhumi",
       showwenhumi: "wenhumi", jiasudu: "jiasudu", readjiasudu: "jiasudu", readx: "jiasudu", readyaxis: "jiasudu", readz: "jiasudu", testjiasudu: "jiasudu", showjiasudu: "jiasudu",
-      gpio: "gpio", configuregpio: "gpio", readadc: "guangmin", readgpio: "gpio", setgpio: "gpio", highpins: "gpio", testgpio: "gpio",
+      gpio: "gpio", configuregpio: "gpio", readadc: "guangmin", readadcvoltage: "guangmin", readadcpercent: "guangmin", readadc_all: "guangmin", readgpio: "gpio", setgpio: "gpio", highpins: "gpio", testgpio: "gpio",
       timer: "timer", after: "timer", every: "timer", testtimer: "timer",
       pwm: "pwm", startpwm: "pwm", setpwmduty: "pwm", readpwmduty: "pwm", stoppwm: "pwm", readpwm: "pwm", testpwm: "pwm",
       fengmingqi: "fengmingqi", beep: "fengmingqi", testbuzzer: "fengmingqi",
-      lcd: "lcd", clearlcd: "lcd", clearlcdline: "lcd", showlcd: "lcd", showlcdcolor: "lcd", showlcdtemp: "lcd", showlcdrowtemp: "lcd", lcdtempactive: "lcd", lcdrowtempactive: "lcd", updatelcdtemp: "lcd", lcdline: "lcd", lcdvalue: "lcd", showstatus: "lcd", testlcd: "lcd",
+      lcd: "lcd", lcdrotation: "lcd", clearlcd: "lcd", lcdfillscreen: "lcd", lcdflush: "lcd", clearlcdline: "lcd", showlcd: "lcd", showlcdcolor: "lcd", lcdshowstring: "lcd", lcdimage: "lcd", lcddrawpoint: "lcd", lcddrawline: "lcd", lcddrawrect: "lcd", lcdfillrect: "lcd", lcdcircle: "lcd", lcdcolor565: "lcd", showlcdtemp: "lcd", showlcdrowtemp: "lcd", lcdtempactive: "lcd", lcdrowtempactive: "lcd", updatelcdtemp: "lcd", lcdline: "lcd", lcdvalue: "lcd", showstatus: "lcd", testlcd: "lcd", testlcdofficial: "lcd",
       spi: "spi", configurespi: "spi", sendspi: "spi", testspi: "spi",
       uart: "uart", setuart: "uart", configureuart: "uart", senduart: "uart", readuart: "uart", readuarttext: "uart", waituart: "uart", testuart: "uart",
       rs232: "rs232", sendrs232: "rs232", readrs232: "rs232", readrs232text: "rs232", testrs232: "rs232",
       rs485: "rs485", sendrs485: "rs485", readrs485: "rs485", readrs485text: "rs485", testrs485: "rs485",
-      cunchu: "cunchu", sdcard: "cunchu", writefile: "cunchu", readfile: "cunchu", removefile: "cunchu", listfiles: "cunchu", storageinfo: "cunchu", makedir: "cunchu", removedir: "cunchu", teststorage: "cunchu",
+      cunchu: "cunchu", sdcard: "cunchu", writefile: "cunchu", appendfile: "cunchu", readfile: "cunchu", removefile: "cunchu", listfiles: "cunchu", storageinfo: "cunchu", makedir: "cunchu", removedir: "cunchu", teststorage: "cunchu",
       yinpin: "yinpin", recordstart: "yinpin", recordstop: "yinpin", record: "yinpin", recordtimed: "yinpin", updateaudio: "yinpin", playfile: "yinpin", play: "yinpin", stopplay: "yinpin", playstop: "yinpin", tts: "yinpin", say: "yinpin", settts: "yinpin", setttsparams: "yinpin", setvolume: "yinpin", volume: "yinpin", readvolume: "yinpin", testaudio: "yinpin",
       lte: "lte", readlte: "lte", networkstatus: "lte", testlte: "lte", lte_status: "lte", lte_field: "lte", lte_print: "lte",
-      ble: "ble", setblemode: "ble", bleserver: "ble", bleclient: "ble", scanble: "ble", connectble: "ble", discoverble: "ble", readble: "ble", readbleclient: "ble", readbledata: "ble", readblehandle: "ble", sendble: "ble", writeblehandle: "ble", testble: "ble",
+      ble: "ble", setblemode: "ble", bleserver: "ble", bleclient: "ble", scanble: "ble", connectble: "ble", discoverble: "ble", readble: "ble", readbletext: "ble", readblesent: "ble", readbleclient: "ble", readbledata: "ble", readblehandle: "ble", sendble: "ble", writeblehandle: "ble", testble: "ble",
       gnss: "gnss", readgnss: "gnss", readgnsslat: "gnss", readgnsslon: "gnss", testgnss: "gnss",
       lbs: "lbs", readlbs: "lbs", readlbslat: "lbs", readlbslon: "lbs", readlocation: "gnss_or_lbs", readlocationlat: "gnss_or_lbs", readlocationlon: "gnss_or_lbs", testlbs: "lbs",
       hmi: "hmi", menu: "hmi", runhmi: "hmi", testhmi: "hmi"
@@ -1597,7 +1618,7 @@ if __name__ == "__main__":
     const PARAM_API_PRESETS = [
       { key: "gpio_read", label: "GPIO \u8bfb\u53d6\u5230\u53d8\u91cf", outputVar: "gpio_value", a: "D3", b: "", c: "" },
       { key: "gpio_config", label: "GPIO \u9ad8\u7ea7\u914d\u7f6e\u5f15\u811a", outputVar: "", a: "D3", b: "in", c: "down", d: "0" },
-      { key: "adc_read_pin", label: "ADC \u9ad8\u7ea7\u8bfb\u53d6\u5f15\u811a", outputVar: "adc_value", a: "C5", b: "", c: "" },
+      { key: "adc_read_pin", label: "ADC \u8bfb\u53d6\u5e76\u4fdd\u5b58", outputVar: "adc_value", a: "C5", b: "raw", c: "", placement: "slow" },
       { key: "gpio_write", label: "GPIO \u8f93\u51fa\u9ad8\u4f4e\u7535\u5e73", outputVar: "", a: "D3", b: "1", c: "" },
       { key: "gpio_high_list", label: "汇总高电平 GPIO 引脚名", outputVar: "high_pin_text", a: "PA3,PC0,PC3,PA5,PA6,PF13,PF14,PF15", b: "", c: "", placement: "slow" },
       { key: "pwm_start", label: "PWM \u542f\u52a8", outputVar: "", a: "D3", b: "1000", c: "50", placement: "startup" },
@@ -1616,14 +1637,32 @@ if __name__ == "__main__":
       { key: "dir_make", label: "SDCard \u521b\u5efa\u76ee\u5f55", outputVar: "", a: "competition_test", b: "", c: "" },
       { key: "dir_remove", label: "SDCard \u5220\u9664\u76ee\u5f55", outputVar: "", a: "competition_test", b: "0", c: "" },
       { key: "file_write_var", label: "存储卡写变量到文件", outputVar: "", a: "SD:test.txt", b: "show_text", c: "" },
+      { key: "file_append_var", label: "存储卡追加变量到历史文件", outputVar: "", a: "SD:sensors.csv", b: "sensor_log", c: "" },
       { key: "file_read", label: "\u5b58\u50a8\u5361\u8bfb\u6587\u4ef6\u5230\u53d8\u91cf", outputVar: "file_text", a: "SD:test.txt", b: "1024", c: "" },
       { key: "file_remove", label: "\u5b58\u50a8\u5361\u5220\u9664\u6587\u4ef6", outputVar: "", a: "SD:test.txt", b: "", c: "" },
       { key: "record_audio", label: "\u5f55\u97f3\u4e00\u6bb5\u65f6\u95f4", outputVar: "", a: "SD:competition_test.wav", b: "1500", c: "" },
       { key: "led_set", label: "LED \u8bbe\u7f6e\u72b6\u6001", outputVar: "", a: "red", b: "1", c: "" },
+      { key: "led1_set", label: "LED1 \u7eff\u706f / PB0 \u5f00\u5173", outputVar: "", a: "1", b: "", c: "" },
+      { key: "led2_set", label: "LED2 \u84dd\u706f / PB7 \u5f00\u5173", outputVar: "", a: "1", b: "", c: "" },
+      { key: "led3_set", label: "LED3 \u7ea2\u706f / PB14 \u5f00\u5173", outputVar: "", a: "1", b: "", c: "" },
+      { key: "led_brightness", label: "\u4e09\u8272 LED \u72ec\u7acb PWM \u8c03\u5149", outputVar: "", a: "green", b: "100", c: "1000", placement: "startup" },
+      { key: "led_breathe", label: "\u4e09\u8272 LED \u72ec\u7acb\u547c\u5438\u706f", outputVar: "", a: "green", b: "2000", c: "0", d: "100", e: "32", placement: "startup" },
       { key: "key_text", label: "\u6309\u952e\u4e8b\u4ef6\u8f6c\u6587\u5b57", outputVar: "key_status", a: "key_event", b: "", c: "" },
       { key: "key_is", label: "\u5224\u65ad\u6309\u952e\u6309\u4f4f", outputVar: "key_held", a: "center", b: "", c: "" },
       { key: "lcd_text", label: "LCD \u6307\u5b9a\u884c\u5217\u663e\u793a", outputVar: "", a: "Hello", b: "0", c: "0" },
       { key: "lcd_text_color", label: "LCD \u5f69\u8272\u663e\u793a", outputVar: "", a: "Hello", b: "0", c: "0", d: "white" },
+            { key: "lcd_rotation", label: "LCD rotation", outputVar: "", a: "1", placement: "startup" },
+      { key: "lcd_fill_screen", label: "LCD fill screen", outputVar: "", a: "black", placement: "slow" },
+      { key: "lcd_flush", label: "LCD flush", outputVar: "", placement: "slow" },
+      { key: "lcd_draw_point", label: "LCD draw point", outputVar: "", a: "2", b: "2", c: "white", placement: "slow" },
+      { key: "lcd_draw_line", label: "LCD draw line", outputVar: "", a: "0", b: "0", c: "40", d: "30", e: "green", placement: "slow" },
+            { key: "lcd_circle", label: "LCD circle", outputVar: "", a: "80", b: "64", c: "20", d: "red", e: "0", placement: "slow" },
+{ key: "lcd_draw_rectangle", label: "LCD draw rectangle", outputVar: "", a: "10", b: "10", c: "80", d: "50", e: "yellow", placement: "slow" },
+      { key: "lcd_fill_rectangle", label: "LCD fill rectangle", outputVar: "", a: "10", b: "10", c: "40", d: "20", e: "blue", placement: "slow" },
+      { key: "lcd_show_string", label: "LCD pixel text", outputVar: "", a: "4", b: "4", c: "LCD API", d: "cyan", e: "black", f: "16", placement: "slow" },
+      { key: "lcd_color565", label: "RGB565 color", outputVar: "lcd_color", a: "255", b: "0", c: "0", placement: "slow" },
+      { key: "lcd_official_test", label: "LCD official test", outputVar: "", placement: "slow" },
+{ key: "lcd_image", label: "SD RGB565 image to LCD", outputVar: "", a: "SD:logo.rgb565", b: "0", c: "0", d: "40", e: "40", placement: "slow" },
       { key: "lcd_row_active", label: "LCD \u6307\u5b9a\u884c\u4e34\u65f6\u72b6\u6001", outputVar: "lcd_active", a: "0" },
       { key: "lcd_line_text", label: "LCD \u6574\u884c\u663e\u793a", outputVar: "", a: "0", b: "Hello", c: "0" },
       { key: "lcd_value_text", label: "LCD \u53d8\u91cf\u663e\u793a", outputVar: "", a: "value", b: "0", c: "0" },
@@ -1648,6 +1687,7 @@ if __name__ == "__main__":
       { key: "play_audio", label: "\u64ad\u653e\u672c\u5730\u97f3\u9891", outputVar: "", a: "SD:competition_test.wav", b: "", c: "" },
       { key: "play_audio_nowait", label: "非阻塞播放本地音频", outputVar: "", a: "SD:competition_test.wav", b: "", c: "" },
       { key: "tts_say", label: "TTS \u64ad\u653e\u6587\u5b57", outputVar: "", a: "Quectel test", b: "", c: "" },
+      { key: "tts_say_var", label: "TTS 播放变量文字", outputVar: "", a: "tts_text", b: "", c: "" },
       { key: "tts_say_nowait", label: "非阻塞 TTS 播放文字", outputVar: "", a: "光线暗", b: "", c: "" },
       { key: "set_volume", label: "\u626c\u58f0\u5668\u97f3\u91cf", outputVar: "", a: "8", b: "", c: "" },
       { key: "rs232_send", label: "RS232 \u53d1\u9001\u6587\u5b57", outputVar: "", a: "RS232_SEND", b: "", c: "" },
@@ -1676,7 +1716,7 @@ if __name__ == "__main__":
     const PARAM_API_META = {
       gpio_read: { output: "读取结果变量", a: "GPIO 引脚，例如 D3" },
       gpio_config: { a: "GPIO 引脚", b: "模式: in / out", c: "上下拉: none / up / down", d: "输出初值 0/1" },
-      adc_read_pin: { output: "ADC 读取结果变量", a: "ADC 引脚" },
+      adc_read_pin: { output: "ADC 读取结果变量", a: "ADC 引脚", b: "保存形式", bOptions: [["raw", "原始值 0-65535"], ["voltage", "电压 0-3.3V"], ["percent", "百分比 0-100%"]] },
       gpio_write: { a: "GPIO 引脚，例如 D3", b: "输出电平：0 或 1" },
       gpio_high_list: { output: "高电平引脚名变量", a: "用逗号分隔的 GPIO 引脚列表" },
       pwm_start: { a: "PWM 引脚", b: "频率 Hz", c: "占空比 0-100" },
@@ -1690,16 +1730,34 @@ if __name__ == "__main__":
       uart_config: { a: "UART 编号", b: "波特率", c: "数据位", d: "校验 none/even/odd", e: "停止位", f: "超时 ms", g: "TX 引脚", h: "RX 引脚" },
       file_write: { a: "文件路径", b: "写入文字" },
       file_write_var: { a: "文件路径", b: "要写入的变量名", variableFields: ["b"] },
+      file_append_var: { a: "历史文件路径", b: "要追加的变量名", variableFields: ["b"] },
       file_read: { output: "文件内容变量", a: "文件路径", b: "最多读取字节数" },
       file_remove: { a: "要删除的文件路径" },
       file_list: { output: "文件列表变量", a: "目录或通配符，例如 *" },
       storage_info: { output: "空间信息变量", a: "卷名，默认 UFS" },
       dir_make: { a: "目录路径" },
       dir_remove: { a: "目录路径", b: "强制删除 0/1" },
-      led_set: { a: "LED 名称", b: "状态 0/1", bOptions: [["0", "关"], ["1", "开"]] },
+      led_set: { a: "LED 名称", aOptions: [["green", "LED1 绿 / PB0"], ["blue", "LED2 蓝 / PB7"], ["red", "LED3 红 / PB14"]], b: "状态 0/1", bOptions: [["0", "关"], ["1", "开"]] },
+      led1_set: { a: "LED1 状态 0/1", aOptions: [["0", "关"], ["1", "开"]] },
+      led2_set: { a: "LED2 状态 0/1", aOptions: [["0", "关"], ["1", "开"]] },
+      led3_set: { a: "LED3 状态 0/1", aOptions: [["0", "关"], ["1", "开"]] },
+      led_brightness: { a: "LED 通道", aOptions: [["green", "LED1 绿 / PB0 PWM"], ["blue", "LED2 蓝 / PB7 PWM"], ["red", "LED3 红 / PB14 PWM"]], b: "亮度 0-100%", c: "PWM 频率 Hz" },
+      led_breathe: { a: "LED 通道", aOptions: [["green", "LED1 绿 / PB0"], ["blue", "LED2 蓝 / PB7"], ["red", "LED3 红 / PB14"]], b: "呼吸周期 ms", c: "最低亮度 %", d: "最高亮度 %", e: "步数" },
       key_text: { output: "文字变量", a: "按键事件变量", variableFields: ["a"] },
       key_is: { output: "布尔变量", a: "方向", aOptions: [["up", "上"], ["down", "下"], ["left", "左"], ["right", "右"], ["center", "中心"], ["user", "USER"]] },
       lcd_text: { a: "显示文字", b: "行 0-6", c: "列 0-19" },
+      lcd_rotation: { a: "旋转值 0-3", aOptions: [["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]] },
+      lcd_fill_screen: { a: "颜色", aOptions: [["black", "黑"], ["white", "白"], ["red", "红"], ["green", "绿"], ["blue", "蓝"], ["yellow", "黄"], ["cyan", "青"]] },
+      lcd_flush: {},
+      lcd_draw_point: { a: "X 像素", b: "Y 像素", c: "颜色" },
+      lcd_draw_line: { a: "X0", b: "Y0", c: "X1", d: "Y1", e: "颜色" },
+      lcd_circle: { a: "中心 X", b: "中心 Y", c: "半径", d: "颜色", e: "填充 0/1" },
+      lcd_draw_rectangle: { a: "左上 X0", b: "左上 Y0", c: "右下 X1", d: "右下 Y1", e: "颜色" },
+      lcd_fill_rectangle: { a: "X", b: "Y", c: "宽度", d: "高度", e: "颜色" },
+      lcd_show_string: { a: "X 像素", b: "Y 像素", c: "显示文字", d: "前景色", e: "背景色", f: "字号" },
+      lcd_color565: { output: "RGB565 颜色变量", a: "R 0-255", b: "G 0-255", c: "B 0-255" },
+      lcd_official_test: {},
+      lcd_image: { a: "RGB565 文件路径", b: "X 坐标", c: "Y 坐标", d: "宽度", e: "高度" },
       lcd_text_color: { a: "显示文字", b: "行 0-6", c: "列 0-19", d: "颜色", dOptions: [["white", "白"], ["red", "红"], ["green", "绿"], ["blue", "蓝"], ["yellow", "黄"]] },
       lcd_row_active: { output: "布尔变量", a: "行 0-6" },
       lcd_line_text: { a: "行 0-6", b: "显示文字", c: "列 0-19" },
@@ -1726,6 +1784,7 @@ if __name__ == "__main__":
       play_audio: { a: "音频文件路径" },
       play_audio_nowait: { a: "音频文件路径" },
       tts_say: { a: "要朗读的文字" },
+      tts_say_var: { a: "要朗读的文字变量", variableFields: ["a"] },
       tts_say_nowait: { a: "要朗读的文字" },
       set_volume: { a: "音量 0-11" },
       rs232_send: { a: "发送文字" },
@@ -1754,16 +1813,16 @@ if __name__ == "__main__":
 
     const API_TO_PARAM_PRESET = {
       readgpio: "gpio_read", setgpio: "gpio_write", highpins: "gpio_high_list", startpwm: "pwm_start", setpwmduty: "pwm_set_duty", stoppwm: "pwm_stop",
-      configuregpio: "gpio_config", readadc: "adc_read_pin", configurei2c: "i2c_config", configurespi: "spi_config", configureuart: "uart_config",
-      scani2c: "i2c_scan", sendspi: "spi_send", waituart: "uart_wait", writefile: "file_write",
+      configuregpio: "gpio_config", readadc: "adc_read_pin", readadcvoltage: "adc_read_pin", readadcpercent: "adc_read_pin", configurei2c: "i2c_config", configurespi: "spi_config", configureuart: "uart_config",
+      scani2c: "i2c_scan", sendspi: "spi_send", waituart: "uart_wait", writefile: "file_write", appendfile: "file_append_var",
       readfile: "file_read", removefile: "file_remove", listfiles: "file_list", storageinfo: "storage_info", makedir: "dir_make", removedir: "dir_remove", recordtimed: "record_timed", playfile: "play_audio",
       tts: "tts_say", say: "tts_say", setvolume: "set_volume", sendrs232: "rs232_send",
       sendrs485: "rs485_send", delay: "delay", beep: "beep", readrs232text: "rs232_read", readrs485text: "rs485_read", setblemode: "ble_mode", scanble: "ble_scan", connectble: "ble_connect",
       discoverble: "ble_discover", readblehandle: "ble_read_handle", writeblehandle: "ble_write_handle",
-      sendble: "ble_send", showlcdtemp: "lcd_temp_var", showlcdrowtemp: "lcd_row_temp_var", clearlcdline: "lcd_clear_line",
+      sendble: "ble_send", showlcdtemp: "lcd_temp_var", showlcdrowtemp: "lcd_row_temp_var", clearlcdline: "lcd_clear_line", lcdrotation: "lcd_rotation", lcdcircle: "lcd_circle", lcdfillscreen: "lcd_fill_screen", lcdflush: "lcd_flush", lcddrawpoint: "lcd_draw_point", lcddrawline: "lcd_draw_line", lcddrawrect: "lcd_draw_rectangle", lcdfillrect: "lcd_fill_rectangle", lcdshowstring: "lcd_show_string", lcdcolor565: "lcd_color565", testlcdofficial: "lcd_official_test",
       lte_status: "lte_status", lte_field: "lte_field", lte_print: "lte_print", waitkey: "wait_key", setuart: "uart_config", shuxue: "math_func",
-      setled: "led_set", keytext: "key_text", iskey: "key_is",
-      showlcd: "lcd_text", showlcdcolor: "lcd_text_color", lcdrowtempactive: "lcd_row_active", lcdline: "lcd_line_text", lcdvalue: "lcd_value_text",
+      setled: "led_set", led1: "led1_set", led2: "led2_set", led3: "led3_set", ledbrightness: "led_brightness", ledbreathe: "led_breathe", keytext: "key_text", iskey: "key_is",
+      showlcd: "lcd_text", showlcdcolor: "lcd_text_color", lcdimage: "lcd_image", lcdrowtempactive: "lcd_row_active", lcdline: "lcd_line_text", lcdvalue: "lcd_value_text",
       baoliuxiaoshu: "algo_round", shuzipaixu: "algo_sort", zuidazhi: "algo_max", zuixiao: "algo_min", pingjunzhi: "algo_avg", pin_jie: "algo_join",
       yunsuan: "algo_math", suijishu: "algo_random", bijiao: "algo_compare", luoji: "algo_logic", wenbenchangdu: "text_length", wenbenzifu: "text_letter",
       wenbenbaohan: "text_contains", zhuanshuzi: "text_number", zhuanwenzi: "text_text", senduart: "uart_send", readuarttext: "uart_text"
@@ -1786,6 +1845,8 @@ if __name__ == "__main__":
       { key: "uart_text", label: "UART2 新接收文字", varName: "uart_received_text", expr: "api.readuarttext()", raw: true },
       { key: "lte", label: "LTE 信息", varName: "lte_read_text", expr: "api.readlte()", raw: false },
       { key: "ble", label: "BLE 信息", varName: "ble_read_text", expr: "api.readble()", raw: false },
+      { key: "ble_status_text", label: "BLE 状态摘要", varName: "ble_status_text", expr: "api.readbletext()", raw: true },
+      { key: "ble_sent", label: "BLE 最近发送内容", varName: "ble_sent_text", expr: "api.readblesent()", raw: true },
       { key: "ble_data", label: "BLE 新接收文字", varName: "ble_received_text", expr: "api.readbledata()", raw: true },
       { key: "audio_recording", label: "定时录音是否进行中", varName: "recording", expr: "api.updateaudio()", raw: true },
       { key: "lcd_row_active", label: "LCD第六行临时消息是否显示", varName: "row6_message_active", expr: "api.lcdrowtempactive(5)", raw: false },
@@ -1851,7 +1912,10 @@ if __name__ == "__main__":
       { key: "lon_value_text", label: "变量：lon_value_text", value: "lon_value_text", isVar: true },
       { key: "uart_read_text_text", label: "变量：uart_read_text_text", value: "uart_read_text_text", isVar: true },
       { key: "lte_read_text_text", label: "变量：lte_read_text_text", value: "lte_read_text_text", isVar: true },
-      { key: "ble_read_text_text", label: "变量：ble_read_text_text", value: "ble_read_text_text", isVar: true }
+      { key: "ble_read_text_text", label: "变量：ble_read_text_text", value: "ble_read_text_text", isVar: true },
+      { key: "ble_status_text_text", label: "变量：ble_status_text_text", value: "ble_status_text_text", isVar: true },
+      { key: "ble_sent_text_text", label: "变量：ble_sent_text_text", value: "ble_sent_text_text", isVar: true },
+      { key: "ble_received_text", label: "变量：ble_received_text", value: "ble_received_text", isVar: true }
     ];
 
     const ACTION_PRESETS = [
@@ -1884,7 +1948,7 @@ if __name__ == "__main__":
       "cunchu","teststorage","yinpin","recordstart","recordstop","record","updateaudio","play","stopplay","playstop",
       "settts","setttsparams","volume","readvolume","testaudio","lte","readlte","networkstatus","testlte","gnss","readgnss",
       "readgnsslat","readgnsslon","testgnss","lbs","readlbs","readlbslat","readlbslon","readlocation",
-      "readlocationlat","readlocationlon","testlbs","ble","bleserver","bleclient","readble","readbleclient","readbledata","testble","hmi","menu","runhmi","testhmi","sdcard"
+      "readlocationlat","readlocationlon","testlbs","ble","bleserver","bleclient","readble","readbletext","readblesent","readbleclient","readbledata","testble","hmi","menu","runhmi","testhmi","sdcard"
     ];
 
     function apiDisplayLabel(api) {
@@ -1904,7 +1968,7 @@ if __name__ == "__main__":
 
     const API_RETURN_APIS = new Set([
       "status", "millis", "readanjian", "readanjianadc", "readanjian_direction", "readuart", "readuarttext", "readlte", "networkstatus",
-      "readble", "readbleclient", "readbledata", "readgnss", "readgnsslat", "readgnsslon", "readlbs", "readlbslat",
+      "readble", "readbletext", "readblesent", "readbleclient", "readbledata", "readgnss", "readgnsslat", "readgnsslon", "readlbs", "readlbslat",
       "readlbslon", "readlocation", "readlocationlat", "readlocationlon", "readvolume", "readpwmduty"
     ]);
     const API_CALL_PRESETS = API_CATEGORIES
@@ -1928,7 +1992,7 @@ if __name__ == "__main__":
     const BUILDER_TYPES = new Set([
       "enable", "varinit", "fastloop", "slowloop", "repeat", "until", "read", "format", "setvar",
       "changevar", "listappend", "select", "numberop", "mathop", "logicop", "textop",
-      "sort", "stat", "join", "paramapi", "lcd", "serial", "api", "reporter", "predicate", "event", "forever", "if", "while", "button"
+      "sort", "stat", "join", "paramapi", "lcd", "serial", "api", "reporter", "predicate", "event", "forever", "if", "while", "button", "macro"
     ]);
     const BUILDER_MODULES = new Set(MODULE_CATEGORIES.flatMap(category => category.items.map(item => item[0])));
     const BUILDER_APIS = new Set(API_CATEGORIES.flatMap(category => category.apis));
@@ -2345,7 +2409,14 @@ if __name__ == "__main__":
         block.paramC = preset.c;
         block.paramD = preset.d || "";
         block.paramE = preset.e || "";
+        block.paramF = preset.f || "";
+        block.paramG = preset.g || "";
+        block.paramH = preset.h || "";
         block.placement = preset.placement || "slow";
+      }
+      if (preset.key === "adc_read_pin") {
+        if (!block.paramB || !["raw", "voltage", "percent"].includes(block.paramB)) block.paramB = "raw";
+        block.placement = "slow";
       }
     }
 
@@ -2496,10 +2567,11 @@ if __name__ == "__main__":
         selectFalseMode: "number",
         selectFalse: "0",
         editorOpen: false,
-        children: (type === "if" || type === "while" || type === "repeat" || type === "until" || type === "fastloop" || type === "slowloop" || type === "event" || type === "forever") ? [] : undefined
+        macroName: "常用功能组",
+        children: (type === "if" || type === "while" || type === "repeat" || type === "until" || type === "fastloop" || type === "slowloop" || type === "event" || type === "forever" || type === "macro") ? [] : undefined
       };
       const merged = Object.assign(block, extra || {});
-      if (["if", "while", "until", "repeat", "select", "fastloop", "slowloop", "event", "forever"].includes(type)) {
+      if (["if", "while", "until", "repeat", "select", "fastloop", "slowloop", "event", "forever", "macro"].includes(type)) {
         merged.placement = "";
       }
       if (type === "read") syncReadPreset(merged, merged.readKey, !!(extra && extra.varName));
@@ -2527,11 +2599,15 @@ if __name__ == "__main__":
       if (normalized.type === "read" && normalized.readKey === "key_status") {
         normalized.readExpr = "api.keytext(api.lastanjian())";
       }
+      if (normalized.type === "paramapi" && normalized.paramApiKey === "adc_read_pin") {
+        if (!["raw", "voltage", "percent"].includes(normalized.paramB)) normalized.paramB = "raw";
+        normalized.placement = "slow";
+      }
       // Structural blocks inherit their execution phase from the enclosing
       // loop. Older saved states copied the ordinary block default
       // (placement="slow") onto if/loop/event containers, which made valid
       // fast-loop programs fail validation after reopening the HTML.
-      if (["if", "while", "until", "repeat", "select", "fastloop", "slowloop", "event", "forever"].includes(normalized.type)) {
+      if (["if", "while", "until", "repeat", "select", "fastloop", "slowloop", "event", "forever", "macro"].includes(normalized.type)) {
         normalized.placement = "";
       }
       if (Array.isArray(raw.children)) normalized.children = raw.children.map(normalizeSavedBlock);
@@ -2545,6 +2621,155 @@ if __name__ == "__main__":
 
     function addBlock(type, extra) {
       insertBlock(type, extra, null, "root");
+    }
+
+    // Add a macro at the requested container. Module-enable blocks remain in
+    // startup, while the editable macro itself follows the drop target's
+    // execution phase (for example, a slowloop child runs in the slow pass).
+    function addFunctionGroup(name, parentId, beforeId) {
+      const children = [];
+      const enable = modules => modules.forEach(module => blocks.push(defaultBlock("enable", { module })));
+      const addSensor = key => { children.push(defaultBlock("read", { readKey: key })); children.push(defaultBlock("format", { formatKey: key })); };
+      if (name === "climate_log") {
+        enable(["wenhumi", "lcd", "uart", "cunchu", "ble"]);
+        addSensor("temperature"); addSensor("humidity");
+        children.push(defaultBlock("join", { joinTarget: "climate_log", joinMode1: "var", joinValue1: "wendu_text", joinMode2: "text", joinValue2: ",", joinMode3: "var", joinValue3: "shidu_text", joinMode4: "text", joinValue4: "\r\n" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "file_append_var", paramA: "SD:climate.csv", paramB: "climate_log", placement: "slow" }));
+        children.push(defaultBlock("lcd", { lcdText: "T:", lcdIsVar: false, row: "0", col: "0", lcdColor: "red", lcdClearMode: "line" }));
+        children.push(defaultBlock("lcd", { lcdText: "wendu_text", lcdIsVar: true, row: "0", col: "2", lcdColor: "red", lcdClearMode: "none" }));
+        children.push(defaultBlock("lcd", { lcdText: "H:", lcdIsVar: false, row: "1", col: "0", lcdColor: "cyan", lcdClearMode: "line" }));
+        children.push(defaultBlock("lcd", { lcdText: "shidu_text", lcdIsVar: true, row: "1", col: "2", lcdColor: "cyan", lcdClearMode: "none" }));
+        children.push(defaultBlock("serial", { serialIsVar: true, serialText: "climate_log" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "ble_send_var", paramA: "climate_log", placement: "slow" }));
+      } else if (name === "light_log") {
+        enable(["guangmin", "lcd", "uart", "cunchu", "ble"]); addSensor("light"); addSensor("light_percent");
+        children.push(defaultBlock("join", { joinTarget: "light_log", joinMode1: "var", joinValue1: "light_value_text", joinMode2: "text", joinValue2: ",", joinMode3: "var", joinValue3: "light_percent_text", joinMode4: "text", joinValue4: "%\r\n" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "file_append_var", paramA: "SD:light.csv", paramB: "light_log", placement: "slow" }));
+        children.push(defaultBlock("lcd", { lcdText: "L:", lcdIsVar: false, row: "0", col: "0", lcdColor: "yellow", lcdClearMode: "line" }));
+        children.push(defaultBlock("lcd", { lcdText: "light_value_text", lcdIsVar: true, row: "0", col: "2", lcdColor: "yellow", lcdClearMode: "none" }));
+        children.push(defaultBlock("lcd", { lcdText: "light_percent_text", lcdIsVar: true, row: "1", col: "0", lcdColor: "white", lcdClearMode: "line" }));
+        children.push(defaultBlock("serial", { serialIsVar: true, serialText: "light_log" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "ble_send_var", paramA: "light_log", placement: "slow" }));
+      } else if (name === "motion_log") {
+        enable(["jiasudu", "lcd", "uart", "cunchu", "ble"]); ["axis_x", "axis_y", "axis_z"].forEach(addSensor);
+        children.push(defaultBlock("join", { joinTarget: "motion_log", joinMode1: "var", joinValue1: "x_text", joinMode2: "text", joinValue2: ",", joinMode3: "var", joinValue3: "y_text", joinMode4: "text", joinValue4: ",", joinMode5: "var", joinValue5: "z_text", joinMode6: "text", joinValue6: "\r\n" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "file_append_var", paramA: "SD:motion.csv", paramB: "motion_log", placement: "slow" }));
+        children.push(defaultBlock("lcd", { lcdText: "motion_log", lcdIsVar: true, row: "0", col: "0", lcdColor: "green", lcdClearMode: "line" }));
+        children.push(defaultBlock("serial", { serialIsVar: true, serialText: "motion_log" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "ble_send_var", paramA: "motion_log", placement: "slow" }));
+      } else if (name === "audio_cycle") {
+        enable(["anjian", "uart", "ble", "cunchu", "yinpin", "lcd"]);
+        children.push(defaultBlock("read", { readKey: "button", varName: "key_event" }));
+        children.push(defaultBlock("if", { conditionMode: "keyevent", conditionEventVar: "key_event", conditionKey1: "center", conditionEvent: "press", children: [
+          defaultBlock("paramapi", { paramApiKey: "record_audio", paramA: "SD:mic_record.wav", paramB: "5000", placement: "slow" }),
+          defaultBlock("paramapi", { paramApiKey: "play_audio_nowait", paramA: "SD:mic_record.wav", placement: "slow" }),
+          defaultBlock("paramapi", { paramApiKey: "file_read", paramOutputVar: "tts_text", paramA: "SD:tts.txt", paramB: "256", placement: "slow" }),
+          defaultBlock("paramapi", { paramApiKey: "tts_say_var", paramA: "tts_text", placement: "slow" }),
+          defaultBlock("paramapi", { paramApiKey: "ble_send_var", paramA: "tts_text", placement: "slow" }),
+          defaultBlock("serial", { serialIsVar: true, serialText: "tts_text" })
+        ] }));
+      } else if (name === "uart_command_control") {
+        enable(["uart", "lcd", "led"]);
+        children.push(defaultBlock("read", { readKey: "uart_text", varName: "uart_received_text" }));
+        ["LED_ON", "LED_OFF"].forEach(command => children.push(defaultBlock("if", {
+          conditionMode: "compare", conditionVar: "uart_received_text", conditionOperator: "==", conditionValueMode: "text", conditionValue: command,
+          children: [defaultBlock("button", { actionKey: command === "LED_ON" ? "green_on" : "green_off" }), defaultBlock("paramapi", { paramApiKey: "uart_send", paramA: command === "LED_ON" ? "ON\\r\\n" : "OFF\\r\\n", placement: "fast" }), defaultBlock("paramapi", { paramApiKey: "lcd_row_temp_var", paramA: "uart_received_text", paramB: "2000", paramC: "4", paramD: "0", paramE: "cyan", placement: "fast" })]
+        })));
+      } else if (name === "ble_command_control") {
+        enable(["ble", "uart", "lcd", "led"]);
+        children.push(defaultBlock("read", { readKey: "ble_data", varName: "ble_received_text" }));
+        ["LED_ON", "LED_OFF"].forEach(command => children.push(defaultBlock("if", {
+          conditionMode: "compare", conditionVar: "ble_received_text", conditionOperator: "==", conditionValueMode: "text", conditionValue: command,
+          children: [defaultBlock("button", { actionKey: command === "LED_ON" ? "red_on" : "red_off" }), defaultBlock("paramapi", { paramApiKey: "lcd_row_temp_var", paramA: "ble_received_text", paramB: "2000", paramC: "5", paramD: "0", paramE: "magenta", placement: "fast" })]
+        })));
+        children.push(defaultBlock("serial", { serialIsVar: true, serialText: "ble_received_text" }));
+      } else if (name === "lcd_sensor_dashboard") {
+        enable(["wenhumi", "guangmin", "jiasudu", "lcd"]);
+        ["temperature", "humidity", "light_percent", "axis_x", "axis_y", "axis_z"].forEach(addSensor);
+        children.push(defaultBlock("lcd", { lcdText: "T:", row: "0", col: "0", lcdColor: "red", lcdClearMode: "line" }));
+        children.push(defaultBlock("lcd", { lcdText: "wendu_text", lcdIsVar: true, row: "0", col: "2", lcdColor: "red", lcdClearMode: "none" }));
+        children.push(defaultBlock("lcd", { lcdText: "shidu_text", lcdIsVar: true, row: "1", col: "0", lcdColor: "cyan", lcdClearMode: "line" }));
+        children.push(defaultBlock("lcd", { lcdText: "light_percent_text", lcdIsVar: true, row: "2", col: "0", lcdColor: "yellow", lcdClearMode: "line" }));
+        children.push(defaultBlock("join", { joinTarget: "dashboard_text", joinMode1: "text", joinValue1: "X:", joinMode2: "var", joinValue2: "x_text", joinMode3: "text", joinValue3: " Y:", joinMode4: "var", joinValue4: "y_text", joinMode5: "text", joinValue5: " Z:", joinMode6: "var", joinValue6: "z_text" }));
+        children.push(defaultBlock("lcd", { lcdText: "dashboard_text", lcdIsVar: true, row: "3", col: "0", lcdColor: "green", lcdClearMode: "line" }));
+      } else if (name === "gnss_log") {
+        enable(["gnss", "lcd", "uart", "cunchu"]);
+        children.push(defaultBlock("read", { readKey: "location_data", varName: "location_data" }));
+        children.push(defaultBlock("read", { readKey: "location_source", varName: "location_source" }));
+        children.push(defaultBlock("read", { readKey: "lat_value", varName: "lat_value" }));
+        children.push(defaultBlock("read", { readKey: "lon_value", varName: "lon_value" }));
+        children.push(defaultBlock("join", { joinTarget: "gnss_log_text", joinMode1: "var", joinValue1: "location_source", joinMode2: "text", joinValue2: ",", joinMode3: "var", joinValue3: "lat_value", joinMode4: "text", joinValue4: ",", joinMode5: "var", joinValue5: "lon_value", joinMode6: "text", joinValue6: "\r\n" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "file_append_var", paramA: "SD:gnss.csv", paramB: "gnss_log_text", placement: "slow" }));
+        children.push(defaultBlock("lcd", { lcdText: "gnss_log_text", lcdIsVar: true, row: "0", col: "0", lcdColor: "cyan", lcdClearMode: "line" }));
+        children.push(defaultBlock("serial", { serialIsVar: true, serialText: "gnss_log_text" }));
+      } else if (name === "led_key_control") {
+        enable(["anjian", "led", "lcd"]);
+        children.push(defaultBlock("read", { readKey: "button_direction", varName: "key_direction" }));
+        ["up", "down", "left", "right", "center"].forEach(direction => children.push(defaultBlock("if", {
+          conditionMode: "compare", conditionVar: "key_direction", conditionOperator: "==", conditionValueMode: "text", conditionValue: direction,
+          children: [defaultBlock("button", { actionKey: direction === "center" ? "led_off" : (direction === "up" || direction === "right" ? "green_on" : "green_off") }), defaultBlock("paramapi", { paramApiKey: "lcd_row_temp_var", paramA: "key_direction", paramB: "1000", paramC: "6", paramD: "0", paramE: "yellow", placement: "fast" })]
+        })));
+      } else if (name === "sd_text_to_tts") {
+        enable(["cunchu", "yinpin", "lcd"]);
+        children.push(defaultBlock("read", { readKey: "button", varName: "key_event" }));
+        children.push(defaultBlock("if", { conditionMode: "keyevent", conditionEventVar: "key_event", conditionKey1: "center", conditionEvent: "press", children: [
+          defaultBlock("paramapi", { paramApiKey: "file_read", paramOutputVar: "tts_text", paramA: "SD:tts.txt", paramB: "256", placement: "fast" }),
+          defaultBlock("paramapi", { paramApiKey: "tts_say_var", paramA: "tts_text", placement: "fast" }),
+          defaultBlock("paramapi", { paramApiKey: "lcd_temp_var", paramA: "tts_text", paramB: "5000", paramC: "0", placement: "fast" })
+        ] }));
+      } else if (name === "mic_record_only") {
+        enable(["cunchu", "yinpin", "lcd"]);
+        enable(["anjian"]);
+        children.push(defaultBlock("read", { readKey: "button", varName: "key_event" }));
+        children.push(defaultBlock("if", { conditionMode: "keyevent", conditionEventVar: "key_event", conditionKey1: "center", conditionEvent: "press", children: [
+          defaultBlock("paramapi", { paramApiKey: "record_audio", paramA: "SD:mic_record.wav", paramB: "5000", placement: "slow" }),
+          defaultBlock("lcd", { lcdText: "录音已保存", row: "0", col: "0", lcdColor: "green", lcdClearMode: "line" })
+        ] }));
+      } else if (name === "mic_record_playback") {
+        enable(["cunchu", "yinpin", "lcd", "anjian"]);
+        children.push(defaultBlock("read", { readKey: "button", varName: "key_event" }));
+        children.push(defaultBlock("if", { conditionMode: "keyevent", conditionEventVar: "key_event", conditionKey1: "center", conditionEvent: "press", children: [
+          defaultBlock("paramapi", { paramApiKey: "record_audio", paramA: "SD:mic_record.wav", paramB: "5000", placement: "slow" }),
+          defaultBlock("paramapi", { paramApiKey: "play_audio", paramA: "SD:mic_record.wav", placement: "slow" }),
+          defaultBlock("lcd", { lcdText: "录音回放完成", row: "0", col: "0", lcdColor: "cyan", lcdClearMode: "line" })
+        ] }));
+      } else if (name === "lcd_official_basic_demo") {
+        enable(["lcd"]);
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_rotation", paramA: "1", placement: "startup" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_fill_screen", paramA: "black", placement: "slow" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_show_string", paramA: "4", paramB: "4", paramC: "LCD API", paramD: "cyan", paramE: "black", paramF: "16", placement: "slow" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_draw_point", paramA: "2", paramB: "28", paramC: "white", placement: "slow" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_draw_line", paramA: "4", paramB: "32", paramC: "40", paramD: "52", paramE: "green", placement: "slow" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_draw_rectangle", paramA: "48", paramB: "28", paramC: "96", paramD: "58", paramE: "yellow", placement: "slow" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_fill_rectangle", paramA: "104", paramB: "32", paramC: "40", paramD: "24", paramE: "blue", placement: "slow" }));
+      } else if (name === "lcd_official_sensor_demo") {
+        enable(["lcd", "guangmin", "wenhumi"]);
+        children.push(defaultBlock("read", { readKey: "light_percent", varName: "light_percent" }));
+        children.push(defaultBlock("read", { readKey: "temperature", varName: "wendu" }));
+        children.push(defaultBlock("read", { readKey: "humidity", varName: "shidu" }));
+        children.push(defaultBlock("lcd", { lcdText: "light_percent", lcdIsVar: true, row: "2", col: "0", lcdColor: "yellow", lcdClearMode: "line" }));
+        children.push(defaultBlock("lcd", { lcdText: "wendu", lcdIsVar: true, row: "3", col: "0", lcdColor: "red", lcdClearMode: "line" }));
+        children.push(defaultBlock("lcd", { lcdText: "shidu", lcdIsVar: true, row: "4", col: "0", lcdColor: "cyan", lcdClearMode: "line" }));
+      } else if (name === "lcd_official_image_demo") {
+        enable(["lcd", "cunchu"]);
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_fill_screen", paramA: "black", placement: "slow" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_image", paramA: "SD:qq_icon.rgb565", paramB: "60", paramC: "44", paramD: "40", paramE: "40", placement: "slow" }));
+        children.push(defaultBlock("paramapi", { paramApiKey: "lcd_show_string", paramA: "20", paramB: "96", paramC: "40x40 RGB565", paramD: "blue", paramE: "black", paramF: "12", placement: "slow" }));
+      }
+      const macro = defaultBlock("macro", {
+        macroName: ({ climate_log: "温湿度记录·LCD·串口·BLE", light_log: "光敏记录·LCD·串口·BLE", motion_log: "加速度记录·LCD·串口·BLE", audio_cycle: "录音·SD·播放·TTS·BLE", uart_command_control: "UART 指令·LED·LCD", ble_command_control: "BLE 指令·LED·LCD", lcd_sensor_dashboard: "LCD 传感器看板", gnss_log: "GNSS·SD·LCD·串口", led_key_control: "五向键·LED·LCD", sd_text_to_tts: "SD 文本·LCD·TTS", mic_record_only: "麦克风·SD 录音", mic_record_playback: "麦克风·录音回放", lcd_official_basic_demo: "LCD 官方基础例程", lcd_official_sensor_demo: "LCD 官方传感器例程", lcd_official_image_demo: "LCD 官方图片例程" })[name] || "常用功能组",
+        children,
+        toolsOpen: true,
+        collapsed: false
+      });
+      const targetList = childrenFor(parentId || "root") || blocks;
+      if (beforeId) {
+        const targetIndex = targetList.findIndex(item => item.id === beforeId);
+        if (targetIndex >= 0) targetList.splice(targetIndex, 0, macro);
+        else targetList.push(macro);
+      } else targetList.push(macro);
+      renderWorkspace();
+      generateAndRender();
     }
 
     function addStandardStructure() {
@@ -2678,6 +2903,7 @@ if __name__ == "__main__":
         forever: "永久循环",
         if: "如果判断",
         while: "条件循环",
+        macro: "常用功能组",
         api: "easy_api 调用"
       }[type] || "功能块";
     }
@@ -2715,6 +2941,7 @@ if __name__ == "__main__":
         forever: "kind-control",
         if: "kind-control",
         while: "kind-control",
+        macro: "kind-custom",
         api: "kind-custom"
       }[type] || "kind-custom";
     }
@@ -2765,7 +2992,7 @@ if __name__ == "__main__":
         const chips = apis.map(api => {
           const label = esc(apiDisplayLabel(api));
           const zone = esc(apiZoneLabel(api));
-          const paramKey = API_TO_PARAM_PRESET[api];
+      const paramKey = API_TO_PARAM_PRESET[api];
           if (paramKey) {
             return '<span class="chip ' + apiKind(cat.name) + '" draggable="true" data-action="add-param-api" data-param-key="' + esc(paramKey) + '" title="点击添加已经配置好参数名称的专用积木">' + label + '<span class="zone">参数积木</span></span>';
           }
@@ -2863,7 +3090,7 @@ if __name__ == "__main__":
 
     function renderBlock(block, index, parentId) {
       const collapsed = !!block.collapsed;
-      const container = ["if", "while", "repeat", "until", "fastloop", "slowloop", "event", "forever"].includes(block.type);
+      const container = ["if", "while", "repeat", "until", "fastloop", "slowloop", "event", "forever", "macro"].includes(block.type);
       const showBody = !!block.toolsOpen && !collapsed;
       const inlineBody = '<span class="mb-loop-caption">' + esc(blockSummary(block)) + '</span>';
       return '<div class="block ' + kindClass(block.type) + (collapsed ? ' is-collapsed' : '') + (container ? ' is-container' : '') + (block.toolsOpen ? ' tools-open' : '') + '" data-id="' + block.id + '" data-parent-id="' + esc(parentId || "root") + '">' +
@@ -2889,6 +3116,7 @@ if __name__ == "__main__":
       const apiPreset = apiPresetByKey(block.apiKey || block.apiName);
       const paramPreset = paramApiPresetByKey(block.paramApiKey);
       const value = item => String(item == null || item === "" ? "-" : item);
+      if (block.type === "macro") return value(block.macroName || "常用功能组") + " · 内含 " + ((block.children || []).length) + " 个可编辑积木";
       if (block.type === "forever") return "持续执行内部积木";
       if (block.type === "event") return value(block.eventType || "key") + " · " + value(block.eventKey || "center") + " · " + value(block.eventName || "press");
       if (block.type === "reporter") return value(block.reporterApiKey || block.apiKey || "status") + " → " + value(block.reporterOutputVar || "report_value");
@@ -2926,7 +3154,7 @@ if __name__ == "__main__":
       const optionsHtml = ['<option value="root"' + selected(parentId, "root") + '>根级（自动按用途分区）</option>'];
       if (rootZoneForBlock(block) === "startup") return optionsHtml.join("");
       allBlocks().forEach(candidate => {
-        if (!["if", "while", "repeat", "until", "fastloop", "slowloop", "event", "forever"].includes(candidate.type)) return;
+        if (!["if", "while", "repeat", "until", "fastloop", "slowloop", "event", "forever", "macro"].includes(candidate.type)) return;
         if (candidate.id === block.id || isDescendant(block.id, candidate.id)) return;
         const label = titleFor(candidate.type) + " #" + candidate.id.replace(/^b/, "");
         optionsHtml.push('<option value="' + esc(candidate.id) + '"' + selected(parentId, candidate.id) + '>放入 ' + esc(label) + '</option>');
@@ -2935,7 +3163,7 @@ if __name__ == "__main__":
     }
 
     function renderNestArea(block) {
-      if (!["if", "while", "repeat", "until", "fastloop", "slowloop", "event", "forever"].includes(block.type)) return "";
+      if (!["if", "while", "repeat", "until", "fastloop", "slowloop", "event", "forever", "macro"].includes(block.type)) return "";
       const childHtml = block.collapsed ? "" : (block.children || []).map((child, index) => renderBlock(child, index, block.id)).join("");
       const hint = block.collapsed ? "已收起，拖到此处放入循环" : "把要包裹执行的积木拖到这里";
       return '<div class="nest-area' + (block.collapsed ? ' is-collapsed-dropzone' : '') + '" data-dropzone="nest" data-parent-id="' + block.id + '">' +
@@ -2968,6 +3196,9 @@ if __name__ == "__main__":
           '<div><label>按键/数据名</label><input data-field="eventKey" value="' + esc(block.eventKey || "center") + '"></div></div>' +
           '<div class="row"><div><label>事件动作</label><select data-field="eventName">' + options(["press","release","short","long","repeat"], block.eventName || "press") + '</select></div><div><label>执行阶段</label><select data-field="eventPlacement"><option value="fast"' + selected(block.eventPlacement || "fast", "fast") + '>快速轮询</option><option value="slow"' + selected(block.eventPlacement, "slow") + '>慢速刷新</option></select></div></div>' +
           '<p class="hint">事件块是条件容器：触发时执行内部积木。数据事件要求事件变量不是 None。</p>';
+      }
+      if (block.type === "macro") {
+        return '<div class="row"><div><label>功能组名称</label><input data-field="macroName" value="' + esc(block.macroName || "常用功能组") + '"></div><div><label>编辑方式</label><input value="展开下方内容后继续增删积木" disabled></div></div><p class="hint">这是可编辑的大积木封装：生成代码时只展开内部积木，不会调用不存在的宏 API。</p>';
       }
       if (block.type === "forever") return '<p class="hint">持续执行内部积木。根级 forever 会成为唯一主循环；不能嵌套另一个 forever。</p>';
       if (block.type === "if" || block.type === "while") {
@@ -3132,6 +3363,9 @@ if __name__ == "__main__":
         if (meta.c) fields.push(meta.cOptions ? paramApiChoice(meta.c, "paramC", block.paramC, meta.cOptions) : paramApiInput(meta.c, "paramC", block.paramC, (meta.variableFields || []).includes("c")));
         if (meta.d) fields.push(meta.dOptions ? paramApiChoice(meta.d, "paramD", block.paramD, meta.dOptions) : paramApiInput(meta.d, "paramD", block.paramD, (meta.variableFields || []).includes("d")));
         if (meta.e) fields.push(meta.eOptions ? paramApiChoice(meta.e, "paramE", block.paramE, meta.eOptions) : paramApiInput(meta.e, "paramE", block.paramE, (meta.variableFields || []).includes("e")));
+        if (meta.f) fields.push(meta.fOptions ? paramApiChoice(meta.f, "paramF", block.paramF, meta.fOptions) : paramApiInput(meta.f, "paramF", block.paramF, (meta.variableFields || []).includes("f")));
+        if (meta.g) fields.push(meta.gOptions ? paramApiChoice(meta.g, "paramG", block.paramG, meta.gOptions) : paramApiInput(meta.g, "paramG", block.paramG, (meta.variableFields || []).includes("g")));
+        if (meta.h) fields.push(meta.hOptions ? paramApiChoice(meta.h, "paramH", block.paramH, meta.hOptions) : paramApiInput(meta.h, "paramH", block.paramH, (meta.variableFields || []).includes("h")));
         return '<div class="row"><div><label>接口类型</label><select data-action="param-api-preset">' + paramApiOptions(block.paramApiKey) + '</select></div>' +
           '<div><label>建议放置位置</label><select data-field="placement">' + options(["startup","fast","slow"], block.placement || "slow") + '</select></div></div>' +
           (fields.length ? '<div class="row">' + fields.join("") + '</div>' : '<p class="hint">此接口没有必填参数。</p>') +
@@ -3265,9 +3499,20 @@ if __name__ == "__main__":
       if (!block) return "slow";
       // Containers do not execute as phase-specific calls. Their children
       // inherit the phase from the enclosing fast/slow loop instead.
-      if (["if", "while", "until", "repeat", "select", "fastloop", "slowloop", "forever", "button"].includes(block.type)) return null;
+      if (["if", "while", "until", "repeat", "select", "fastloop", "slowloop", "forever", "macro"].includes(block.type)) return null;
+      // Action blocks are non-blocking controls and default to the fast poll;
+      // this prevents mixed macros from replaying LED/audio actions in both
+      // fast and slow passes while still allowing explicit container placement.
+      if (block.type === "button") return "fast";
       if (block.type === "read") {
         return ["button", "key_status", "button_adc", "button_direction", "millis", "uart", "uart_text", "ble_data", "audio_recording", "lcd_row_active"].includes(block.readKey) ? "fast" : "slow";
+      }
+      if (block.type === "paramapi" && ["adc_read_pin", "lcd_image", "lcd_rotation", "lcd_fill_screen", "lcd_flush", "lcd_draw_point", "lcd_draw_line", "lcd_draw_rectangle", "lcd_circle",  "lcd_fill_rectangle", "lcd_show_string", "lcd_color565", "lcd_official_test"].includes(block.paramApiKey)) return block.paramApiKey === "lcd_rotation" ? "startup" : "slow";
+      if (block.type === "paramapi" && ["led1_set", "led2_set", "led3_set"].includes(block.paramApiKey)) return block.placement || "fast";
+      if (block.type === "paramapi" && ["led_brightness", "led_breathe"].includes(block.paramApiKey)) {
+        // At root these are one-time setup calls. Inside a loop/condition they
+        // retain the enclosing phase so the user controls when they run.
+        return enclosingPhase(block) || block.placement || "startup";
       }
       if (block.type === "event") return ["fast", "slow"].includes(block.eventPlacement) ? block.eventPlacement : (block.eventType === "data" ? "slow" : "fast");
       if (block.type === "reporter") {
@@ -3284,6 +3529,7 @@ if __name__ == "__main__":
       const placement = blockExecutionPlacement(block);
       if (!placement) return true;
       if (placement === "startup") return false;
+      if (isInsideMacro(block) && enclosingPhase(block) === phase) return true;
       return placement === phase;
     }
 
@@ -3304,22 +3550,35 @@ if __name__ == "__main__":
       return null;
     }
 
+    function isInsideMacro(block) {
+      let info = block && block.id ? findBlockInfo(block.id) : null;
+      while (info && info.parentId && info.parentId !== "root") {
+        const parent = findBlockInfo(info.parentId);
+        if (!parent) break;
+        if (parent.block.type === "macro") return true;
+        info = parent;
+      }
+      return false;
+    }
+
     function programUsesModule(module) {
       if (allBlocks().some(block => block.type === "enable" && block.module === module && String(block.enabled) !== "0")) return true;
       return allBlocks().some(block => {
         if (block.type === "api") return API_MODULE_REQUIREMENTS[block.apiKey || block.apiName] === module;
         if (block.type === "paramapi") {
-          const key = block.paramApiKey || "";
+            const key = block.paramApiKey || "";
           return (key.startsWith("ble_") ? "ble" : (key.startsWith("file_") || ["file_list","storage_info","dir_make","dir_remove"].includes(key)) ? "cunchu" :
+            key === "lcd_image" ? "cunchu" :
+            ["led_set", "led1_set", "led2_set", "led3_set", "led_brightness", "led_breathe"].includes(key) ? "led" :
             ["lte_status", "lte_field", "lte_print"].includes(key) ? "lte" :
             key === "wait_key" ? "anjian" :
-            ["lcd_temp_var", "lcd_row_temp_var", "lcd_clear_line"].includes(key) ? "lcd" :
+            ["lcd_image", "lcd_temp_var", "lcd_row_temp_var", "lcd_clear_line", "lcd_rotation", "lcd_fill_screen", "lcd_flush", "lcd_draw_point", "lcd_draw_line", "lcd_draw_rectangle", "lcd_circle",  "lcd_fill_rectangle", "lcd_show_string", "lcd_color565", "lcd_official_test"].includes(key) ? "lcd" :
             ["rs232_read", "rs232_send"].includes(key) ? "rs232" :
             ["rs485_read", "rs485_send"].includes(key) ? "rs485" : null) === module;
         }
         if (block.type === "lcd") return module === "lcd";
         if (block.type === "serial") return module === "uart";
-        if (block.type === "read") return module === (block.readKey === "uart" || block.readKey === "uart_text" ? "uart" : block.readKey === "ble" || block.readKey === "ble_data" ? "ble" : null);
+        if (block.type === "read") return module === (block.readKey === "uart" || block.readKey === "uart_text" ? "uart" : ["ble", "ble_status_text", "ble_sent", "ble_data"].includes(block.readKey) ? "ble" : null);
         return false;
       });
     }
@@ -3342,9 +3601,17 @@ if __name__ == "__main__":
       const c = block.paramC || "";
       const d = block.paramD || "";
       const e = block.paramE || "";
+      const f = block.paramF || "";
+      const g = block.paramG || "";
+      const h = block.paramH || "";
       if (key === "gpio_read") return out + " = api.readgpio(" + quote(a || "D3") + ")";
       if (key === "gpio_config") return "api.configuregpio(" + quote(a || "D3") + ", " + quote(b || "in") + ", " + quote(c || "none") + ", " + intLiteral(d, 0, 0, 1) + ")";
-      if (key === "adc_read_pin") return out + " = api.readadc(" + quote(a || "C5") + ")";
+      if (key === "adc_read_pin") {
+        const mode = ["raw", "voltage", "percent"].includes(b) ? b : "raw";
+        if (mode === "voltage") return out + " = api.readadcvoltage(" + quote(a || "C5") + ")";
+        if (mode === "percent") return out + " = api.readadcpercent(" + quote(a || "C5") + ")";
+        return out + " = api.readadc(" + quote(a || "C5") + ")";
+      }
       if (key === "gpio_write") return "api.setgpio(" + quote(a || "D3") + ", " + intLiteral(b, 1, 0, 1) + ")";
       if (key === "gpio_high_list") return out + " = api.highpins(" + stringTupleLiteral(a) + ")";
       if (key === "pwm_start") return "api.startpwm(" + quote(a || "D3") + ", " + intLiteral(b, 1000, 1, 1000000) + ", " + intLiteral(c, 50, 0, 100) + ")";
@@ -3358,6 +3625,7 @@ if __name__ == "__main__":
       if (key === "uart_config") return "api.configureuart(" + intLiteral(a, 2, 0, 9) + ", " + intLiteral(b, 115200, 300, 4000000) + ", " + intLiteral(c, 8, 5, 9) + ", " + ((d || "none").toLowerCase() === "none" ? "None" : quote(d)) + ", " + intLiteral(e, 1, 1, 2) + ", " + intLiteral(f, 1000, 0, 600000) + ", " + (g ? quote(g) : "None") + ", " + (h ? quote(h) : "None") + ")";
       if (key === "file_write") return "api.writefile(" + quote(a || "SD:test.txt") + ", " + quote(b || "hello") + ")";
       if (key === "file_write_var") return "api.writefile(" + quote(a || "SD:test.txt") + ", " + safeVarName(b, "show_text") + ")";
+      if (key === "file_append_var") return "api.appendfile(" + quote(a || "SD:sensors.csv") + ", " + safeVarName(b, "sensor_log") + ")";
       if (key === "file_read") return out + " = api.readfile(" + quote(a || "SD:test.txt") + ", " + intLiteral(b, 1024, 1, 65535) + ")";
       if (key === "file_remove") return "api.removefile(" + quote(a || "SD:test.txt") + ")";
       if (key === "file_list") return out + " = api.listfiles(" + quote(a || "*") + ")";
@@ -3365,9 +3633,26 @@ if __name__ == "__main__":
       if (key === "dir_make") return "api.makedir(" + quote(a || "competition_test") + ")";
       if (key === "dir_remove") return "api.removedir(" + quote(a || "competition_test") + ", " + intLiteral(b, 0, 0, 1) + ")";
       if (key === "led_set") return "api.setled(" + quote(a || "red") + ", " + intLiteral(b, 1, 0, 1) + ")";
+      if (key === "led1_set") return "api.led1(" + intLiteral(a, 1, 0, 1) + ")";
+      if (key === "led2_set") return "api.led2(" + intLiteral(a, 1, 0, 1) + ")";
+      if (key === "led3_set") return "api.led3(" + intLiteral(a, 1, 0, 1) + ")";
+      if (key === "led_brightness") return "api.ledbrightness(" + quote(a || "green") + ", " + intLiteral(b, 100, 0, 100) + ", " + intLiteral(c, 1000, 1, 100000) + ")";
+      if (key === "led_breathe") return "api.ledbreathe(" + quote(a || "green") + ", " + intLiteral(b, 2000, 200, 600000) + ", " + intLiteral(c, 0, 0, 100) + ", " + intLiteral(d, 100, 0, 100) + ", " + intLiteral(e, 32, 4, 128) + ")";
       if (key === "key_text") return out + " = api.keytext(" + safeVarName(a, "key_event") + ")";
       if (key === "key_is") return out + " = api.iskey(" + quote(a || "center") + ")";
       if (key === "lcd_text") return "api.showlcd(" + quote(a || "Hello") + ", " + intLiteral(b, 0, 0, 6) + ", " + intLiteral(c, 0, 0, 19) + ")";
+      if (key === "lcd_rotation") return "api.lcdrotation(" + intLiteral(a, 1, 0, 3) + ")";
+      if (key === "lcd_fill_screen") return "api.lcdfillscreen(" + quote(a || "black") + ")";
+      if (key === "lcd_flush") return "api.lcdflush()";
+      if (key === "lcd_draw_point") return "api.lcddrawpoint(" + intLiteral(a, 2, 0, 159) + ", " + intLiteral(b, 2, 0, 127) + ", " + quote(c || "white") + ")";
+      if (key === "lcd_draw_line") return "api.lcddrawline(" + intLiteral(a, 0, 0, 159) + ", " + intLiteral(b, 0, 0, 127) + ", " + intLiteral(c, 40, 0, 159) + ", " + intLiteral(d, 30, 0, 127) + ", " + quote(e || "green") + ")";
+      if (key === "lcd_draw_rectangle") return "api.lcddrawrect(" + intLiteral(a, 10, 0, 159) + ", " + intLiteral(b, 10, 0, 127) + ", " + intLiteral(c, 80, 0, 159) + ", " + intLiteral(d, 50, 0, 127) + ", " + quote(e || "yellow") + ")";
+      if (key === "lcd_circle") return "api.lcdcircle(" + intLiteral(a, 80, 0, 159) + ", " + intLiteral(b, 64, 0, 127) + ", " + intLiteral(c, 20, 1, 127) + ", " + quote(d || "red") + ", " + (intLiteral(e, 0, 0, 1) === "1" ? "True" : "False") + ")";
+      if (key === "lcd_fill_rectangle") return "api.lcdfillrect(" + intLiteral(a, 10, 0, 159) + ", " + intLiteral(b, 10, 0, 127) + ", " + intLiteral(c, 40, 1, 160) + ", " + intLiteral(d, 20, 1, 128) + ", " + quote(e || "blue") + ")";
+      if (key === "lcd_show_string") return "api.lcdshowstring(" + intLiteral(a, 4, 0, 159) + ", " + intLiteral(b, 4, 0, 127) + ", " + quote(c || "LCD API") + ", " + quote(d || "cyan") + ", " + quote(e || "black") + ", " + intLiteral(f, 16, 8, 24) + ")";
+      if (key === "lcd_color565") return out + " = api.lcdcolor565(" + intLiteral(a, 255, 0, 255) + ", " + intLiteral(b, 0, 0, 255) + ", " + intLiteral(c, 0, 0, 255) + ")";
+      if (key === "lcd_official_test") return "api.testlcdofficial()";
+      if (key === "lcd_image") return "api.lcdimage(" + quote(a || "SD:logo.rgb565") + ", " + intLiteral(b, 0, 0, 159) + ", " + intLiteral(c, 0, 0, 127) + ", " + intLiteral(d, 40, 1, 160) + ", " + intLiteral(e, 40, 1, 128) + ")";
       if (key === "lcd_text_color") return "api.showlcdcolor(" + quote(a || "Hello") + ", " + intLiteral(b, 0, 0, 6) + ", " + intLiteral(c, 0, 0, 19) + ", " + quote(d || "white") + ")";
       if (key === "lcd_row_active") return out + " = api.lcdrowtempactive(" + intLiteral(a, 0, 0, 6) + ")";
       if (key === "lcd_line_text") return "api.lcdline(" + intLiteral(a, 0, 0, 6) + ", " + quote(b || "Hello") + ", " + intLiteral(c, 0, 0, 19) + ")";
@@ -3388,13 +3673,24 @@ if __name__ == "__main__":
       if (key === "text_contains") return out + " = api.wenbenbaohan(" + safeVarName(a, "text_value") + ", " + quote(b || "test") + ")";
       if (key === "text_number") return out + " = api.zhuanshuzi(" + safeVarName(a, "text_value") + ")";
       if (key === "text_text") return out + " = api.zhuanwenzi(" + safeVarName(a, "value") + ")";
-      if (key === "uart_send") return "api.senduart(" + quote(a || "OK\\r\\n") + ")";
+      if (key === "uart_send") {
+        // Command replies are line-oriented in the UART2 examples.  Older
+        // saved projects often contain just ON/OFF, so normalize the three
+        // built-in acknowledgements while preserving arbitrary payloads.
+        let payload = String(a || "OK\\r\\n");
+        const escapedCr = String.fromCharCode(92) + "r";
+        const escapedLf = String.fromCharCode(92) + "n";
+        const command = payload.split(escapedCr).join("").split(escapedLf).join("").trim();
+        if (["ON", "OFF", "OK"].includes(command)) payload = command + String.fromCharCode(13, 10);
+        return "api.senduart(" + quote(payload) + ")";
+      }
       if (key === "uart_text") return out + " = api.readuarttext()";
       if (key === "record_audio") return "api.record(" + quote(a || "SD:competition_test.wav") + ", " + intLiteral(b, 1500, 1, 600000) + ")";
       if (key === "record_timed") return "api.recordtimed(" + quote(a || "SD:competition_test.wav") + ", " + intLiteral(b, 10000, 1, 600000) + ")";
       if (key === "play_audio") return "api.playfile(" + quote(a || "SD:competition_test.wav") + ")";
       if (key === "play_audio_nowait") return "api.playfile(" + quote(a || "SD:competition_test.wav") + ", False)";
       if (key === "tts_say") return "api.tts(" + quote(a || "Quectel test") + ")";
+      if (key === "tts_say_var") return "api.tts(" + safeVarName(a, "tts_text") + ")";
       if (key === "tts_say_nowait") return "api.tts(" + quote(a || "光线暗") + ", False)";
       if (key === "set_volume") return "api.setvolume(" + intLiteral(a, 8, 0, 11) + ")";
       if (key === "rs232_send") return "api.sendrs232(" + quote(a || "RS232_SEND") + ")";
@@ -3469,6 +3765,12 @@ if __name__ == "__main__":
         const before = lines.length;
         (block.children || []).forEach(child => emitBlock(child, lines, level + 4, state, phase));
         if (lines.length === before) addLine(lines, level + 4, "pass");
+        return;
+      }
+      if (block.type === "macro") {
+        const before = lines.length;
+        (block.children || []).forEach(child => emitBlock(child, lines, level, state, phase));
+        if (lines.length === before) addLine(lines, level, "pass");
         return;
       }
       if (block.type === "fastloop") {
@@ -3623,7 +3925,11 @@ if __name__ == "__main__":
       }
       if (block.type === "serial") {
         if (!shouldEmitBlock(block, phase)) return;
-        addLine(lines, level, "api.senduart(" + contentExpr(block.serialIsVar, block.serialText) + ")");
+        const payload = contentExpr(block.serialIsVar, block.serialText);
+        if (boolField(block.serialIsVar)) {
+          addLine(lines, level, "if " + safeVarName(block.serialText, "value") + " is not None:");
+          addLine(lines, level + 4, "api.senduart(" + payload + ")");
+        } else addLine(lines, level, "api.senduart(" + payload + ")");
         return;
       }
       if (block.type === "api") {
@@ -3634,7 +3940,7 @@ if __name__ == "__main__":
     function isLcdProgramOperation(block) {
       if (!block) return false;
       if (block.type === "lcd") return true;
-      if (block.type === "paramapi") return ["lcd_temp_var", "lcd_row_temp_var", "lcd_clear_line"].includes(block.paramApiKey);
+      if (block.type === "paramapi") return ["lcd_image", "lcd_temp_var", "lcd_row_temp_var", "lcd_clear_line", "lcd_rotation", "lcd_fill_screen", "lcd_flush", "lcd_draw_point", "lcd_draw_line", "lcd_draw_rectangle", "lcd_circle",  "lcd_fill_rectangle", "lcd_show_string", "lcd_color565", "lcd_official_test"].includes(block.paramApiKey);
       if (block.type === "api") return ["clearlcd", "clearlcdline", "showstatus", "updatelcdtemp"].includes(block.apiKey || block.apiName);
       return false;
     }
@@ -3684,8 +3990,23 @@ if __name__ == "__main__":
       referencedVariableNames().forEach(name => {
         if (!variableDefinitions().has(name) && !initializers.some(line => line.indexOf(name + " =") === 0)) initializers.push(name + " = None");
       });
-      blocks.forEach(block => {
-        if (block.type === "paramapi" && block.placement === "startup") startup.push(paramApiLine(block));
+      // LED parameter blocks are self-contained: enable the LED backend even
+      // when the user did not separately drag an LED module block.
+      if (programUsesModule("led") && !emittedModules.has("led")) {
+        startup.push("api.led(1)");
+        emittedModules.add("led");
+      }
+      // Startup configuration must also see parameter blocks nested inside a
+      // loop.  A breathe block is a one-time state setup, not a per-tick call.
+      const emittedStartupParamKeys = new Set();
+      allBlocks().forEach(block => {
+        if (block.type !== "paramapi") return;
+        const key = block.paramApiKey || "";
+        const startupParam = block.placement === "startup" || key === "led_breathe" || key === "led_brightness";
+        if (!rootBlock(block)) return;
+        if (!startupParam || emittedStartupParamKeys.has(key)) return;
+        startup.push(paramApiLine(block));
+        emittedStartupParamKeys.add(key);
       });
       if (allBlocks().some(block => block.type === "enable" && block.module === "uart" && String(block.enabled) !== "0")) startup.push("api.setuart(UART_ID, UART_BAUDRATE, UART_TIMEOUT_MS)");
 
@@ -3694,17 +4015,19 @@ if __name__ == "__main__":
       blocks.forEach(block => {
         if (block.type === "forever" && rootBlock(block)) return;
         if (block.type === "fastloop") emitBlock(block, fast, 0, fastState, "fast");
+        else if (block.type === "macro") emitBlock(block, fast, 0, fastState, "fast");
         else if (block.type === "event" && blockExecutionPlacement(block) === "fast") emitBlock(block, fast, 0, fastState, "fast");
         else if ((block.type === "reporter" || block.type === "predicate") && blockExecutionPlacement(block) === "fast") emitBlock(block, fast, 0, fastState, "fast");
         else if (block.type === "api" && block.placement === "fast") fast.push(apiCallLine(block));
-        else if (block.type === "paramapi" && block.placement === "fast") fast.push(paramApiLine(block));
+        else if (block.type === "paramapi" && blockExecutionPlacement(block) === "fast") fast.push(paramApiLine(block));
       });
+      if (allBlocks().some(block => block.type === "paramapi" && block.paramApiKey === "led_breathe")) fast.push("api.updateled()")
       blocks.forEach(block => {
         if (block.type === "forever" && rootBlock(block)) return;
         if (block.type === "fastloop" || block.type === "slowloop") emitBlock(block, slow, 0, slowState, "slow");
         else if (block.type === "event" && blockExecutionPlacement(block) === "slow") emitBlock(block, slow, 0, slowState, "slow");
         else if ((block.type === "reporter" || block.type === "predicate") && blockExecutionPlacement(block) === "slow") emitBlock(block, slow, 0, slowState, "slow");
-        else if (block.type === "paramapi" && block.placement !== "slow") return;
+        else if (block.type === "paramapi" && blockExecutionPlacement(block) !== "slow") return;
         else if (block.type !== "fastloop") emitBlock(block, slow, 0, slowState, "slow");
       });
       const canvasEnabled = lcdDesign.length && programUsesModule("lcd");
@@ -3777,7 +4100,7 @@ if __name__ == "__main__":
         "DISPLAY_CYCLES = " + displayCyclesLiteral(),
         "BUTTON_POLL_MS = " + inputIntLiteral("buttonPollMs", 20, 1, 60000),
         "SENSOR_REFRESH_MS = " + inputIntLiteral("sensorRefreshMs", 1000, 1, 600000),
-        "UART_ID = 2                 # fixed UART2 / USART_B, PC COM43",
+        "UART_ID = 2                 # UART2 / USART_B; use the COM port currently enumerated for the data UART",
         "UART_BAUDRATE = " + inputIntLiteral("uartBaudrate", 115200, 1, 3000000),
         "UART_TIMEOUT_MS = " + inputIntLiteral("uartTimeout", 1000, 0, 600000),
         "",
@@ -4153,7 +4476,7 @@ if __name__ == "__main__":
             if (["keyevent","keyeither"].includes(block.conditionMode)) flowUse(available, block, "conditionEventVar", block.conditionEventVar, "按键事件变量");
             if (block.conditionMode === "hasdata") flowUse(available, block, "conditionDataVar", block.conditionDataVar, "接收数据变量");
           }
-          if (block.type === "event" || block.type === "forever") {
+          if (block.type === "event" || block.type === "forever" || block.type === "macro") {
             if (block.type === "event" && block.eventType === "data") flowUse(available, block, "eventVar", block.eventVar, "事件数据变量");
             if (block.type === "event" && block.eventType === "key") flowUse(available, block, "eventVar", block.eventVar, "按键事件变量");
             (block.children || []).forEach(child => checkFlowBlock(child, available, phase));
@@ -4162,7 +4485,7 @@ if __name__ == "__main__":
             if (phase === "slow") (block.children || []).forEach(child => { if (child.type === "slowloop") checkFlowBlock(child, available, phase); });
           } else if (block.type === "slowloop") {
             if (phase === "slow") (block.children || []).forEach(child => checkFlowBlock(child, available, phase));
-          } else if (["if","while","until","repeat","predicate"].includes(block.type) && block.children) {
+          } else if (["if","while","until","repeat","predicate","macro"].includes(block.type) && block.children) {
             block.children.forEach(child => checkFlowBlock(child, available, phase));
           }
           flowProduced(block).forEach(name => available.add(name));
@@ -4218,7 +4541,7 @@ if __name__ == "__main__":
           if (["axis_x","axis_y","axis_z"].includes(block.readKey)) requireModule(block, "jiasudu", "加速度读取");
           if (["button","button_adc","button_direction"].includes(block.readKey)) requireModule(block, "anjian", "按键读取");
           if (["uart","uart_text"].includes(block.readKey)) requireModule(block, "uart", "UART2 读取");
-          if (["ble","ble_data"].includes(block.readKey)) requireModule(block, "ble", "BLE 读取");
+          if (["ble", "ble_status_text", "ble_sent", "ble_data"].includes(block.readKey)) requireModule(block, "ble", "BLE 读取");
           if (block.readKey === "audio_recording") requireModule(block, "yinpin", "录音状态更新");
           if (["location_data","location_source","lat_value","lon_value"].includes(block.readKey) && !enabled.has("gnss") && !enabled.has("lbs")) issue(errors, block, "", "定位读取至少需要启用 GNSS 或 LBS 模块。" );
         }
@@ -4236,7 +4559,8 @@ if __name__ == "__main__":
           if (block.paramApiKey === "rs232_read") requireModule(block, "rs232", "RS232 接收");
           if (block.paramApiKey === "rs485_read") requireModule(block, "rs485", "RS485 接收");
           if (block.paramApiKey.startsWith("ble_")) requireModule(block, "ble", "BLE 操作");
-          if (["lcd_temp_var","lcd_row_temp_var","lcd_clear_line"].includes(block.paramApiKey)) requireModule(block, "lcd", "LCD 临时显示");
+          if (["lcd_image","lcd_temp_var","lcd_row_temp_var","lcd_clear_line", "lcd_rotation", "lcd_fill_screen", "lcd_flush", "lcd_draw_point", "lcd_draw_line", "lcd_draw_rectangle", "lcd_circle",  "lcd_fill_rectangle", "lcd_show_string", "lcd_color565", "lcd_official_test"].includes(block.paramApiKey)) requireModule(block, "lcd", "LCD 操作");
+          if (block.paramApiKey === "lcd_image") requireModule(block, "cunchu", "LCD 图片读取存储卡");
           if (["lte_status","lte_field","lte_print"].includes(block.paramApiKey)) requireModule(block, "lte", "4G 状态操作");
           if (block.paramApiKey === "wait_key") requireModule(block, "anjian", "等待按键事件");
           if (block.paramApiKey === "lte_field" && !["sim","registered","attached","signal","status"].includes(String(block.paramA || "registered").trim())) issue(warnings, block, "paramA", "4G 状态字段未知，将按 registered 读取。可用：sim、registered、attached、signal、status。");
@@ -4495,6 +4819,14 @@ if __name__ == "__main__":
         slowChildren.push(lcdPiece("y_text", true, 2, 9, "green", "none"));
         slowChildren.push(lcdPiece("Z:", false, 2, 14, "blue", "none"));
         slowChildren.push(lcdPiece("z_text", true, 2, 16, "blue", "none"));
+        slowChildren.push(defaultBlock("read", { readKey: "ble_status_text", varName: "ble_status_text" }));
+        slowChildren.push(defaultBlock("format", { formatKey: "ble_status_text", sourceName: "ble_status_text", targetName: "ble_status_text_text", keepRaw: true }));
+        slowChildren.push(defaultBlock("read", { readKey: "ble_sent", varName: "ble_sent_text" }));
+        slowChildren.push(defaultBlock("format", { formatKey: "ble_sent", sourceName: "ble_sent_text", targetName: "ble_sent_text_text", keepRaw: true }));
+        slowChildren.push(lcdPiece("BLE:", false, 3, 0, "magenta", "line"));
+        slowChildren.push(lcdPiece("ble_status_text_text", true, 3, 4, "magenta", "none"));
+        slowChildren.push(lcdPiece("TX:", false, 4, 0, "cyan", "line"));
+        slowChildren.push(lcdPiece("ble_sent_text_text", true, 4, 3, "cyan", "none"));
         slowChildren.push(compareIf("recording", "==", "bool", "false", [
           compareIf("row6_message_active", "==", "bool", "false", [
             defaultBlock("paramapi", {
@@ -4556,15 +4888,37 @@ if __name__ == "__main__":
         ];
         const slowChildren = [];
         ["uart","lcd","lte","ble","gnss","lbs"].forEach(module => blocks.push(defaultBlock("enable", { module })));
-        addReadFormatsTo(slowChildren, ["location_data","location_source","lat_value","lon_value","lte","ble"]);
+        addReadFormatsTo(slowChildren, ["location_data","location_source","lat_value","lon_value","lte","ble_status_text","ble_sent"]);
         addLcdItemsTo(slowChildren, [
           ["label_loc",0,0],["location_source_text",0,5],
           ["label_lat",1,0],["lat_value_text",1,5],
           ["label_lon",2,0],["lon_value_text",2,5],
           ["label_lte",3,0],["lte_read_text_text",3,5],
-          ["label_ble",4,0],["ble_read_text_text",4,5]
+          ["label_ble",4,0],["ble_status_text_text",4,5],
+          ["label_uart",5,0],["ble_sent_text_text",5,5]
         ]);
-        addSerialItemsTo(slowChildren, ["label_loc","location_source_text","label_lat","lat_value_text","label_lon","lon_value_text","label_lte","lte_read_text_text","label_ble","ble_read_text_text","newline"]);
+        addSerialItemsTo(slowChildren, ["label_loc","location_source_text","label_lat","lat_value_text","label_lon","lon_value_text","label_lte","lte_read_text_text","label_ble","ble_status_text_text","label_uart","ble_sent_text_text","newline"]);
+        pushTemplateLoops(fastChildren, slowChildren);
+      } else if (name === "sensor_sd") {
+        const slowChildren = [];
+        ["led", "guangmin", "wenhumi", "jiasudu", "lcd", "uart", "cunchu"].forEach(module => blocks.push(defaultBlock("enable", { module })));
+        addReadFormatsTo(slowChildren, ["light", "temperature", "humidity", "axis_x", "axis_y", "axis_z"]);
+        slowChildren.push(joinBlock("sensor_log", [["var", "wendu_text"], ["text", ","], ["var", "shidu_text"], ["text", ","], ["var", "light_value_text"], ["text", "\r\n"]]));
+        slowChildren.push(defaultBlock("paramapi", { paramApiKey: "file_append_var", paramA: "SD:sensors.csv", paramB: "sensor_log", placement: "slow" }));
+        slowChildren.push(defaultBlock("serial", { serialIsVar: true, serialText: "sensor_log" }));
+        addLcdItemsTo(slowChildren, [["label_temp", 0, 0], ["wendu_text", 0, 3], ["label_humi", 1, 0], ["shidu_text", 1, 3], ["label_light", 2, 0], ["light_value_text", 2, 3]]);
+        pushTemplateLoops([], slowChildren);
+      } else if (name === "audio_ble") {
+        const fastChildren = [defaultBlock("read", { readKey: "button", varName: "key_event" }), defaultBlock("read", { readKey: "uart_text", varName: "uart_received_text" }), defaultBlock("read", { readKey: "ble_data", varName: "ble_received_text" })];
+        const slowChildren = [];
+        ["anjian", "uart", "ble", "cunchu", "yinpin", "lcd"].forEach(module => blocks.push(defaultBlock("enable", { module })));
+        slowChildren.push(defaultBlock("paramapi", { paramApiKey: "record_audio", paramA: "SD:mic_record.wav", paramB: "5000", placement: "slow" }));
+        slowChildren.push(defaultBlock("paramapi", { paramApiKey: "play_audio_nowait", paramA: "SD:mic_record.wav", placement: "slow" }));
+        slowChildren.push(defaultBlock("paramapi", { paramApiKey: "file_read", paramOutputVar: "tts_text", paramA: "SD:tts.txt", paramB: "256", placement: "slow" }));
+        slowChildren.push(defaultBlock("paramapi", { paramApiKey: "tts_say_var", paramA: "tts_text", placement: "slow" }));
+        slowChildren.push(defaultBlock("paramapi", { paramApiKey: "ble_send_var", paramA: "tts_text", placement: "slow" }));
+        slowChildren.push(defaultBlock("serial", { serialIsVar: true, serialText: "tts_text" }));
+        addLcdItemsTo(slowChildren, [["label_tts", 0, 0], ["tts_text", 1, 0]]);
         pushTemplateLoops(fastChildren, slowChildren);
       }
       renderWorkspace();
@@ -4784,6 +5138,7 @@ if __name__ == "__main__":
       if (action === "add-enable") return { mode: "add", type: "enable", extra: { module: el.dataset.module } };
       if (action === "add-api") return { mode: "add", type: "api", extra: { apiName: el.dataset.api } };
       if (action === "add-param-api") return { mode: "add", type: "paramapi", extra: { paramApiKey: el.dataset.paramKey } };
+      if (action === "add-function") return { mode: "function", functionName: el.dataset.function };
       const block = el.classList && el.classList.contains("block") ? el : (el.closest ? el.closest(".block") : null);
       if (block) return { mode: "move", id: block.dataset.id };
       return null;
@@ -4903,6 +5258,7 @@ if __name__ == "__main__":
       else if (action === "undo") undo();
       else if (action === "redo") redo();
       else if (action === "add") addBlock(el.dataset.type);
+      else if (action === "add-function") addFunctionGroup(el.dataset.function);
       else if (action === "standard-structure") addStandardStructure();
       else if (action === "add-enable") addBlock("enable", { module: el.dataset.module });
       else if (action === "add-api") addBlock("api", { apiName: el.dataset.api });
@@ -5137,6 +5493,7 @@ if __name__ == "__main__":
         return;
       }
       if (payload.mode === "add") insertBlock(payload.type, payload.extra, beforeId, parentId);
+      else if (payload.mode === "function") addFunctionGroup(payload.functionName, parentId, beforeId);
       else if (payload.mode === "move") moveBlockBefore(payload.id, beforeId, parentId);
     });
 
@@ -5208,7 +5565,7 @@ if __name__ == "__main__":
 
       function verifiedTemplate() {
         blocks = [];
-        ["led", "anjian", "timer", "guangmin", "i2c", "wenhumi", "jiasudu", "lcd"].forEach(module => {
+        ["led", "anjian", "timer", "guangmin", "i2c", "wenhumi", "jiasudu", "lcd", "ble"].forEach(module => {
           blocks.push(defaultBlock("enable", { module: module }));
         });
         const slow = [];
@@ -5222,12 +5579,25 @@ if __name__ == "__main__":
         slow.push(defaultBlock("lcd", { lcdText: "shidu_text", lcdIsVar: true, row: "1", col: "3", lcdColor: "blue", lcdClearMode: "none" }));
         slow.push(defaultBlock("lcd", { lcdText: "L:", lcdIsVar: false, row: "2", col: "0", lcdColor: "white", lcdClearMode: "line" }));
         slow.push(defaultBlock("lcd", { lcdText: "light_value_text", lcdIsVar: true, row: "2", col: "3", lcdColor: "white", lcdClearMode: "none" }));
+        slow.push(defaultBlock("read", { readKey: "ble_status_text", varName: "ble_status_text" }));
+        slow.push(defaultBlock("format", { formatKey: "ble_status_text", sourceName: "ble_status_text", targetName: "ble_status_text_text", keepRaw: true }));
+        slow.push(defaultBlock("read", { readKey: "ble_sent", varName: "ble_sent_text" }));
+        slow.push(defaultBlock("format", { formatKey: "ble_sent", sourceName: "ble_sent_text", targetName: "ble_sent_text_text", keepRaw: true }));
+        slow.push(defaultBlock("lcd", { lcdText: "BLE:", lcdIsVar: false, row: "3", col: "0", lcdColor: "magenta", lcdClearMode: "line" }));
+        slow.push(defaultBlock("lcd", { lcdText: "ble_status_text_text", lcdIsVar: true, row: "3", col: "4", lcdColor: "magenta", lcdClearMode: "none" }));
+        slow.push(defaultBlock("lcd", { lcdText: "TX:", lcdIsVar: false, row: "4", col: "0", lcdColor: "cyan", lcdClearMode: "line" }));
+        slow.push(defaultBlock("lcd", { lcdText: "ble_sent_text_text", lcdIsVar: true, row: "4", col: "3", lcdColor: "cyan", lcdClearMode: "none" }));
         const fast = defaultBlock("fastloop", {
           children: [
             defaultBlock("read", { readKey: "button", varName: "key_event" }),
             defaultBlock("if", {
               conditionMode: "keyevent", conditionEventVar: "key_event", conditionKey1: "center", conditionEvent: "press",
               children: [defaultBlock("button", { actionKey: "red_on" })]
+            }),
+            defaultBlock("read", { readKey: "ble_data", varName: "ble_received_text" }),
+            defaultBlock("if", {
+              conditionMode: "hasdata", conditionDataVar: "ble_received_text",
+              children: [defaultBlock("paramapi", { paramApiKey: "lcd_row_temp_var", paramA: "ble_received_text", paramB: "5000", paramC: "5", paramD: "0", paramE: "magenta", placement: "fast" })]
             }),
             defaultBlock("slowloop", { children: slow })
           ]
@@ -5260,6 +5630,11 @@ if __name__ == "__main__":
         previewValues.key_event = phase % 5 === 0 ? "center press" : "None";
         previewValues.key_direction = phase % 5 === 0 ? "center" : "None";
         previewValues.lte_read_text = "LTE: ready";
+        previewValues.ble_status_text = "BLE:server C0 RX:- TX:-";
+        previewValues.ble_status_text_text = previewValues.ble_status_text;
+        previewValues.ble_sent_text = "-";
+        previewValues.ble_sent_text_text = "-";
+        previewValues.ble_received_text = "-";
         previewValues.location_source = "GNSS";
         previewValues.lat_value = "22.30";
         previewValues.lon_value = "114.17";
@@ -5298,7 +5673,9 @@ if __name__ == "__main__":
           x: (-.2 + phase / 100).toFixed(1), x_text: (-.2 + phase / 100).toFixed(1),
           y: "-0.3", y_text: "-0.3", z: "9.3", z_text: "9.3",
           location_source: "GNSS", lat_value: "22.30", lon_value: "114.17",
-          lte_registered: "1", lte_signal: "18"
+          lte_registered: "1", lte_signal: "18",
+          ble_status_text: "BLE:server C0 RX:- TX:-", ble_status_text_text: "BLE:server C0 RX:- TX:-",
+          ble_sent_text: "-", ble_sent_text_text: "-", ble_received_text: "-"
         };
         (lcdBlocks || []).forEach(block => {
           if (block.type === "api" && (block.apiKey || block.apiName) === "clearlcd") {

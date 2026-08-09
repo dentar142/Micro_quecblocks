@@ -71,6 +71,14 @@ HTML 中使用“数字运算”“数学函数”“比较与逻辑”“文本
 `import easy_api as api`，所以下列示例均带 `api.`；使用
 `from easy_api import *` 时可去掉此前缀。
 
+### 可展开常用功能组
+
+网页中的“常用功能组”是可展开的大积木，不是设备端黑盒函数。拖入后打开“展开/编辑”，内部仍然是普通读取、格式化、条件、LCD、串口、BLE、SD 和音频积木，可以继续改参数、删除步骤或插入自己的判断；生成 `main.py` 时只展开这些内部积木。
+
+当前快捷组包括：温湿度、光敏、加速度历史记录（LCD、UART、BLE、SD 追加 CSV）、录音回放语音、UART 指令控制、BLE 指令控制、LCD 传感器看板、GNSS 定位日志、五向键控制 LED、SD 文本播报、麦克风录音到 SD、麦克风录音并回放。指令控制组默认识别 `LED_ON` 和 `LED_OFF`，展开后可把比较文字改成自己的协议。
+
+录音到扬声器必须分两个阶段：先用阻塞式 `api.record("SD:mic.wav", 5000)` 完成录音，再用 `api.playfile("SD:mic.wav")` 播放。非阻塞 `recordtimed()` 适合按键实时响应，但要先等待 `api.updateaudio()` 返回结束，再播放同一个文件，不能边录边播同一文件。
+
 放置规则：模块启用、模式和通信参数放“启动区”；按键、UART/BLE 新消息、
 `updateaudio()` 和临时 LCD 状态放“快速轮询区”；传感器、状态、定位和普通
 LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件或条件内部。
@@ -92,7 +100,7 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 | 生成器接口 | 功能与返回值 |
 |---|---|
 | `api.led(enabled=1)` | 启用或关闭 LED 模块；关闭时同时熄灭。 |
-| `api.setled(name, value)` | 设置 `red`、`green`、`blue` 等指定灯的电平。 |
+| `api.setled(name, value)` | 设置 `red`、`green`、`blue` 等指定灯的电平。本套件映射为绿=`PB0`（TIM3_CH3）、蓝=`PB7`（TIM4_CH2）、红=`PB14`（TIM12_CH1），三路高有效且均支持硬件 PWM。 |
 | `api.ledoff()` | 熄灭全部已配置 LED。 |
 | `api.ledrun(delay_ms=250)` | 按配置顺序执行一次流水灯。 |
 | `api.testled()` | 执行 LED 自检。 |
@@ -116,10 +124,12 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 `waitkey()` 阻塞其他任务。
 
 五向键使用 UniKnect LCD Shield 的模拟电阻梯形输入。当前套件默认引脚为
-`config.NAV_ADC_PIN = "C1"`（Arduino Shield A3），方向对应关系由
-`config.NAV_THRESHOLDS` 决定：`left`、`down`、`center`、`right`、`up`。
-不同批次电阻有偏差时，先运行 `examples/00_nav_calibration.py`，再修改
-`NAV_THRESHOLDS`；网页生成器和运行库都会使用同一份配置。
+`config.NAV_ADC_PIN = "C1"`（Arduino Shield A3）。本套实测区间对应关系为：
+约 1000=`right`、10000=`up`、20000=`center`、30000=`left`、50000=`down`，
+松手约为 65535。方向由 `config.NAV_THRESHOLDS` 统一决定，网页生成器只使用
+语义名称，不应自行交换标签。不同批次电阻有偏差时，先运行
+`examples/00_nav_calibration.py`，再修改 `NAV_THRESHOLDS`；网页生成器和运行库
+都使用同一份方向语义。
 
 ### Sensor / 传感器
 
@@ -161,6 +171,9 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 |---|---|
 | `api.configuregpio(pin, mode="in", pull="none", initial=0)` | 为指定 GPIO 选择输入/输出、上拉/下拉，并设置输出初值。 |
 | `api.readadc(pin)` | 读取指定 ADC 引脚的 16 位原始值；板载光敏默认仍使用 `C5`，五向键使用 `C1`。 |
+| `api.readadcvoltage(pin, reference_voltage=3.3)` | 读取 ADC 并保存为电压值；默认按 0-3.3V 换算。 |
+| `api.readadcpercent(pin)` | 读取 ADC 并保存为 0-100 百分比。 |
+| `api.readadc_all(pin, reference_voltage=3.3)` | 一次返回 `raw_u16`、`voltage`、`percent` 三个字段。 |
 | `api.configurei2c(bus_id=1, sda=None, scl=None, freq=400000)` | 配置 I2C 编号、频率和可选 SDA/SCL；留空时使用固件默认引脚。 |
 | `api.configurespi(bus_id=1, baudrate=1000000, polarity=0, phase=0, sck=None, mosi=None, miso=None)` | 配置 SPI 速率、模式和可选信号引脚。 |
 
@@ -216,13 +229,14 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 | `api.setuart(uart_id, baudrate=115200, timeout=1000)` | 配置并打开指定 UART。比赛固定使用 `api.setuart(2, ...)`。 |
 | `api.senduart(data)` | 通过 UART2 发送；默认同时镜像到电脑 REPL 串口。 |
 | `api.readuart()` | 非阻塞读取当前原始数据，无数据返回 `None`。 |
-| `api.readuarttext()` | 非阻塞读取并转为可显示文字，无数据返回 `None`。 |
+| `api.readuarttext()` | 非阻塞读取并转为可显示文字，无数据返回 `None`；只去掉末尾 `\\r\\n`，便于直接比较 `LED_ON` 等行命令。 |
 | `api.waituart(timeout=10000)` | 阻塞等待数据，超时返回 `None`。 |
 | `api.rs232(enabled=1)` / `api.sendrs232(data=b"RS232")` | 启用 RS232 / 发送数据，必须使用电平转换器。 |
 | `api.rs485(enabled=1)` / `api.sendrs485(data=b"RS485")` | 启用 RS485 / 自动切换方向后发送。 |
 
-比赛数据串口只使用 UART2（`usart_b`，连接电脑 `COM43`）；`COM17` 仅用于
-REPL 烧录和调试，不能把 `usart_a` 当作题目数据串口。
+比赛数据串口只使用 UART2（`usart_b`）；Windows 的 COM 编号会随设备枚举变化，
+以设备管理器当前显示的 `USART_B` 数据串口为准。另一个 REPL/ST-LINK 串口仅用于
+烧录和调试，不能把 `usart_a` 当作题目数据串口。
 
 高级 UART 配置：
 
@@ -239,6 +253,7 @@ api.configureuart(2, 115200, 8, None, 1, 1000, None, None)
 | `api.cunchu(enabled=1)` | 启用或关闭存储功能。 |
 | `api.sdcard(enabled=1)` | `cunchu()` 的 SDCard 语义别名；启用后才能调用下列存储接口。 |
 | `api.writefile(path, data)` | 覆盖写入文字、字节或变量，成功返回 `True`。 |
+| `api.appendfile(path, data)` | 以追加方式写入历史数据，适合传感器 CSV/文本日志。 |
 | `api.readfile(path, size=1024, default="")` | 读取指定字节数；失败返回 `default`。 |
 | `api.removefile(path)` | 删除文件，返回是否成功。 |
 | `api.listfiles(path="*")` | 列出文件/目录，返回 `[{"name": ..., "size": ..., "directory": ...}]`。 |
@@ -254,7 +269,7 @@ api.configureuart(2, 115200, 8, None, 1, 1000, None, None)
 | `api.playfile(path=None, wait=True)` | 播放本地音频；`wait=False` 时立即返回。 |
 | `api.play(path=None, wait=True)` | `playfile()` 的别名。 |
 | `api.stopplay()` / `api.playstop()` | 停止本地音频播放。 |
-| `api.tts(text=None, wait=True)` | 播放 TTS；`wait=False` 时不阻塞主循环。 |
+| `api.tts(text=None, wait=True)` | 播放 TTS；`wait=False` 时不阻塞主循环。变量 TTS 积木可传入串口、BLE 或 SD 读取到的文字。 |
 | `api.say(text=None)` | 阻塞式 `tts(text)` 的别名。 |
 | `api.settts(speed=None, pitch=None, volume=None)` | 设置 TTS 语速、音调和音量；`None` 表示不改。 |
 | `api.setttsparams(speed=None, pitch=None, volume=None)` | `settts()` 的别名。 |
@@ -351,11 +366,16 @@ api.sendble(show_text)
 | `led(1)` | 启用 LED 功能 | `led(1)` |
 | `led(0)` | 关闭 LED 功能并熄灯 | `led(0)` |
 | `setled(name, value)` | 设置指定 LED | `setled("red", 1)` |
+| `led1(value)` / `led2(value)` / `led3(value)` | 独立控制 LED1 绿 PB0、LED2 蓝 PB7、LED3 红 PB14，均为高有效 | `led1(1)` |
+| `ledbrightness(name, duty, freq)` | 三盏 LED 均使用硬件 PWM 独立调光；`name` 为 `green`/`blue`/`red` | `ledbrightness("green", 30)` |
+| `ledbreathe(name, period_ms, min_duty, max_duty, steps)` | 启动指定 LED 的非阻塞呼吸灯 | `ledbreathe("green", 2000, 0, 100, 32)` |
+| `updateled()` | 推进一次呼吸灯状态，放在快速轮询区 | `updateled()` |
 | `ledoff()` | 关闭所有 LED | `ledoff()` |
 | `ledrun(delay_ms=250)` | LED 流水灯 | `ledrun()` |
 | `testled()` | LED 测试 | `testled()` |
 
 可用 LED 名称以 `config.py` 的 `LED_PINS` 为准，当前常用：`red`、`green`、`blue`。
+三盏 LED 都可独立调光和呼吸，例如 `api.ledbrightness("blue", duty, freq)`、`api.ledbreathe("red", period_ms, min_duty, max_duty, steps)`。呼吸灯是非阻塞的，需在快速轮询区反复调用 `api.updateled()`。调用 `api.led1(0)`、`api.led2(0)` 或 `api.led3(0)` 会只停止并关闭对应灯，不影响其他灯的 PWM/呼吸状态。
 
 ## 5. 按键接口
 
@@ -518,6 +538,7 @@ every(1000, hello, 5)
 | `clearlcd()` | 清屏 | `clearlcd()` |
 | `showlcd(text, row=0, col=0)` | 从指定行列开始显示文字 | `showlcd("Hello", 0, 0)` |
 | `showlcdcolor(text, row=0, col=0, color="white")` | 用指定颜色显示文字 | `showlcdcolor("T:23.4", 0, 0, "red")` |
+| `lcdimage(path, x=0, y=0, width=40, height=40)` | 从存储卡显示 RGB565 原始图片 | `lcdimage("SD:logo.rgb565", 0, 0, 40, 40)` |
 | `clearlcdline(row)` | 只清除指定文字行，不影响其它行 | `clearlcdline(3)` |
 | `showlcdrowtemp(text, ms=5000, row=0, col=0, color="white")` | 在单行临时显示，超时后只清该行 | `showlcdrowtemp(text, 5000, 3, 0, "cyan")` |
 | `updatelcdtemp()` | 更新单行临时显示计时，必须放快速轮询区 | `updatelcdtemp()` |
@@ -525,7 +546,27 @@ every(1000, hello, 5)
 | `showtest(name, status, detail="")` | 显示测试结果 | `showtest("ADC", "PASS", "ok")` |
 | `testlcd()` | LCD 测试 | `testlcd()` |
 
+官方 `uniknect-micropython/modules/lcd` 例程对应的像素级积木/API：
+
+| 函数 | 作用 | 示例 |
+|---|---|---|
+| `lcdrotation(rotation=1)` | 调用官方 `set_rotation()`，范围 0-3 | `lcdrotation(1)` |
+| `lcdfillscreen(color="black")` | 调用官方 `fill_screen()` 并分段刷新整屏 | `lcdfillscreen("black")` |
+| `lcdflush()` | 提交当前帧缓冲 | `lcdflush()` |
+| `lcddrawpoint(x, y, color)` | 官方 `draw_point()` | `lcddrawpoint(2, 3, "red")` |
+| `lcddrawline(x0, y0, x1, y1, color)` | 官方 `draw_line()` | `lcddrawline(0, 0, 80, 40, "green")` |
+| `lcddrawrect(x0, y0, x1, y1, color)` | 官方端点坐标空心矩形 | `lcddrawrect(10, 10, 100, 60, "yellow")` |
+| `lcdfillrect(x, y, width, height, color)` | 官方 `fill_rectangle()` | `lcdfillrect(20, 20, 40, 20, "blue")` |
+| `lcdcircle(cx, cy, radius, color, filled=False)` | 圆形/填充圆 | `lcdcircle(80, 64, 20, "red", False)` |
+| `lcdshowstring(x, y, text, color, background, size)` | 官方像素坐标 `show_string()` | `lcdshowstring(4, 4, "LCD API", "cyan", "black", 16)` |
+| `lcdcolor565(r, g, b)` | 官方 `COLOR565()` 的 RGB888 转换，返回可保存变量 | `red565 = lcdcolor565(255, 0, 0)` |
+| `lcdimage(path, x, y, width, height)` | 从 SD 读取 RGB565 原始图像 | `lcdimage("SD:logo.rgb565", 0, 0, 40, 40)` |
+| `testlcdofficial()` | 有限时长官方 LCD 功能展示，便于板端调试 | `testlcdofficial()` |
+
+网页中这些接口位于 LCD 分类的“参数接口”积木；旋转建议放启动区，其余绘制和官方调试积木放慢速刷新区。官方 `lcd.py`、`lcd1.py`、`lcd2.py` 的功能组会展开为普通可编辑积木，不会把无限循环或大图数组直接写入运行库。
+
 颜色可选 `white`、`red`、`blue`、`green`、`cyan`、`magenta`、`yellow`。
+图片接口只接受 RGB565 原始字节流，文件大小至少为 `width * height * 2` 字节；主机端可运行 `python tools/rgb565_image.py input.png output.rgb565 --width 40 --height 40` 转换，再使用 Thonny 上传到设备。QuecPython 端不解码 PNG/JPEG。
 同一行多种颜色时，先调用一次 `clearlcdline(row)`，再用不同列数连续调用
 `showlcdcolor()`。`showlcdrowtemp()` 与旧的全屏 `showlcdtemp()` 相互独立。
 
@@ -555,6 +596,7 @@ SPI 回环需要 MOSI 接 MISO。
 | `testuart(data=b"hello")` | UART 回环测试 | `testuart()` |
 
 UART 回环需要 TX 接 RX。`api.senduart(...)` 默认会同时发送到外接 UART 和电脑 USB/REPL 串口，方便在电脑串口工具里看到同一份输出；如需关闭，在 `starter/config.py` 中把 `UART_MIRROR_TO_PC` 改成 `False`。
+无数据时 `readuarttext()` 返回 `None`，不要把这个值直接发送；新生成的指令积木会发送 `api.senduart("ON\\r\\n")`。为兼容旧工程，运行库默认也会把精确的 `ON`、`OFF`、`OK` 自动补成一行；普通文字和变量不会自动追加换行。若仍没有收到回复，确认串口线交叉连接（板 TX -> 转换器 RX、板 RX -> 转换器 TX）并监视 UART2 对应的外接串口，而不是 REPL/烧录串口。
 
 ### RS232
 
@@ -936,7 +978,11 @@ UART_TIMEOUT_MS = 1000     # 串口读取超时，单位 ms。
 
 # 下面为模块启停区：1=开启，0=关闭；直接调用 easy_api，不再套 USE_xxx 开关。
 api.init()                 # 初始化系统；会准备 easy_api 内部状态。
-api.led(1)                 # LED；开启后可用 api.setled("red", 1) 控制红灯。
+api.led(1)                 # LED；开启后可用 api.led1(1)、api.led2(1)、api.led3(1) 控制三路灯。
+api.ledbrightness("green", 30)  # LED1/PB0(TIM3_CH3) 硬件 PWM 调光
+api.ledbrightness("blue", 60)   # LED2/PB7(TIM4_CH2) 硬件 PWM 调光
+api.ledbreathe("red", 2000, 0, 100, 32)  # LED3/PB14(TIM12_CH1) 非阻塞呼吸灯
+# 快速轮询区：api.updateled()
 api.anjian(1)              # 按键；开启后可用 api.readanjian() / api.waitanjian()。
 api.guangmin(1)            # 光敏 ADC；开启后可用 api.readguangmin()。
 api.i2c(1)                 # I2C 总线；温湿度、加速度等 I2C 传感器会用到。

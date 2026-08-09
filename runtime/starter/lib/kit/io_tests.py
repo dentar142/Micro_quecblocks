@@ -64,13 +64,14 @@ class TimerProbe:
 
 class PwmOutput:
     def __init__(self, pin_name, frequency=1000, duty_percent=50, machine_module=None,
-                 timer_id=3, timer_channel=1):
+                 timer_id=3, timer_channel=1, prefer_pyb=False):
         self.pin_name = pin_name
         self.frequency = frequency
         self.duty_percent = duty_percent
         self.machine = machine_module
         self.timer_id = timer_id
         self.timer_channel = timer_channel
+        self.prefer_pyb = bool(prefer_pyb)
         self.impl = None
 
     def _pwm_channel(self):
@@ -84,51 +85,55 @@ class PwmOutput:
             return None
 
     def start(self):
-        try:
-            if self.machine is None:
-                import machine as machine_module
-            else:
-                machine_module = self.machine
-            pin = machine_module.Pin(self.pin_name)
-            pwm = machine_module.PWM(pin)
-            self.impl = pwm
-            if hasattr(pwm, "freq"):
-                pwm.freq(self.frequency)
-            if hasattr(pwm, "duty_u16"):
-                pwm.duty_u16(int(65535 * self.duty_percent / 100))
-            elif hasattr(pwm, "duty"):
-                pwm.duty(int(1023 * self.duty_percent / 100))
-            return "machine.PWM"
-        except Exception as machine_exc:
+        machine_exc = RuntimeError("machine.PWM skipped for verified pyb.Timer mapping")
+        if not self.prefer_pyb:
             self.stop()
             try:
+                if self.machine is None:
+                    import machine as machine_module
+                else:
+                    machine_module = self.machine
+                pin = machine_module.Pin(self.pin_name)
+                pwm = machine_module.PWM(pin)
+                self.impl = pwm
+                if hasattr(pwm, "freq"):
+                    pwm.freq(self.frequency)
+                if hasattr(pwm, "duty_u16"):
+                    pwm.duty_u16(int(65535 * self.duty_percent / 100))
+                elif hasattr(pwm, "duty"):
+                    pwm.duty(int(1023 * self.duty_percent / 100))
+                return "machine.PWM"
+            except Exception as exc:
+                machine_exc = exc
+                self.stop()
+        try:
+            import pyb
+            pin = pyb.Pin(self.pin_name)
+            timer = pyb.Timer(self.timer_id, freq=self.frequency)
+            try:
+                channel = timer.channel(self.timer_channel, pyb.Timer.PWM, pin=pin)
+                channel.pulse_width_percent(self.duty_percent)
+                self.impl = (timer, channel)
+                return "pyb.Timer.PWM"
+            except Exception:
+                timer.deinit()
+                raise
+        except Exception as pyb_timer_exc:
+            try:
                 import pyb
-                pin = pyb.Pin(self.pin_name)
-                timer = pyb.Timer(self.timer_id, freq=self.frequency)
-                try:
-                    channel = timer.channel(self.timer_channel, pyb.Timer.PWM, pin=pin)
-                    channel.pulse_width_percent(self.duty_percent)
-                    self.impl = (timer, channel)
-                    return "pyb.Timer.PWM"
-                except Exception:
-                    timer.deinit()
-                    raise
-            except Exception as pyb_timer_exc:
-                try:
-                    import pyb
-                    channel = self._pwm_channel()
-                    if channel is None:
-                        raise ValueError("no numeric PWM channel in {}".format(self.pin_name))
-                    duty = max(0, min(100, int(self.duty_percent)))
-                    pyb.pwm(channel, duty)
-                    self.impl = ("pyb.pwm", channel)
-                    return "pyb.pwm"
-                except Exception as pyb_pwm_exc:
-                    raise RuntimeError(
-                        "PWM unavailable: machine={} pyb_timer={} pyb_pwm={}".format(
-                            machine_exc, pyb_timer_exc, pyb_pwm_exc
-                        )
+                channel = self._pwm_channel()
+                if channel is None:
+                    raise ValueError("no numeric PWM channel in {}".format(self.pin_name))
+                duty = max(0, min(100, int(self.duty_percent)))
+                pyb.pwm(channel, duty)
+                self.impl = ("pyb.pwm", channel)
+                return "pyb.pwm"
+            except Exception as pyb_pwm_exc:
+                raise RuntimeError(
+                    "PWM unavailable: machine={} pyb_timer={} pyb_pwm={}".format(
+                        machine_exc, pyb_timer_exc, pyb_pwm_exc
                     )
+                )
 
     def set_duty(self, duty_percent):
         duty = max(0, min(100, float(duty_percent)))

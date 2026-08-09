@@ -32,6 +32,16 @@ class EasyApiContractTests(unittest.TestCase):
             "testxxx",
             "writexxx",
             "xxx",
+            # Upstream st7735 method names are documented as reference
+            # implementation details; they are not easy_api exports.
+            "set_rotation",
+            "fill_screen",
+            "flush",
+            "draw_point",
+            "draw_line",
+            "fill_rectangle",
+            "show_string",
+            "COLOR565",
         })
         return names
 
