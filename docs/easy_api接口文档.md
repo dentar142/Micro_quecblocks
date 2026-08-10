@@ -1,6 +1,6 @@
 # easy_api 接口文档
 
-本文档整理当前 `starter/easy_api.py` 中由 `easy_api_main_builder.html` 使用的
+本文档整理当前 `runtime/starter/easy_api.py` 中由 `builder/easy_api_main_builder_microblocks.html` 使用的
 全部接口，并补充零基础用户常用的测试和兼容接口。用户只需要在 Thonny REPL
 或自己的 `main.py` 中写：
 
@@ -218,7 +218,7 @@ LCD 刷新放“慢速刷新区”。LED、GPIO、音频等动作应放在事件
 | `api.zhuanshuzi(value)` | 转为数字，失败返回 `0`。 |
 | `api.zhuanwenzi(value)` | 转为文字。 |
 
-算法接口会按需加载 `starter/lib/alg/` 中的独立模块。生成器下载前会根据实际
+算法接口会按需加载 `runtime/starter/lib/alg/` 中的独立模块。生成器下载前会根据实际
 使用的算法积木生成所需文件清单；未使用的算法模块无需上传到板上。
 
 ### UART / 串口
@@ -712,7 +712,7 @@ api.g4(1)
 | `writeblehandle(handle, data)` | 客户端写入指定值句柄 | `writeblehandle(21, "hello")` |
 | `testble()` | 检查当前 BLE 模式是否就绪 | `testble()` |
 
-BLE 参数集中在 `starter/config.py`：`BLE_NAME`、`BLE_MODE`、
+BLE 参数集中在 `runtime/starter/config.py`：`BLE_NAME`、`BLE_MODE`、
 `BLE_CLIENT_TARGET_NAME`、`BLE_CLIENT_VALUE_HANDLE` 以及服务和特征 UUID。
 服务端供电脑或手机连接；客户端负责扫描、连接、发现服务后读写句柄。两种模式
 不能同时启用，切换模式后应重新调用 `ble(1, ...)`。
@@ -813,7 +813,7 @@ testspi()
 ## 20. 常见错误
 
 - 写成 `from eazy_api import *`：错误，实际文件名是 `easy_api.py`。
-- 忘记上传 `easy_api.py`：需要上传整个 `starter/` 目录。
+- 忘记上传 `easy_api.py`：需要上传整个 `runtime/starter/` 目录，并保留 `easy_api_parts/`、`lib/` 子目录。
 - `SKIP`：通常是功能未开启或引脚未配置。
 - `FAIL`：通常是接线、硬件、固件或参数有问题。
 - RS232 不能 TTL 直连，必须接 RS232 电平转换器。
@@ -894,11 +894,11 @@ data = waituart(5000)
 
 `easy_api.py` 只提供“启用、读取、控制、测试”这类单次函数，不提供 `refresh()` 或 `loop()` 轮询函数。
 
-`starter/main.py` 中只有 `main()` 是程序入口；如果看到 `api.xxx(...)`，
+`runtime/starter/main.py` 中只有 `main()` 是程序入口；如果看到 `api.xxx(...)`，
 它就是在调用 `easy_api.py` 的公开接口。旧示例里的 `serial_title`、
 `safe_call`、`show_page` 等名字不是 easy_api 接口，已经从正式入口移除。
 
-如果题目要求“持续显示传感器数据”“持续检测按键”或“持续读取串口”，请在 `starter/main.py` 的 `main()` 函数中写 `while True:`。
+如果题目要求“持续显示传感器数据”“持续检测按键”或“持续读取串口”，请在生成器中把对应积木放入快速轮询框或慢速刷新框；需要手写时再编辑 `runtime/starter/main.py` 的 `main()`。
 
 示例：LCD 持续显示光敏值
 

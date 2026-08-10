@@ -1,12 +1,14 @@
-# 通用代码使用说明
+# 通用代码使用说明（高级诊断）
 
-这套代码按组委会常见离线考核方式设计：先用杜邦线完成必要回环或外设连接，再在 Thonny 的 REPL 中运行一个统一接口。不要为每道题重写底层驱动，只改 `starter/config.py`，再调用对应命令。
+> 这不是当前积木工作台的主操作界面。日常使用请打开 `builder/easy_api_main_builder_microblocks.html`，上传目录为 `runtime/starter/`。下面的 `UniversalKit` 命令仅用于板端自检、回环测试和没有积木覆盖的现场诊断。
+
+这套代码按组委会常见离线考核方式设计：先用杜邦线完成必要回环或外设连接，再在 Thonny 的 REPL 中运行一个统一接口。不要为每道题重写底层驱动，只改 `runtime/starter/config.py`，再调用对应命令。
 
 ## 预计题型与对应命令
 
 | 可能题型 | 先做什么 | 运行命令 |
 |---|---|---|
-| 检查固件/库是否完整 | 上传 `starter/` 后先测 | `app.run("preflight")` |
+| 检查固件/库是否完整 | 上传 `runtime/starter/` 后先测 | `app.run("preflight")` |
 | LED、按键、人机交互 | 使用板载 LED、用户键、LCD Shield 五向键 | `app.run("led")`、`app.run("button_led")`、`app.run("hmi")` |
 | GPIO 高低电平/杜邦线回环 | 在 `config.py` 填 `GPIO_LOOP_OUT_PIN`、`GPIO_LOOP_IN_PIN`，用杜邦线短接 | `app.run("gpio")` |
 | 定时器、PWM、蜂鸣器 | PWM 需把输出脚接到测量脚；蜂鸣器需确认引脚 | `app.run("timer")`、`app.run("pwm")`、`app.run("buzzer")` |
@@ -18,7 +20,7 @@
 
 ## 使用步骤
 
-1. 在电脑上打开 `competition-offline-kit/starter/config.py`。
+1. 在电脑上打开 `runtime/starter/config.py`。
 2. 按实际题目修改功能开关和引脚。例如 GPIO 回环题只需要：
 
    ```python
@@ -26,7 +28,7 @@
    GPIO_LOOP_IN_PIN = "D3"
    ```
 
-3. 用 Thonny 把整个 `starter/` 目录上传到开发板根目录。
+3. 用 Thonny 把整个 `runtime/starter/` 目录上传到开发板根目录。
 4. 运行 `main.py`。看到 `kit>` 后输入命令，例如：
 
    ```python

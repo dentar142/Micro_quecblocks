@@ -1243,7 +1243,7 @@
           <div><label>串口波特率</label><input id="uartBaudrate" type="number" value="115200"></div>
           <div><label>TIMEOUT_MS</label><input id="uartTimeout" type="number" value="1000"></div>
         </div>
-        <p class="hint">题目串口固定使用 UART2 / USART_B，对接电脑 COM43；REPL 烧录和调试使用 COM17。小数统一使用 api.baoliuxiaoshu(变量, 位数)。</p>
+        <p class="hint">题目数据串口固定使用 UART2 / USART_B；Windows 中的 COM 编号以当前设备管理器枚举结果为准。REPL 烧录和调试也使用当前枚举的 ST-LINK 虚拟串口。小数统一使用 api.baoliuxiaoshu(变量, 位数)。</p>
       </div>
 
       <h2>2. 示例模板</h2>
@@ -1389,7 +1389,7 @@ import easy_api as api
 DISPLAY_CYCLES = None
 BUTTON_POLL_MS = 20
 SENSOR_REFRESH_MS = 1000
-UART_ID = 2                 # fixed UART2 / USART_B, PC COM43
+    UART_ID = 2                 # fixed UART2 / USART_B; use the currently enumerated data-UART COM port
 UART_BAUDRATE = 115200
 UART_TIMEOUT_MS = 1000
 

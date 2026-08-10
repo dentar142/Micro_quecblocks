@@ -60,7 +60,7 @@ print(hasattr(api, "lcdrect"))
 print(hasattr(api, "lcdcircle"))
 print(hasattr(api, "readlte"))
 print(hasattr(api, "networkstatus"))
-print(api.api_version())  # 当前仓库应为 2026.08.09.2 或更高
+print(api.api_version())  # 当前仓库应为 2026.08.10.1 或更高
 print("readadc" in api.api_capabilities())
 ```
 
@@ -145,7 +145,7 @@ print("LOCATION", location)
 python -B tools\run_host_tests.py
 ```
 
-测试会编译运行库和示例，并检查编辑器中关键生成契约。当前基线应为 51 项通过。
+测试会编译运行库和示例，并检查编辑器中关键生成契约。当前基线应为 71 项通过。
 
 ## 许可证与第三方文件
 
